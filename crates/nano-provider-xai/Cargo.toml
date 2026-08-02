@@ -1,0 +1,23 @@
+[package]
+name = "nano-provider-xai"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+http = ["dep:bytes", "dep:futures-util", "dep:reqwest", "dep:tokio"]
+test-loopback = ["http"]
+
+[dependencies]
+base64.workspace = true
+bytes = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+nano-types.workspace = true
+reqwest = { workspace = true, optional = true }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tokio = { workspace = true, optional = true }

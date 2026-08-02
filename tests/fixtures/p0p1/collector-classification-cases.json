@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "expected_bucket": "verifier_setup_network",
+      "name": "dependency_download_504",
+      "reward": 0.0,
+      "verifier_output": "curl: (22) synthetic URL returned error: 504\n/bin/sh: uvx: not found\n"
+    },
+    {
+      "expected_bucket": "verifier_runtime",
+      "name": "browser_launch_failure",
+      "reward": 0.0,
+      "verifier_output": "SessionNotCreatedException: synthetic browser instance exited\n"
+    },
+    {
+      "expected_bucket": "agent_semantic",
+      "name": "assertion_failure",
+      "reward": 0.0,
+      "verifier_output": "FAILED synthetic_test.py::test_answer - AssertionError\n"
+    },
+    {
+      "expected_bucket": "uncertain",
+      "name": "unknown_verifier_traceback",
+      "reward": 0.0,
+      "verifier_output": "Traceback (most recent call last):\nRuntimeError: synthetic frobnicator failed\n"
+    }
+  ],
+  "schema_version": "nano-p0p1-collector-classification-fixtures-v1"
+}
