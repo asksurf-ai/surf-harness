@@ -21,6 +21,9 @@ from scripts.check_dependency_policy import (  # noqa: E402
     check_python_project,
 )
 from scripts.check_secrets import PATTERNS  # noqa: E402
+from scripts.submission_preflight import (  # noqa: E402
+    static_errors as submission_preflight_errors,
+)
 
 IGNORED_PARTS = {
     ".git",
@@ -62,6 +65,7 @@ def static_errors(root: Path) -> list[str]:
         *check_python_project(resolved),
         *check_python_lock(resolved / "uv.lock"),
         *check_architecture_boundaries(resolved),
+        *submission_preflight_errors(resolved),
         *check_static_secrets(resolved),
     ]
     if (resolved / "tools/upstream-export").is_dir():

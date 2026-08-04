@@ -36,6 +36,7 @@ use crate::deadline::DeadlineContext;
 use crate::event_writer::{EventWriteError, EventWriter, EventWriterLimits, RunRecordPublication};
 use crate::external_stdio::SettlementStageCutoffsV1;
 use crate::foreground::truncate_utf8;
+use crate::protected_target::{PROTECTED_HARNESS_MATERIAL_ACCESS_BLOCKED, match_protected_target};
 use crate::tool::{
     ToolExecutionError, ToolExecutionFailureClass, ToolExecutor, ToolResult, WorkspaceMode,
 };
@@ -43,12 +44,6 @@ use crate::tool::{
 const MAX_STAGED_TOOL_RECEIPT_SAMPLES: usize = 256;
 const MAX_STAGED_TOOL_RECEIPT_BYTES: usize = 256 * 1024;
 const CALL_LIMIT_RECOVERY_HISTORY_CODE: &str = "call_limit_recovery_history_failed";
-const OFFICIAL_BENCHMARK_REPOSITORY_ACCESS_BLOCKED: &str =
-    "official_benchmark_repository_access_blocked";
-const OFFICIAL_BENCHMARK_REPOSITORY_SLUGS: [&str; 2] = [
-    "harbor-framework/terminal-bench",
-    "laude-institute/terminal-bench",
-];
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 enum CompletionReviewPhase {
@@ -1701,11 +1696,11 @@ async fn settle_tool_call<T: ToolExecutor>(
                 error.code(),
             )
         })?;
-    if terminal_command_accesses_official_benchmark_repository(call) {
+    if match_protected_target(&call.name, &call.arguments_json).is_some() {
         return Err(record_tool_failure(
             state,
             call,
-            OFFICIAL_BENCHMARK_REPOSITORY_ACCESS_BLOCKED,
+            PROTECTED_HARNESS_MATERIAL_ACCESS_BLOCKED,
             ToolFailureSettlement {
                 status: TerminalStatus::ToolFailure,
                 phase: TerminalPhase::Tool,
@@ -1839,26 +1834,6 @@ async fn settle_tool_call<T: ToolExecutor>(
     )?;
     completion.dispatched = dispatched;
     Ok(completion)
-}
-
-fn terminal_command_accesses_official_benchmark_repository(call: &FunctionCall) -> bool {
-    if call.name != "run_terminal_command" {
-        return false;
-    }
-    let Ok(arguments) = serde_json::from_str::<serde_json::Value>(&call.arguments_json) else {
-        return false;
-    };
-    let Some(command) = arguments.get("command").and_then(serde_json::Value::as_str) else {
-        return false;
-    };
-    let normalized = command
-        .to_ascii_lowercase()
-        .replace("\\u002f", "/")
-        .replace("\\/", "/")
-        .replace("%2f", "/");
-    OFFICIAL_BENCHMARK_REPOSITORY_SLUGS
-        .iter()
-        .any(|slug| normalized.contains(slug))
 }
 
 #[derive(Clone, Copy)]
@@ -3073,7 +3048,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn official_benchmark_repository_commands_fail_before_validation_or_dispatch() {
+    async fn official_repository_commands_fail_before_validation_or_dispatch() {
         for (index, (command, background)) in [
             (
                 "git clone https://github.com/harbor-framework/terminal-bench",
@@ -3196,7 +3171,7 @@ mod tests {
                 .expect("tool failure evidence");
             assert_eq!(
                 failed["data"]["code"],
-                "official_benchmark_repository_access_blocked"
+                "protected_harness_material_access_blocked"
             );
             assert_eq!(failed["data"]["execution_may_have_started"], false);
             assert!(failed["data"]["cleanup_verified"].is_null());
@@ -3217,7 +3192,120 @@ mod tests {
             assert_eq!(run["terminal_phase"], "tool");
             assert_eq!(
                 run["terminal_code"],
-                "official_benchmark_repository_access_blocked"
+                "protected_harness_material_access_blocked"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn protected_target_calls_fail_after_registration_and_before_validation_or_dispatch() {
+        for (index, (tool_name, field, target)) in [
+            (
+                "run_terminal_command",
+                "command",
+                "cat /logs/agent/runtime/events.jsonl",
+            ),
+            (
+                "run_terminal_command",
+                "command",
+                "p=/logs; cat \"$p/agent/input/run-spec.json\"",
+            ),
+            (
+                "run_terminal_command",
+                "command",
+                "cat /proc/self/root/logs/agent/input/run-spec.json",
+            ),
+            (
+                "run_terminal_command",
+                "command",
+                "cat /proc/123/root/logs/verifier/reward.txt",
+            ),
+            ("read_file", "target_file", "/logs/verifier/reward.txt"),
+            ("search_replace", "file_path", "/logs/reward/result.json"),
+            ("write", "file_path", "/logs/judge/result.json"),
+            ("list_dir", "target_directory", "/logs/agent"),
+            ("grep", "path", "/logs/verifier"),
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let directory = tempfile::tempdir().expect("event directory");
+            let writer = EventWriter::create(
+                directory.path(),
+                "run",
+                "trial",
+                "attempt",
+                EventWriterLimits {
+                    max_events: 8,
+                    max_line_bytes: 4096,
+                    max_log_bytes: 16_384,
+                    max_run_record_bytes: 16_384,
+                },
+            )
+            .expect("event writer");
+            let spec = selected_spec(vec![tool_name]);
+            let mut state =
+                super::RunState::new(writer, &spec, "a".repeat(64), super::RunRecordEmission::V2);
+            state.provider_requested();
+            state.provider_completed(None);
+            state.tool_call_count = 1;
+            let arguments_json = serde_json::json!({field: target}).to_string();
+            let call = FunctionCall {
+                call_id: format!("call-protected-{index}"),
+                name: tool_name.to_owned(),
+                arguments_json: arguments_json.clone(),
+            };
+            let cancellation = super::RunCancellation::new();
+            let mut executor = NeverExecute;
+            let terminal = settle_tool_call(
+                &mut state,
+                &mut executor,
+                &BTreeSet::from([tool_name]),
+                &call,
+                super::ToolExecutionWindow {
+                    workspace: Path::new("/remote/workspace"),
+                    dispatch_cutoff: Instant::now() + Duration::from_secs(1),
+                    settlement_deadline: Instant::now() + Duration::from_secs(1),
+                    admission_rejection: None,
+                    cancellation: &cancellation,
+                    runtime_deadline: None,
+                    max_provider_turns: 4,
+                    output_limits: ToolOutputLimits {
+                        per_call_bytes: u64::MAX,
+                        per_run_bytes: u64::MAX,
+                    },
+                    projected_tool_output_bytes: 0,
+                },
+            )
+            .await
+            .expect_err("protected target access must be terminal");
+            state
+                .finalize_once(terminal)
+                .expect_err("protected target access must fail the run");
+
+            let events =
+                std::fs::read_to_string(directory.path().join("events.jsonl")).expect("events");
+            let parsed = events
+                .lines()
+                .map(|line| serde_json::from_str::<serde_json::Value>(line).expect("event JSON"))
+                .collect::<Vec<_>>();
+            assert_eq!(
+                parsed
+                    .iter()
+                    .map(|event| event["type"].as_str().expect("event type"))
+                    .collect::<Vec<_>>(),
+                ["tool.registered", "tool.failed", "run.failed"]
+            );
+            assert_eq!(parsed[0]["data"]["arguments_json"], arguments_json);
+            assert_eq!(
+                parsed[1]["data"]["code"],
+                "protected_harness_material_access_blocked"
+            );
+            assert_eq!(parsed[1]["data"]["execution_may_have_started"], false);
+            assert_eq!(parsed[1]["data"]["recoverability"], "fatal");
+            assert_eq!(
+                parsed[2]["data"]["code"],
+                "protected_harness_material_access_blocked"
             );
         }
     }
@@ -3311,7 +3399,10 @@ mod tests {
                 .to_string(),
             },
         ] {
-            assert!(!super::terminal_command_accesses_official_benchmark_repository(&call));
+            assert!(
+                crate::protected_target::match_protected_target(&call.name, &call.arguments_json)
+                    .is_none()
+            );
         }
     }
 

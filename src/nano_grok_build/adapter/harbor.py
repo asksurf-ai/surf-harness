@@ -28,6 +28,7 @@ from nano_grok_build.adapter.artifactizer import (
 from nano_grok_build.adapter.artifactizer import (
     _read_regular as _read_artifact_regular,
 )
+from nano_grok_build.adapter.control_plane import ControlPlane, control_root_for
 from nano_grok_build.adapter.deadline import (
     DeadlineContractError,
     RunDeadlineReceiptV1,
@@ -158,7 +159,9 @@ class NanoGrokBuildAgent(BaseAgent):
             tuple[bytes, str, tuple[tuple[object, ...], ...]] | None
         ) = None
         self._process_lease_v1: ProcessLeaseV1 | None = None
-        expected_artifact_dir = (self.logs_dir / "runtime").resolve()
+        self._control_root = control_root_for(self.logs_dir.resolve())
+        self._control_plane: ControlPlane | None = None
+        expected_artifact_dir = (self._control_root / "runtime").resolve()
         if (
             Path(self._run_spec.get("artifact_dir", "")).resolve()
             != expected_artifact_dir
@@ -241,12 +244,32 @@ class NanoGrokBuildAgent(BaseAgent):
     async def setup(self, environment: BaseEnvironment) -> None:
         if self.session_id is None or self.context_id is None:
             raise RuntimeError("Harbor identity was not assigned before setup")
+        self._control_plane = ControlPlane.create(
+            self.logs_dir,
+            run_spec_sha256=rust_run_spec_sha256(self._run_spec),
+        )
         self._actor = RemoteTerminalActor(_HarborEnvironmentProxy(environment))
         await self._actor.setup()
         self._before_snapshot = await capture_before(
-            SnapshotTarget(actor=self._actor, artifact_dir=self.logs_dir),
+            SnapshotTarget(
+                actor=self._actor,
+                artifact_dir=self._control_plane.root,
+                publication_dir=self.logs_dir,
+            ),
             SnapshotPolicy(),
         )
+
+    def _artifact_source_dir(self) -> Path:
+        plane = getattr(self, "_control_plane", None)
+        if isinstance(plane, ControlPlane):
+            return plane.root
+        run_spec = getattr(self, "_run_spec", None)
+        if not isinstance(run_spec, dict):
+            return self.logs_dir
+        artifact_dir = Path(run_spec.get("artifact_dir", ""))
+        if artifact_dir.name == "runtime" and artifact_dir.parent.is_absolute():
+            return artifact_dir.parent
+        return self.logs_dir
 
     @staticmethod
     def _failure_code(error: BaseException | None) -> str:
@@ -302,7 +325,7 @@ class NanoGrokBuildAgent(BaseAgent):
         outcome: BridgeOutcome | None,
         error: BaseException | None,
     ) -> bytes:
-        events_path = self.logs_dir / "runtime" / "events.jsonl"
+        events_path = self._artifact_source_dir() / "runtime" / "events.jsonl"
         events_sha256: str | None = None
         events_byte_length: int | None = None
         try:
@@ -364,7 +387,7 @@ class NanoGrokBuildAgent(BaseAgent):
 
         try:
             self._write_immutable(
-                self.logs_dir / "runtime-stderr.json",
+                self._artifact_source_dir() / "runtime-stderr.json",
                 self._stderr_receipt(outcome, original_error),
             )
         except Exception as error:
@@ -388,7 +411,7 @@ class NanoGrokBuildAgent(BaseAgent):
                 }
             )
             self._write_immutable(
-                self.logs_dir / "runtime-background-manifest.json",
+                self._artifact_source_dir() / "runtime-background-manifest.json",
                 manifest_payload,
             )
             manifest_published = True
@@ -409,12 +432,12 @@ class NanoGrokBuildAgent(BaseAgent):
         except Exception as error:
             errors.append(error)
 
-        run_record = self.logs_dir / "runtime" / "run.json"
+        run_record = self._artifact_source_dir() / "runtime" / "run.json"
         run_record_available = run_record.is_file() and not run_record.is_symlink()
         if not run_record_available:
             try:
                 self._write_immutable(
-                    self.logs_dir / "runtime-emergency.json",
+                    self._artifact_source_dir() / "runtime-emergency.json",
                     self._emergency_receipt(outcome, original_error),
                 )
             except Exception as error:
@@ -448,7 +471,7 @@ class NanoGrokBuildAgent(BaseAgent):
                     }
                 )
                 self._write_immutable(
-                    self.logs_dir / "runtime-background-manifest.json",
+                    self._artifact_source_dir() / "runtime-background-manifest.json",
                     manifest_payload,
                 )
                 manifest_published = True
@@ -470,7 +493,11 @@ class NanoGrokBuildAgent(BaseAgent):
             if self._actor is None or self._before_snapshot is None:
                 raise BridgeError("post_agent_workspace_snapshot_unavailable")
             receipt = await capture_after(
-                SnapshotTarget(actor=self._actor, artifact_dir=self.logs_dir),
+                SnapshotTarget(
+                    actor=self._actor,
+                    artifact_dir=self._artifact_source_dir(),
+                    publication_dir=self.logs_dir,
+                ),
                 self._before_snapshot,
                 hard_deadline_monotonic_ns=hard_cutoff_ns,
             )
@@ -489,7 +516,9 @@ class NanoGrokBuildAgent(BaseAgent):
         if type(receipt) is not SnapshotReceipt:
             raise BridgeError("post_agent_workspace_receipt_binding_invalid")
         try:
-            persisted = load_workspace_receipt(self.logs_dir / "workspace-receipt.json")
+            persisted = load_workspace_receipt(
+                self._artifact_source_dir() / "workspace-receipt.json"
+            )
         except BaseException as error:
             raise BridgeError("post_agent_workspace_receipt_binding_invalid") from error
         if persisted != receipt:
@@ -506,7 +535,7 @@ class NanoGrokBuildAgent(BaseAgent):
         if binding is None:
             raise BridgeError("post_snapshot_background_liveness_invalid")
         manifest_payload, manifest_sha256, manifest_rows = binding
-        manifest_path = self.logs_dir / "runtime-background-manifest.json"
+        manifest_path = self._artifact_source_dir() / "runtime-background-manifest.json"
         try:
             persisted_manifest = _read_artifact_regular(
                 manifest_path,
@@ -579,7 +608,7 @@ class NanoGrokBuildAgent(BaseAgent):
             raise BridgeError("post_snapshot_background_liveness_invalid")
         try:
             self._write_immutable(
-                self.logs_dir / "runtime-background-liveness-v1.json",
+                self._artifact_source_dir() / "runtime-background-liveness-v1.json",
                 receipt,
             )
         except Exception as error:
@@ -864,7 +893,7 @@ class NanoGrokBuildAgent(BaseAgent):
             return denied
         try:
             runtime = validate_verifier_terminal_runtime(
-                runtime_dir=self.logs_dir / "runtime",
+                runtime_dir=self._artifact_source_dir() / "runtime",
                 run_spec=self._run_spec,
             )
             receipt = self._load_bound_workspace_receipt(workspace_receipt)
@@ -973,6 +1002,9 @@ class NanoGrokBuildAgent(BaseAgent):
             raise RuntimeError("terminal actor was not set up")
         if instruction != self._run_spec["task"]["instruction"]:
             raise RuntimeError("Harbor instruction does not match pre-bound RunSpec")
+        plane = getattr(self, "_control_plane", None)
+        if isinstance(plane, ControlPlane):
+            plane.verify_pre_dispatch()
         self._instruction = instruction
         loop = asyncio.get_running_loop()
         if deadline_receipt is None:
@@ -994,17 +1026,21 @@ class NanoGrokBuildAgent(BaseAgent):
                 if deadline_receipt is not None:
                     raise BridgeError("workspace_before_snapshot_unavailable")
                 before_snapshot = await capture_before(
-                    SnapshotTarget(actor=self._actor, artifact_dir=self.logs_dir),
+                    SnapshotTarget(
+                        actor=self._actor,
+                        artifact_dir=self._artifact_source_dir(),
+                        publication_dir=self.logs_dir,
+                    ),
                     SnapshotPolicy(),
                 )
                 self._before_snapshot = before_snapshot
-            input_dir = self.logs_dir / "input"
+            input_dir = self._artifact_source_dir() / "input"
             input_dir.mkdir(parents=True, exist_ok=False)
             spec_path = input_dir / "run-spec.json"
             spec_path.write_bytes(canonical_json(self._run_spec))
             deadline_monotonic_ns: int | None = None
             if deadline_receipt is not None:
-                runtime_dir = self.logs_dir / "runtime"
+                runtime_dir = self._artifact_source_dir() / "runtime"
                 runtime_dir.mkdir(parents=True, exist_ok=True)
                 self._write_immutable(
                     runtime_dir / "deadline.json",
@@ -1095,7 +1131,12 @@ class NanoGrokBuildAgent(BaseAgent):
                 )
                 return
             publication = publish_artifacts(
-                logs_dir=self.logs_dir,
+                logs_dir=self._artifact_source_dir(),
+                publication_dir=(
+                    self.logs_dir
+                    if self._artifact_source_dir() != self.logs_dir
+                    else None
+                ),
                 run_spec=self._run_spec,
                 instruction=self._instruction,
                 agent_name=self.name(),
@@ -1131,6 +1172,9 @@ class NanoGrokBuildAgent(BaseAgent):
                 context.metadata["provider_call_coverage"] = dict(
                     publication.usage_coverage
                 )
+            plane = getattr(self, "_control_plane", None)
+            if isinstance(plane, ControlPlane):
+                plane.cleanup()
         except Exception:
             self.logger.exception(
                 "Nano artifactization failed; marker remains authoritative"

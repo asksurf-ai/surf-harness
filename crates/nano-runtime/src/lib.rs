@@ -9,6 +9,7 @@ pub mod deadline;
 pub mod event_writer;
 pub mod external_stdio;
 mod foreground;
+pub mod protected_target;
 pub mod terminal;
 pub mod tool;
 

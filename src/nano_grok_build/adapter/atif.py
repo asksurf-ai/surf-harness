@@ -324,6 +324,204 @@ def _prefix_projection(
     return list(provider_turns.values()), list(tool_calls.values()), assistant_final
 
 
+def _prefix_atif_steps(
+    *,
+    instruction: str,
+    tool_calls: Sequence[Mapping[str, Any]],
+    assistant_final: str | None,
+    model_name: str,
+) -> list[dict[str, Any]]:
+    steps: list[dict[str, Any]] = [
+        {"step_id": 1, "source": "user", "message": instruction}
+    ]
+    for call in tool_calls:
+        tool_call: dict[str, Any] = {
+            "tool_call_id": call["call_id"],
+            "function_name": call["function_name"],
+            "arguments": call["arguments"],
+            "extra": {
+                "known": call["known"],
+                "state": call["state"],
+                "dispatched": call["dispatched"],
+            },
+        }
+        failure = call.get("failure")
+        if isinstance(failure, dict):
+            tool_call["extra"]["failure"] = dict(failure)
+        step: dict[str, Any] = {
+            "step_id": len(steps) + 1,
+            "source": "agent",
+            "model_name": model_name,
+            "message": "",
+            "tool_calls": [tool_call],
+        }
+        observation = call.get("observation")
+        if isinstance(observation, dict):
+            step["observation"] = {
+                "results": [
+                    {
+                        "source_call_id": call["call_id"],
+                        "content": observation["output"],
+                        "extra": {
+                            "execution_attempted": observation["execution_attempted"],
+                            "outcome": observation["outcome"],
+                        },
+                    }
+                ]
+            }
+        steps.append(step)
+    if assistant_final is not None:
+        steps.append(
+            {
+                "step_id": len(steps) + 1,
+                "source": "agent",
+                "model_name": model_name,
+                "message": assistant_final,
+            }
+        )
+    return steps
+
+
+def _prefix_atif_trajectory(
+    *,
+    instruction: str,
+    events: Sequence[Mapping[str, Any]],
+    identity: Mapping[str, Any],
+    terminal_failure: Mapping[str, Any],
+    usage_source: Mapping[str, Any],
+    agent_name: str,
+    agent_version: str,
+    model_name: str,
+    source_kind: str,
+    event_prefix: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    if not instruction:
+        raise AtifError("atif_instruction_missing")
+    provider_turns, tool_calls, assistant_final = _prefix_projection(events)
+    steps = _prefix_atif_steps(
+        instruction=instruction,
+        tool_calls=tool_calls,
+        assistant_final=assistant_final,
+        model_name=model_name,
+    )
+    extra: dict[str, Any] = {
+        "trial_id": identity["trial_id"],
+        "attempt_id": identity["attempt_id"],
+        "run_spec_sha256": identity["run_spec_sha256"],
+        "source_kind": source_kind,
+        "terminal_failure": dict(terminal_failure),
+        "provider_turns": provider_turns,
+    }
+    events_sha256 = identity.get("events_sha256")
+    if isinstance(events_sha256, str):
+        extra["events_sha256"] = events_sha256
+    if event_prefix is not None:
+        extra["event_prefix"] = dict(event_prefix)
+    trajectory = {
+        "schema_version": ATIF_VERSION,
+        "session_id": identity["run_id"],
+        "agent": {
+            "name": agent_name,
+            "version": agent_version,
+            "model_name": model_name,
+        },
+        "steps": steps,
+        "final_metrics": {
+            **_usage_totals(usage_source),
+            "total_steps": len(steps),
+        },
+        "extra": extra,
+    }
+    validate_minimal_trajectory(trajectory)
+    return trajectory
+
+
+def project_failure_trajectory(
+    *,
+    instruction: str,
+    events: Sequence[Mapping[str, Any]],
+    run_record: Mapping[str, Any],
+    agent_name: str,
+    agent_version: str,
+    model_name: str,
+) -> dict[str, Any]:
+    """Project a committed terminal failure into truthful uploader-valid ATIF."""
+
+    if run_record.get("terminal_status") == "success":
+        raise AtifError("atif_failure_run_is_successful")
+    if not events or events[-1].get("type") != "run.failed":
+        raise AtifError("atif_failure_terminal_missing")
+    terminal = events[-1]
+    return _prefix_atif_trajectory(
+        instruction=instruction,
+        events=events,
+        identity=run_record,
+        terminal_failure={
+            "status": run_record["terminal_status"],
+            "phase": run_record["terminal_phase"],
+            "code": run_record["terminal_code"],
+            "event_seq": terminal["seq"],
+            "elapsed_ms": terminal["elapsed_ms"],
+        },
+        usage_source=run_record,
+        agent_name=agent_name,
+        agent_version=agent_version,
+        model_name=model_name,
+        source_kind="committed_failure",
+    )
+
+
+def project_emergency_trajectory(
+    *,
+    instruction: str,
+    events: Sequence[Mapping[str, Any]],
+    identity: Mapping[str, Any],
+    terminal_status: str,
+    terminal_phase: str,
+    terminal_code: str,
+    usage_coverage: Mapping[str, Any],
+    usage_totals: Mapping[str, Any],
+    source_events_sha256: str,
+    source_events_byte_length: int,
+    validated_prefix_sha256: str,
+    validated_prefix_byte_length: int,
+    stop_reason: str,
+    agent_name: str,
+    agent_version: str,
+    model_name: str,
+) -> dict[str, Any]:
+    """Project a validated emergency prefix without inventing a terminal turn."""
+
+    last = events[-1] if events else None
+    return _prefix_atif_trajectory(
+        instruction=instruction,
+        events=events,
+        identity=identity,
+        terminal_failure={
+            "status": terminal_status,
+            "phase": terminal_phase,
+            "code": terminal_code,
+            "event_seq": last["seq"] if last is not None else None,
+            "elapsed_ms": last["elapsed_ms"] if last is not None else None,
+            "evidence": "adapter_emergency",
+        },
+        usage_source={"usage_totals": dict(usage_totals)},
+        agent_name=agent_name,
+        agent_version=agent_version,
+        model_name=model_name,
+        source_kind="emergency_prefix",
+        event_prefix={
+            "source_sha256": source_events_sha256,
+            "source_byte_length": source_events_byte_length,
+            "validated_sha256": validated_prefix_sha256,
+            "validated_byte_length": validated_prefix_byte_length,
+            "last_valid_seq": last["seq"] if last is not None else None,
+            "stop_reason": stop_reason,
+            "usage_coverage": dict(usage_coverage),
+        },
+    )
+
+
 def project_partial_trajectory(
     *,
     instruction: str,
@@ -467,8 +665,12 @@ def validate_minimal_trajectory(trajectory: Mapping[str, Any]) -> None:
     ):
         raise AtifError("atif_agent_invalid")
     steps = trajectory.get("steps")
-    if not isinstance(steps, list) or len(steps) < 2:
+    if not isinstance(steps, list) or not steps:
         raise AtifError("atif_steps_invalid")
+    extra = trajectory.get("extra")
+    terminal_failure = (
+        extra.get("terminal_failure") if isinstance(extra, dict) else None
+    )
     for index, step in enumerate(steps, start=1):
         if not isinstance(step, dict) or step.get("step_id") != index:
             raise AtifError("atif_step_sequence_invalid")
@@ -482,7 +684,14 @@ def validate_minimal_trajectory(trajectory: Mapping[str, Any]) -> None:
             if not isinstance(calls, list) or len(calls) != 1:
                 raise AtifError("atif_tool_calls_invalid")
             if not isinstance(observation, dict):
-                raise AtifError("atif_tool_observation_missing")
+                call_extra = calls[0].get("extra")
+                if (
+                    terminal_failure is None
+                    or not isinstance(call_extra, dict)
+                    or call_extra.get("state") not in {"failed", "in_flight"}
+                ):
+                    raise AtifError("atif_tool_observation_missing")
+                continue
             results = observation.get("results")
             if (
                 not isinstance(results, list)
@@ -490,7 +699,9 @@ def validate_minimal_trajectory(trajectory: Mapping[str, Any]) -> None:
                 or results[0].get("source_call_id") != calls[0].get("tool_call_id")
             ):
                 raise AtifError("atif_tool_observation_invalid")
-    if steps[0]["source"] != "user" or steps[-1]["source"] != "agent":
+    if steps[0]["source"] != "user":
+        raise AtifError("atif_boundary_steps_invalid")
+    if terminal_failure is None and steps[-1]["source"] != "agent":
         raise AtifError("atif_boundary_steps_invalid")
 
 

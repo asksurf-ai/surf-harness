@@ -803,7 +803,7 @@ async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
         .await
         .expect_err("official repository call must fail closed");
 
-    assert_eq!(error.code(), "official_benchmark_repository_access_blocked");
+    assert_eq!(error.code(), "protected_harness_material_access_blocked");
     assert_eq!(executor.executions, 0);
     let events = fs::read_to_string(artifacts.join("events.jsonl")).expect("events");
     let parsed = events
@@ -843,8 +843,80 @@ async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
     assert_eq!(run["terminal_phase"], "tool");
     assert_eq!(
         run["terminal_code"],
-        "official_benchmark_repository_access_blocked"
+        "protected_harness_material_access_blocked"
     );
+}
+
+#[tokio::test]
+async fn protected_path_alias_calls_are_fatal_registered_only_runs() {
+    for (name, command) in [
+        (
+            "split-logs",
+            "p=/logs; cat \"$p/agent/input/run-spec.json\"",
+        ),
+        (
+            "proc-root-logs",
+            "cat /proc/self/root/logs/agent/input/run-spec.json",
+        ),
+    ] {
+        let root = tempfile::tempdir().expect("test root");
+        let contract = write_contract(root.path());
+        let artifacts = root.path().join("artifacts");
+        let deadline = action_open_phase_deadline(Instant::now() + Duration::from_secs(10));
+        let arguments = json!({
+            "command": command,
+            "description": "blocked protected path alias",
+            "background": true,
+        });
+        let mut provider = PhaseProvider {
+            responses: VecDeque::from([phase_terminal_response(name, arguments.clone())]),
+            requests: Vec::new(),
+            action_return_at: None,
+        };
+        let mut executor = ImmediateExecutor::default();
+        let spec = phase_spec(&contract, &artifacts);
+
+        let error =
+            run_agent_with_deadline(&spec, &contract, &mut provider, &mut executor, &deadline)
+                .await
+                .expect_err("protected path alias must fail closed");
+
+        assert_eq!(error.code(), "protected_harness_material_access_blocked");
+        assert_eq!(executor.executions, 0);
+        let events = fs::read_to_string(artifacts.join("events.jsonl")).expect("events");
+        let parsed = events
+            .lines()
+            .map(|line| serde_json::from_str::<Value>(line).expect("event JSON"))
+            .collect::<Vec<_>>();
+        assert_eq!(
+            parsed
+                .iter()
+                .filter(|event| event["type"] == "tool.registered")
+                .count(),
+            1
+        );
+        assert_eq!(
+            parsed
+                .iter()
+                .find(|event| event["type"] == "tool.registered")
+                .expect("registered")["data"]["arguments_json"],
+            serde_json::to_string(&arguments).expect("arguments")
+        );
+        assert_eq!(events.matches("\"type\":\"tool.dispatched\"").count(), 0);
+        assert_eq!(events.matches("\"type\":\"tool.completed\"").count(), 0);
+        assert_eq!(events.matches("\"type\":\"tool.failed\"").count(), 1);
+        assert_eq!(events.matches("\"type\":\"run.failed\"").count(), 1);
+        let failed = parsed
+            .iter()
+            .find(|event| event["type"] == "tool.failed")
+            .expect("failed evidence");
+        assert_eq!(
+            failed["data"]["code"],
+            "protected_harness_material_access_blocked"
+        );
+        assert_eq!(failed["data"]["execution_may_have_started"], false);
+        assert_eq!(failed["data"]["recoverability"], "fatal");
+    }
 }
 
 #[tokio::test]

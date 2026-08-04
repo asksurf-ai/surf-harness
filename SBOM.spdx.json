@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-08-02T05:52:55Z",
+    "created": "2026-08-04T05:37:53Z",
     "creators": [
       "Tool: nano-grok-build-public-export-v1"
     ],
@@ -11,8 +11,8 @@
   "documentDescribes": [
     "SPDXRef-Package-surf-harness"
   ],
-  "documentNamespace": "https://spdx.org/spdxdocs/surf-harness-0.1.0-d3aca8683d42a98a66ccc652c5046fa221778182",
-  "name": "surf-harness-0.1.0",
+  "documentNamespace": "https://spdx.org/spdxdocs/surf-harness-0.2.0-1cc8392ceaad8884d5fcda5e266a903f527b4918",
+  "name": "surf-harness-0.2.0",
   "packages": [
     {
       "SPDXID": "SPDXRef-Package-surf-harness",
@@ -22,7 +22,7 @@
       "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "Apache-2.0",
       "name": "surf-harness",
-      "versionInfo": "0.1.0"
+      "versionInfo": "0.2.0"
     },
     {
       "SPDXID": "SPDXRef-cargo-atomic-waker-1.1.2",

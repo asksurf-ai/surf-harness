@@ -228,6 +228,18 @@ def test_bound_run_spec_carries_exact_requested_selector(
     assert (
         envelope["manifest"]["run_specs"][0]["active_tools"] == specs[0]["active_tools"]
     )
+    expected_private_runtime = (
+        tmp_path / "trials" / "trial-1" / ".nano-control-v2" / "runtime"
+    ).resolve()
+    assert Path(specs[0]["artifact_dir"]) == expected_private_runtime
+    assert (
+        Path(trial.agent.kwargs["run_spec"]["artifact_dir"]) == expected_private_runtime
+    )
+    assert (
+        Path(envelope["manifest"]["run_specs"][0]["artifact_dir"])
+        == expected_private_runtime
+    )
+    assert "agent" not in expected_private_runtime.parts[-3:]
 
 
 def test_resolved_package_task_cache_seam_avoids_trial_registry_lookup(

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0
+
+- Isolate run control artifacts from the task-visible agent log mount.
+- Block task-neutral protected harness targets before tool dispatch.
+- Publish truthful ATIF trajectories for failed and emergency runs.
+- Package one shared protected-target policy for runtime and collector parity.
+- Export the offline clean-submission preflight when integrated.
+
+This release starts a fresh five-run evaluation cohort. It does not reuse or
+repair V10.1 evidence and does not claim a leaderboard score before review.
+
 ## 0.1.0
 
 - Publish the bounded Rust provider/runtime and Python Harbor adapter.

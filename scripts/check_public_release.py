@@ -11,7 +11,8 @@ import sys
 import tomllib
 from pathlib import Path
 
-EXPECTED_VERSION = "0.1.0"
+EXPECTED_VERSION = "0.2.0"
+PUBLIC_PROTECTED_POLICY = "policy/protected-targets-v1.json"
 EXPECTED_APPROVED_ARTIFACTS = {
     "NOTICE": (648, "48f7687551795354b316162b0bdf189a6bb57d6e5e9e6db4bf7a4ad79ea8426d"),
     "THIRD_PARTY_NOTICES.md": (
@@ -50,6 +51,7 @@ REQUIRED_PATHS = {
     "THIRD_PARTY_NOTICES.md",
     "SOURCE-MANIFEST.json",
     "SBOM.spdx.json",
+    PUBLIC_PROTECTED_POLICY,
     *EXPECTED_APPROVED_ARTIFACTS,
 }
 FORBIDDEN_PREFIXES = (
@@ -139,7 +141,9 @@ def check_public_release(root: Path) -> list[str]:
         candidate = root / path
         if candidate.is_symlink():
             errors.append(f"public release contains symlink: {path}")
-        if path in FORBIDDEN_PATHS or path.startswith(FORBIDDEN_PREFIXES):
+        if path in FORBIDDEN_PATHS or (
+            path.startswith(FORBIDDEN_PREFIXES) and path != PUBLIC_PROTECTED_POLICY
+        ):
             errors.append(f"internal-only path exported: {path}")
 
     for path, (expected_length, expected_hash) in EXPECTED_APPROVED_ARTIFACTS.items():

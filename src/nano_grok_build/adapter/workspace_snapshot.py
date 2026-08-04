@@ -762,6 +762,7 @@ class SnapshotTarget:
 
     actor: object
     artifact_dir: Path
+    publication_dir: Path | None = None
 
 
 class WorkspaceBaselineStateV1(str, Enum):
@@ -1319,7 +1320,21 @@ def _target(value: object) -> SnapshotTarget:
         or not artifact_dir.is_dir()
     ):
         raise WorkspaceSnapshotError("workspace_snapshot_artifact_dir_invalid")
-    return SnapshotTarget(actor=target.actor, artifact_dir=artifact_dir)
+    publication_dir: Path | None = None
+    if target.publication_dir is not None:
+        publication_dir = target.publication_dir.resolve()
+        if (
+            target.publication_dir.is_symlink()
+            or not publication_dir.is_absolute()
+            or not publication_dir.is_dir()
+            or publication_dir == artifact_dir
+        ):
+            raise WorkspaceSnapshotError("workspace_snapshot_publication_dir_invalid")
+    return SnapshotTarget(
+        actor=target.actor,
+        artifact_dir=artifact_dir,
+        publication_dir=publication_dir,
+    )
 
 
 def _local_workspace(actor: object) -> Path:

@@ -669,6 +669,86 @@ def test_marker_last_publication_is_byte_idempotent(tmp_path: Path) -> None:
     assert marker["trajectory_sha256"] == hashlib.sha256(trajectory_bytes).hexdigest()
 
 
+def test_private_source_publication_is_allowlisted_marker_last_and_conflict_closed(
+    tmp_path: Path,
+) -> None:
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    trial = tmp_path / "trial"
+    public = trial / "agent"
+    public.mkdir(parents=True)
+    private = trial / ".nano-control-v2"
+    spec = run_spec(private)
+    plane = ControlPlane.create(
+        public,
+        run_spec_sha256=rust_run_spec_sha256(spec),
+    )
+    write_committed_runtime(plane.root, spec)
+    private_spec = plane.root / "input" / "run-spec.json"
+    private_spec.parent.mkdir()
+    private_spec.write_bytes(b"private-sentinel")
+
+    publication = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=False,
+    )
+
+    assert publication.trajectory_path == public / "trajectory.json"
+    assert publication.marker_path == public / "agent-run.json"
+    assert (public / "runtime" / "run.json").is_file()
+    assert (public / "runtime" / "events.jsonl").is_file()
+    assert not (public / "input").exists()
+    assert b"private-sentinel" not in b"".join(
+        path.read_bytes() for path in public.rglob("*") if path.is_file()
+    )
+    assert publication.marker_path.stat().st_mtime_ns >= (
+        publication.trajectory_path.stat().st_mtime_ns
+    )
+    repeated = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=False,
+    )
+    assert repeated.marker_bytes == publication.marker_bytes
+    assert repeated.trajectory_path.read_bytes() == (
+        publication.trajectory_path.read_bytes()
+    )
+
+    conflict_trial = tmp_path / "conflict-trial"
+    conflict_public = conflict_trial / "agent"
+    conflict_public.mkdir(parents=True)
+    conflict_private = conflict_trial / ".nano-control-v2"
+    conflict_spec = run_spec(conflict_private)
+    conflict_plane = ControlPlane.create(
+        conflict_public,
+        run_spec_sha256=rust_run_spec_sha256(conflict_spec),
+    )
+    write_committed_runtime(conflict_plane.root, conflict_spec)
+    (conflict_public / "trajectory.json").write_bytes(b"conflict\n")
+    with pytest.raises(ArtifactError, match="public.*conflict"):
+        publish_artifacts(
+            logs_dir=conflict_plane.root,
+            publication_dir=conflict_public,
+            run_spec=conflict_spec,
+            instruction="Create the sentinel.",
+            agent_name="nano-grok-build",
+            agent_version="test",
+            model_name="synthetic-model",
+            require_harbor_validator=False,
+        )
+
+
 def test_v2_success_keeps_atif_and_publishes_v2_usage_marker(tmp_path: Path) -> None:
     logs = tmp_path / "agent"
     spec = run_spec(logs)
@@ -822,7 +902,7 @@ def test_compact_tool_receipt_is_accepted_without_entering_partial_trajectory(
         require_harbor_validator=False,
     )
 
-    assert publication.publication_kind == "failure_partial"
+    assert publication.publication_kind == "failure_atif"
     assert "tool_receipt" not in json.dumps(publication.trajectory)
 
 
@@ -1560,6 +1640,7 @@ def test_v2_deadline_receipt_file_cannot_remain_unbound(tmp_path: Path) -> None:
 
 def test_v2_failure_publishes_truthful_partial_and_marker_last(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     logs = tmp_path / "agent"
     spec = run_spec(logs)
@@ -1585,6 +1666,11 @@ def test_v2_failure_publishes_truthful_partial_and_marker_last(
         }
     )
     (logs / "workspace-receipt.json").write_bytes(workspace_receipt)
+    monkeypatch.setattr(
+        artifactizer,
+        "validate_with_pinned_harbor",
+        lambda trajectory: None,
+    )
 
     first = publish_artifacts(
         logs_dir=logs,
@@ -1597,12 +1683,12 @@ def test_v2_failure_publishes_truthful_partial_and_marker_last(
         require_background_manifest=True,
     )
 
-    assert first.publication_kind == "failure_partial"
+    assert first.publication_kind == "failure_atif"
     assert first.success_artifact_valid is False
     assert first.diagnostic_package_valid is True
-    assert first.trajectory_path.name == "partial-trajectory.json"
-    assert not (logs / "trajectory.json").exists()
-    partial_bytes = first.trajectory_path.read_bytes()
+    assert first.trajectory_path.name == "trajectory.json"
+    assert first.trajectory["schema_version"] == "ATIF-v1.7"
+    partial_bytes = (logs / "partial-trajectory.json").read_bytes()
     partial = json.loads(partial_bytes)
     assert partial["schema_version"] == "nano-partial-trajectory-v1"
     assert partial["instruction"] == "Create the sentinel."
@@ -1633,10 +1719,15 @@ def test_v2_failure_publishes_truthful_partial_and_marker_last(
         }
     ]
     marker = json.loads(first.marker_bytes)
-    assert marker["schema_version"] == "nano-agent-run-v2"
-    assert marker["publication_kind"] == "failure_partial"
-    assert marker["trajectory_path"] == "partial-trajectory.json"
-    assert marker["trajectory_sha256"] == hashlib.sha256(partial_bytes).hexdigest()
+    assert marker["schema_version"] == "nano-agent-run-v4"
+    assert marker["publication_kind"] == "failure_atif"
+    assert marker["trajectory_path"] == "trajectory.json"
+    assert (
+        marker["trajectory_sha256"]
+        == hashlib.sha256(first.trajectory_path.read_bytes()).hexdigest()
+    )
+    assert marker["diagnostic_path"] == "partial-trajectory.json"
+    assert marker["diagnostic_sha256"] == hashlib.sha256(partial_bytes).hexdigest()
     assert (
         marker["usage_receipt_sha256"]
         == hashlib.sha256(
@@ -1663,7 +1754,56 @@ def test_v2_failure_publishes_truthful_partial_and_marker_last(
         require_background_manifest=True,
     )
     assert second.marker_bytes == first.marker_bytes
-    assert second.trajectory_path.read_bytes() == partial_bytes
+    assert second.trajectory_path.read_bytes() == first.trajectory_path.read_bytes()
+    assert (logs / "partial-trajectory.json").read_bytes() == partial_bytes
+
+
+def test_failure_publishes_direct_pinned_atif_and_bound_partial_diagnostic(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    logs = tmp_path / "agent"
+    spec = run_spec(logs)
+    write_failed_runtime_v2(logs, spec)
+    validated: list[object] = []
+    monkeypatch.setattr(
+        artifactizer,
+        "validate_with_pinned_harbor",
+        lambda trajectory: validated.append(trajectory),
+    )
+
+    publication = publish_artifacts(
+        logs_dir=logs,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=True,
+    )
+
+    assert publication.publication_kind == "failure_atif"
+    assert publication.success_artifact_valid is False
+    assert publication.trajectory_path == logs / "trajectory.json"
+    assert publication.trajectory["schema_version"] == "ATIF-v1.7"
+    assert publication.trajectory["extra"]["terminal_failure"]["status"] == (
+        "tool_failure"
+    )
+    assert publication.trajectory["steps"][-1]["message"] != "finished"
+    assert validated == [publication.trajectory]
+    diagnostic = logs / "partial-trajectory.json"
+    assert diagnostic.is_file()
+    assert json.loads(diagnostic.read_bytes())["schema_version"] == (
+        "nano-partial-trajectory-v1"
+    )
+    marker = json.loads(publication.marker_bytes)
+    assert marker["schema_version"] == "nano-agent-run-v4"
+    assert marker["trajectory_path"] == "trajectory.json"
+    assert marker["diagnostic_path"] == "partial-trajectory.json"
+    assert (
+        marker["diagnostic_sha256"]
+        == hashlib.sha256(diagnostic.read_bytes()).hexdigest()
+    )
 
 
 @pytest.mark.parametrize(
@@ -1679,8 +1819,9 @@ def test_v2_failure_publishes_truthful_partial_and_marker_last(
         ("tool_failure", "bridge", "terminal_actor_cleanup_unverified"),
     ],
 )
-def test_rewarded_failed_runtime_remains_diagnostic_and_atif_ineligible(
+def test_rewarded_failed_runtime_has_truthful_uploader_compatible_atif(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
     terminal_status: str,
     terminal_phase: str,
     terminal_code: str,
@@ -1695,6 +1836,11 @@ def test_rewarded_failed_runtime_remains_diagnostic_and_atif_ineligible(
         terminal_code=terminal_code,
     )
     external_verifier_reward = 1
+    monkeypatch.setattr(
+        artifactizer,
+        "validate_with_pinned_harbor",
+        lambda trajectory: None,
+    )
 
     first = publish_artifacts(
         logs_dir=logs,
@@ -1707,25 +1853,28 @@ def test_rewarded_failed_runtime_remains_diagnostic_and_atif_ineligible(
     )
 
     assert external_verifier_reward == 1
-    assert first.publication_kind == "failure_partial"
+    assert first.publication_kind == "failure_atif"
     assert first.success_artifact_valid is False
-    assert first.atif_eligibility.leaderboard_eligible is False
-    assert first.atif_eligibility.conformance == "diagnostic_only"
-    assert first.atif_eligibility.trajectory_path is None
-    assert first.atif_eligibility.trajectory_sha256 is None
-    assert first.atif_eligibility.ineligibility_reason == (
-        f"runtime_not_success:{terminal_status}:{terminal_code}"
+    assert first.atif_eligibility.leaderboard_eligible is True
+    assert first.atif_eligibility.conformance == "pinned_harbor_valid"
+    assert first.atif_eligibility.trajectory_path == "trajectory.json"
+    assert (
+        first.atif_eligibility.trajectory_sha256
+        == hashlib.sha256(first.trajectory_path.read_bytes()).hexdigest()
     )
-    partial = first.trajectory
+    assert first.atif_eligibility.ineligibility_reason is None
+    assert first.trajectory["schema_version"] == "ATIF-v1.7"
+    assert first.trajectory["extra"]["terminal_failure"]["status"] == terminal_status
+    partial = json.loads((logs / "partial-trajectory.json").read_bytes())
     assert partial["schema_version"] == "nano-partial-trajectory-v1"
     assert partial["assistant_final"] is None
     assert partial["provider_turns"][-1]["state"] == "in_flight"
-    assert not (logs / "trajectory.json").exists()
+    assert (logs / "trajectory.json").is_file()
     marker = json.loads(first.marker_bytes)
-    assert marker["publication_kind"] == "failure_partial"
+    assert marker["publication_kind"] == "failure_atif"
     assert marker["terminal_status"] == terminal_status
     assert marker["terminal_code"] == terminal_code
-    assert marker["trajectory_path"] == "partial-trajectory.json"
+    assert marker["trajectory_path"] == "trajectory.json"
     assert (
         marker["trajectory_sha256"]
         == hashlib.sha256(first.trajectory_path.read_bytes()).hexdigest()
@@ -1746,6 +1895,7 @@ def test_rewarded_failed_runtime_remains_diagnostic_and_atif_ineligible(
 
 def test_missing_record_publishes_validated_emergency_prefix(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     logs = tmp_path / "agent"
     spec = run_spec(logs)
@@ -1777,6 +1927,11 @@ def test_missing_record_publishes_validated_emergency_prefix(
         "tasks": [],
     }
     (logs / "runtime-background-manifest.json").write_bytes(canonical_json(manifest))
+    monkeypatch.setattr(
+        artifactizer,
+        "validate_with_pinned_harbor",
+        lambda trajectory: None,
+    )
 
     publication = publish_artifacts(
         logs_dir=logs,
@@ -1789,23 +1944,20 @@ def test_missing_record_publishes_validated_emergency_prefix(
         require_background_manifest=True,
     )
 
-    assert publication.publication_kind == "emergency_prefix"
+    assert publication.publication_kind == "emergency_atif"
     assert publication.success_artifact_valid is False
     assert publication.diagnostic_package_valid is True
-    assert publication.atif_eligibility.leaderboard_eligible is False
-    assert publication.atif_eligibility.conformance == "diagnostic_only"
-    assert publication.atif_eligibility.trajectory_path is None
-    assert publication.atif_eligibility.trajectory_sha256 is None
-    assert publication.atif_eligibility.ineligibility_reason == (
-        "runtime_not_success:runtime_failure:"
-        "runtime_record_missing_after_bridge_completion"
-    )
+    assert publication.atif_eligibility.leaderboard_eligible is True
+    assert publication.atif_eligibility.conformance == "pinned_harbor_valid"
+    assert publication.atif_eligibility.trajectory_path == "trajectory.json"
+    assert publication.atif_eligibility.ineligibility_reason is None
     assert publication.context == {
         "n_input_tokens": 13,
         "n_cache_tokens": 2,
         "n_output_tokens": 5,
     }
-    prefix = publication.trajectory
+    assert publication.trajectory["schema_version"] == "ATIF-v1.7"
+    prefix = json.loads((logs / "emergency-prefix.json").read_bytes())
     assert prefix["schema_version"] == "nano-emergency-prefix-v1"
     assert prefix["assistant_final"] is None
     assert prefix["event_prefix"]["last_valid_seq"] == 2
@@ -1819,12 +1971,66 @@ def test_missing_record_publishes_validated_emergency_prefix(
         "evidence": "adapter_emergency",
     }
     marker = json.loads(publication.marker_bytes)
-    assert marker["publication_kind"] == "emergency_prefix"
+    assert marker["publication_kind"] == "emergency_atif"
     assert marker["run_record_schema"] is None
     assert marker["events_sha256"] == hashlib.sha256(source_events).hexdigest()
-    assert marker["trajectory_path"] == "emergency-prefix.json"
+    assert marker["trajectory_path"] == "trajectory.json"
+    assert marker["diagnostic_path"] == "emergency-prefix.json"
     assert publication.usage_coverage is not None
     assert publication.usage_coverage["state"] == "complete"
+
+
+def test_empty_emergency_prefix_publishes_direct_atif_without_invented_final(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    logs = tmp_path / "agent"
+    logs.mkdir()
+    spec = run_spec(logs)
+    emergency = {
+        "schema_version": "nano-runtime-emergency-v1",
+        "run_id": spec["run_id"],
+        "trial_id": spec["trial_id"],
+        "attempt_id": spec["attempt_id"],
+        "run_spec_sha256": rust_run_spec_sha256(spec),
+        "status": "runtime_record_missing",
+        "code": "adapter_runtime_failed",
+        "bridge_completed": False,
+        "events_sha256": None,
+        "events_byte_length": None,
+    }
+    (logs / "runtime-emergency.json").write_bytes(canonical_json(emergency))
+    validated: list[object] = []
+    monkeypatch.setattr(
+        artifactizer,
+        "validate_with_pinned_harbor",
+        lambda trajectory: validated.append(trajectory),
+    )
+
+    publication = publish_artifacts(
+        logs_dir=logs,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=True,
+    )
+
+    assert validated == [publication.trajectory]
+    assert publication.trajectory_path == logs / "trajectory.json"
+    assert publication.trajectory["steps"] == [
+        {"step_id": 1, "source": "user", "message": "Create the sentinel."}
+    ]
+    assert publication.trajectory["extra"]["terminal_failure"]["evidence"] == (
+        "adapter_emergency"
+    )
+    assert (
+        json.loads((logs / "emergency-prefix.json").read_bytes())["event_prefix"][
+            "stop_reason"
+        ]
+        == "event_log_missing"
+    )
 
 
 def test_background_manifest_is_canonical_bounded_and_digest_bound(
@@ -1905,7 +2111,7 @@ def test_background_failure_manifest_preserves_runtime_diagnostics(
         require_background_manifest=True,
     )
 
-    assert publication.publication_kind == "failure_partial"
+    assert publication.publication_kind == "failure_atif"
     assert publication.diagnostic_package_valid is True
     assert publication.background_manifest == receipt
     assert publication.usage_receipt_path is not None

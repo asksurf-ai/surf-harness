@@ -26,7 +26,7 @@ from nano_grok_build.adapter.workspace_snapshot import (
     capture_after,
     capture_before,
 )
-from nano_grok_build.harbor import tb21
+from nano_grok_build.harbor import protected_target, tb21
 
 
 def _write_task(
@@ -928,7 +928,10 @@ def _write_v2_failure_publication(
         agent_name="nano-grok-build",
         agent_version="test",
         model_name="grok-4.5",
-        require_harbor_validator=not successful,
+        # This collector fixture also runs in the dependency-cold checkout,
+        # where Harbor is intentionally not installed. Pinned-validator
+        # integration is covered separately; keep this helper provider-free.
+        require_harbor_validator=False,
         require_background_manifest=True,
     )
     (job_dir / "result.json").write_bytes(
@@ -1137,6 +1140,83 @@ def _write_collectible_emergency_prefix(
     return job_dir, spec
 
 
+@pytest.mark.parametrize("publication", ["failure_atif", "emergency_atif"])
+def test_terminal_atif_v4_is_valid_collector_evidence(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    publication: str,
+) -> None:
+    monkeypatch.setattr(
+        "nano_grok_build.adapter.artifactizer.validate_with_pinned_harbor",
+        lambda _trajectory: None,
+    )
+    if publication == "failure_atif":
+        job_dir, _run_path = _write_collectible_v2_failure(tmp_path)
+        spec = _run_spec("failure__trial", "failure", "a" * 64)
+    else:
+        job_dir, spec = _write_collectible_emergency_prefix(tmp_path)
+    trial_dir = job_dir / str(spec["trial_id"])
+
+    artifacts = tb21._artifact_evidence(trial_dir, spec)
+
+    assert artifacts.publication_kind == publication
+    assert artifacts.publication_valid is True
+    assert artifacts.trajectory_valid is True
+    assert artifacts.diagnostic_valid is True
+    assert artifacts.success_valid is False
+    assert artifacts.usage_receipt_valid is True
+    assert artifacts.terminal_status != "success"
+    assert (trial_dir / "agent" / "trajectory.json").is_file()
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "trajectory_hash",
+        "diagnostic_hash",
+        "diagnostic_path",
+        "terminal_success",
+        "unknown_field",
+    ],
+)
+def test_terminal_atif_v4_marker_tamper_fails_closed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+) -> None:
+    monkeypatch.setattr(
+        "nano_grok_build.adapter.artifactizer.validate_with_pinned_harbor",
+        lambda _trajectory: None,
+    )
+    job_dir, _run_path = _write_collectible_v2_failure(tmp_path)
+    spec = _run_spec("failure__trial", "failure", "a" * 64)
+    trial_dir = job_dir / str(spec["trial_id"])
+    marker_path = trial_dir / "agent" / "agent-run.json"
+    marker = json.loads(marker_path.read_bytes())
+    assert marker["schema_version"] == "nano-agent-run-v4"
+    if mutation == "trajectory_hash":
+        marker["trajectory_sha256"] = "0" * 64
+    elif mutation == "diagnostic_hash":
+        marker["diagnostic_sha256"] = "0" * 64
+    elif mutation == "diagnostic_path":
+        marker["diagnostic_path"] = "trajectory.json"
+    elif mutation == "terminal_success":
+        marker["terminal_status"] = "success"
+        marker["terminal_phase"] = None
+        marker["terminal_code"] = "completed"
+    else:
+        marker["future_field"] = True
+    marker_path.write_bytes(_canonical(marker))
+
+    artifacts = tb21._artifact_evidence(trial_dir, spec)
+
+    assert artifacts.publication_kind == "failure_atif"
+    assert artifacts.publication_valid is False
+    assert artifacts.trajectory_valid is False
+    assert artifacts.diagnostic_valid is False
+    assert artifacts.success_valid is False
+
+
 def _rust_ordered_v2_run(record: dict[str, object]) -> bytes:
     field_order = (
         "schema_version",
@@ -1251,14 +1331,29 @@ def _upgrade_v2_publication_reader_fixture(
     usage = json.loads(usage_path.read_bytes())
     usage["events_sha256"] = events_sha256
     usage_path.write_bytes(_canonical(usage))
+    trajectory_path = logs_dir / "trajectory.json"
+    trajectory = json.loads(trajectory_path.read_bytes())
+    trajectory["extra"]["events_sha256"] = events_sha256
+    trajectory_path.write_bytes(_canonical(trajectory))
+    diagnostic_path = logs_dir / "partial-trajectory.json"
+    diagnostic = json.loads(diagnostic_path.read_bytes())
+    diagnostic["extra"]["events_sha256"] = events_sha256
+    diagnostic_path.write_bytes(_canonical(diagnostic))
     marker_path = logs_dir / "agent-run.json"
     marker = json.loads(marker_path.read_bytes())
     marker["events_sha256"] = events_sha256
     marker["run_record_schema"] = schema_version
     marker["usage_receipt_sha256"] = hashlib.sha256(usage_path.read_bytes()).hexdigest()
+    marker["trajectory_sha256"] = hashlib.sha256(
+        trajectory_path.read_bytes()
+    ).hexdigest()
+    marker["diagnostic_sha256"] = hashlib.sha256(
+        diagnostic_path.read_bytes()
+    ).hexdigest()
     if schema_version == "nano-run-record-v3":
-        marker["schema_version"] = "nano-agent-run-v3"
         marker["deadline_receipt_sha256"] = record["deadline_receipt_sha256"]
+    else:
+        marker.pop("deadline_receipt_sha256", None)
     marker_path.write_bytes(_canonical(marker))
     return runtime_dir / "run.json"
 
@@ -3155,7 +3250,7 @@ def test_abort_collect_preserves_partial_usage_trajectory_and_cleanup_failure(
     }
     cleanup = rows["terminal-bench/cleanup"]
     partial = rows["terminal-bench/partial"]
-    assert cleanup["publication_kind"] == "failure_partial"
+    assert cleanup["publication_kind"] == "failure_atif"
     assert cleanup["runtime_terminal_code"] == "terminal_actor_cleanup_unverified"
     assert (cleanup_dir / "agent" / "partial-trajectory.json").is_file()
     assert partial["usage_state"] == "partial"
@@ -3905,6 +4000,7 @@ def test_contamination_audit_reads_only_model_tool_arguments_and_stays_advisory(
             "source": "agent",
             "tool_calls": [
                 {
+                    "tool_call_id": "official-repository-call",
                     "function_name": "run_terminal_command",
                     "arguments": {
                         "command": (
@@ -3914,6 +4010,14 @@ def test_contamination_audit_reads_only_model_tool_arguments_and_stays_advisory(
                     },
                 }
             ],
+            "observation": {
+                "results": [
+                    {
+                        "source_call_id": "official-repository-call",
+                        "content": "clone output",
+                    }
+                ]
+            },
         }
     )
     publish_trajectory()
@@ -3926,15 +4030,324 @@ def test_contamination_audit_reads_only_model_tool_arguments_and_stays_advisory(
     assert row["contamination_signals"] == ["official_benchmark_repository_access"]
     assert row["contamination_signal"] is True
     assert summary["contamination"] == {
+        "schema_version": protected_target.AUDIT_SCHEMA,
+        "finding_schema_version": protected_target.FINDING_SCHEMA,
+        "policy_schema_version": protected_target.POLICY_SCHEMA,
+        "policy_sha256": protected_target.POLICY_SHA256,
         "audit_available": 1,
         "audit_denominator": 1,
+        "finding_trial_count": 1,
+        "finding_trial_passes": 1,
         "strong_signal_count": 1,
         "strong_signal_passes": 1,
+        "finding_counts": {
+            "findings": 1,
+            "strong": 1,
+            "attempted": 0,
+            "access_blocked": 0,
+            "dispatched": 1,
+            "bytes_returned": 1,
+            "causal_benefit": 1,
+        },
         "signal_adjusted_collector_numerator": 0,
         "signal_adjusted_collector_denominator": 1,
         "signal_adjusted_collector_percent": 0.0,
     }
     assert summary["gates"]["contamination_clean"] is False
+
+
+def test_protected_target_policy_parity_uses_versioned_fixture_cases() -> None:
+    fixture = json.loads(
+        (
+            Path(__file__).parent
+            / "fixtures"
+            / "p0p1"
+            / "collector-classification-cases.json"
+        ).read_bytes()
+    )
+
+    for case in fixture["protected_target_cases"]:
+        finding = protected_target.match_protected_target(
+            case["tool_name"], case["arguments"]
+        )
+        expected = case["expected_kind"]
+        assert (finding["target_kind"] if finding else None) == expected, case["name"]
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        'p=/logs; cat "$p/agent/input/run-spec.json"',
+        "cat /proc/self/root/logs/agent/input/run-spec.json",
+        "cat /proc/123/root/logs/verifier/reward.txt",
+        "cat /tmp/../proc/456/root/logs/reward/value",
+        r"cat /proc/self/root%2flogs%2fjudge%2fresult.json",
+    ],
+)
+def test_protected_target_matcher_covers_split_and_proc_root_aliases(
+    command: str,
+) -> None:
+    finding = protected_target.match_protected_target(
+        "run_terminal_command", {"command": command}
+    )
+
+    assert finding == {
+        "target_kind": "protected_path",
+        "target_field": "command",
+        "policy_value": "/logs",
+    }
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "cat /workspace/logs/agent-notes",
+        "cat /var/logs/agent",
+        "echo ordinary logs word",
+        "cat /proc/self/root/workspace/logs/agent-notes",
+    ],
+)
+def test_protected_target_matcher_keeps_benign_logs_controls(command: str) -> None:
+    assert (
+        protected_target.match_protected_target(
+            "run_terminal_command", {"command": command}
+        )
+        is None
+    )
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        'p=/logs; cat "$p/agent/input/run-spec.json"',
+        "cat /proc/self/root/logs/agent/input/run-spec.json",
+    ],
+)
+def test_protected_target_audit_finds_split_and_proc_root_attempts(
+    tmp_path: Path,
+    command: str,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    agent_dir.mkdir()
+    (agent_dir / "trajectory.json").write_bytes(
+        _canonical(
+            {
+                "schema_version": "ATIF-v1.7",
+                "steps": [
+                    {
+                        "source": "agent",
+                        "tool_calls": [
+                            {
+                                "tool_call_id": "call-protected-alias",
+                                "function_name": "run_terminal_command",
+                                "arguments": {"command": command},
+                            }
+                        ],
+                        "observation": {
+                            "results": [
+                                {
+                                    "source_call_id": "call-protected-alias",
+                                    "content": "ordinary command failure",
+                                }
+                            ]
+                        },
+                    }
+                ],
+            }
+        )
+    )
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=True)
+
+    assert audit["state"] == "available"
+    assert audit["signals"] == ["protected_harness_material_access"]
+    assert audit["counts"]["findings"] == 1
+    assert audit["counts"]["dispatched"] == 1
+    assert audit["findings"][0]["policy_value"] == "/logs"
+
+
+def test_protected_target_audit_deduplicates_atif_and_events_as_strong(
+    tmp_path: Path,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    runtime_dir = agent_dir / "runtime"
+    runtime_dir.mkdir(parents=True)
+    arguments = {"command": "cat /logs/agent/input/run-spec.json"}
+    trajectory = {
+        "schema_version": "ATIF-v1.7",
+        "steps": [
+            {
+                "source": "agent",
+                "tool_calls": [
+                    {
+                        "tool_call_id": "call-1",
+                        "function_name": "run_terminal_command",
+                        "arguments": arguments,
+                    }
+                ],
+                "observation": {
+                    "results": [
+                        {"source_call_id": "call-1", "content": "private bytes"}
+                    ]
+                },
+            }
+        ],
+    }
+    trajectory_raw = _canonical(trajectory)
+    (agent_dir / "trajectory.json").write_bytes(trajectory_raw)
+    events = [
+        {
+            "type": "tool.registered",
+            "data": {
+                "call_id": "call-1",
+                "provider_name": "run_terminal_command",
+                "arguments_json": json.dumps(arguments),
+            },
+        },
+        {
+            "type": "tool.dispatched",
+            "data": {
+                "call_id": "call-1",
+                "provider_name": "run_terminal_command",
+            },
+        },
+        {
+            "type": "tool.completed",
+            "data": {
+                "call_id": "call-1",
+                "provider_name": "run_terminal_command",
+                "output": "private bytes",
+            },
+        },
+    ]
+    event_raw = b"".join(_canonical(event) for event in events)
+    (runtime_dir / "events.jsonl").write_bytes(event_raw)
+    (agent_dir / "agent-run.json").write_bytes(
+        _canonical(
+            {
+                "schema_version": "nano-agent-run-v3",
+                "publication_kind": "success_atif",
+                "terminal_status": "success",
+                "terminal_phase": None,
+                "terminal_code": "completed",
+                "trajectory_path": "trajectory.json",
+                "trajectory_sha256": hashlib.sha256(trajectory_raw).hexdigest(),
+                "events_sha256": hashlib.sha256(event_raw).hexdigest(),
+            }
+        )
+    )
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=True)
+
+    assert audit["state"] == "available"
+    assert audit["signals"] == ["protected_harness_material_access"]
+    assert audit["counts"] == {
+        "findings": 1,
+        "strong": 1,
+        "attempted": 0,
+        "access_blocked": 0,
+        "dispatched": 1,
+        "bytes_returned": 1,
+        "causal_benefit": 1,
+    }
+    assert audit["findings"][0]["classification"] == "strong"
+    assert audit["findings"][0]["causal_benefit"] is True
+
+
+def test_protected_target_audit_reads_v4_failure_atif_and_block_marker(
+    tmp_path: Path,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    agent_dir.mkdir()
+    trajectory = {
+        "schema_version": "ATIF-v1.7",
+        "steps": [
+            {
+                "source": "agent",
+                "tool_calls": [
+                    {
+                        "tool_call_id": "call-blocked",
+                        "function_name": "read_file",
+                        "arguments": {"target_file": "/logs/verifier/reward.txt"},
+                    }
+                ],
+            }
+        ],
+    }
+    diagnostic = {"terminal_code": "protected_harness_material_access_blocked"}
+    trajectory_raw = _canonical(trajectory)
+    diagnostic_raw = _canonical(diagnostic)
+    (agent_dir / "trajectory.json").write_bytes(trajectory_raw)
+    (agent_dir / "failure-diagnostic.json").write_bytes(diagnostic_raw)
+    (agent_dir / "agent-run.json").write_bytes(
+        _canonical(
+            {
+                "schema_version": "nano-agent-run-v4",
+                "publication_kind": "failure_atif",
+                "terminal_status": "tool_failure",
+                "terminal_phase": "tool",
+                "terminal_code": "protected_harness_material_access_blocked",
+                "trajectory_path": "trajectory.json",
+                "trajectory_sha256": hashlib.sha256(trajectory_raw).hexdigest(),
+                "diagnostic_path": "failure-diagnostic.json",
+                "diagnostic_sha256": hashlib.sha256(diagnostic_raw).hexdigest(),
+            }
+        )
+    )
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=False)
+
+    assert audit["state"] == "available"
+    assert audit["signals"] == ["protected_harness_material_access_blocked"]
+    assert audit["counts"]["access_blocked"] == 1
+    finding = audit["findings"][0]
+    assert finding["classification"] == "access_blocked"
+    assert finding["attempted"] is True
+    assert finding["dispatched"] is False
+    assert finding["bytes_returned"] is False
+    assert finding["causal_benefit"] is False
+
+
+def test_protected_target_audit_classifies_registered_only_as_attempted(
+    tmp_path: Path,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    agent_dir.mkdir()
+    (agent_dir / "partial-trajectory.json").write_bytes(
+        _canonical(
+            {
+                "schema_version": "nano-partial-trajectory-v1",
+                "tool_calls": [
+                    {
+                        "call_id": "call-registered",
+                        "function_name": "list_dir",
+                        "arguments": {"target_directory": "/logs/reward"},
+                        "state": "in_flight",
+                        "dispatched": False,
+                    }
+                ],
+            }
+        )
+    )
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=False)
+
+    assert audit["signals"] == ["protected_harness_material_access_attempted"]
+    assert audit["counts"]["attempted"] == 1
+    assert audit["findings"][0]["classification"] == "attempted"
+
+
+def test_protected_target_audit_fails_closed_on_malformed_surface(
+    tmp_path: Path,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    agent_dir.mkdir()
+    (agent_dir / "trajectory.json").write_bytes(b"{\n")
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=False)
+
+    assert audit["state"] == "invalid"
+    assert audit["findings"] == []
 
 
 @pytest.mark.parametrize(
@@ -3964,20 +4377,26 @@ def test_contamination_audit_normalizes_official_repository_slugs(
                         "source": "agent",
                         "tool_calls": [
                             {
+                                "tool_call_id": "call-1",
                                 "function_name": "run_terminal_command",
                                 "arguments": {"command": command},
                             }
                         ],
+                        "observation": {
+                            "results": [
+                                {"source_call_id": "call-1", "content": "output"}
+                            ]
+                        },
                     }
                 ]
             }
         )
     )
 
-    assert tb21._contamination_audit(tmp_path) == {
-        "state": "available",
-        "signals": ["official_benchmark_repository_access"],
-    }
+    audit = tb21._contamination_audit(tmp_path)
+    assert audit["state"] == "available"
+    assert audit["signals"] == ["official_benchmark_repository_access"]
+    assert audit["findings"][0]["target_kind"] == "official_benchmark_repository"
 
 
 def test_contamination_audit_keeps_ordinary_github_clean(tmp_path: Path) -> None:
@@ -4005,10 +4424,10 @@ def test_contamination_audit_keeps_ordinary_github_clean(tmp_path: Path) -> None
         )
     )
 
-    assert tb21._contamination_audit(tmp_path) == {
-        "state": "available",
-        "signals": [],
-    }
+    audit = tb21._contamination_audit(tmp_path)
+    assert audit["state"] == "available"
+    assert audit["signals"] == []
+    assert audit["findings"] == []
 
 
 def test_missing_reward_is_verifier_runtime_never_semantic(
@@ -4167,7 +4586,7 @@ def test_v2_failure_package_is_diagnostic_not_success_artifact(
     assert row["success_artifact_valid"] is False
     assert row["diagnostic_package_valid"] is True
     assert row["artifacts_valid"] is False
-    assert row["publication_kind"] == "failure_partial"
+    assert row["publication_kind"] == "failure_atif"
     assert row["workspace_receipt_valid"] is True
     assert row["workspace_snapshot_complete"] is False
     assert row["runtime_terminal_status"] == "tool_failure"
@@ -5452,7 +5871,7 @@ def test_legacy_reader_outputs_remain_pinned(
     assert summary_projection == expected_summary
 
 
-def test_terminal_evidence_is_independent_of_result_and_trajectory(
+def test_terminal_evidence_rejects_mutated_bound_failure_diagnostic(
     tmp_path: Path,
 ) -> None:
     job_dir, run_path = _write_collectible_v2_failure(tmp_path)
@@ -5467,8 +5886,8 @@ def test_terminal_evidence_is_independent_of_result_and_trajectory(
 
     (trial_dir / "agent" / "partial-trajectory.json").write_bytes(b"{}\n")
     summary = tb21.collect_job(job_dir)
-    assert summary["terminal_evidence"]["terminalized_started"] == 1
-    assert summary["terminal_evidence"]["valid_usage_receipts_for_started"] == 1
+    assert summary["terminal_evidence"]["terminalized_started"] == 0
+    assert summary["terminal_evidence"]["valid_usage_receipts_for_started"] == 0
     assert summary["terminal_evidence"]["valid_trajectories_for_started"] == 0
 
 
@@ -5506,14 +5925,14 @@ def test_v2_run_record_order_relaxation_keeps_strict_validation(
     assert row["measurement_complete"] is False
 
 
-def test_emergency_prefix_without_event_file_remains_collectible(
+def test_emergency_atif_without_event_file_remains_collectible(
     tmp_path: Path,
 ) -> None:
     job_dir, _spec = _write_collectible_emergency_prefix(tmp_path)
 
     row = _collected_row(job_dir)
 
-    assert row["publication_kind"] == "emergency_prefix"
+    assert row["publication_kind"] == "emergency_atif"
     assert row["diagnostic_package_valid"] is True
     assert row["success_artifact_valid"] is False
     assert row["runtime_terminal_status"] == "runtime_failure"
@@ -5524,15 +5943,15 @@ def test_emergency_prefix_without_event_file_remains_collectible(
     assert row["runtime_entry_state"] == "not_observed"
 
 
-def test_emergency_prefix_rejects_unbound_v3_marker_relabel(
+def test_emergency_atif_rejects_unbound_v3_marker_relabel(
     tmp_path: Path,
 ) -> None:
     job_dir, spec = _write_collectible_emergency_prefix(tmp_path)
     trial_dir = job_dir / str(spec["trial_id"])
     marker_path = trial_dir / "agent" / "agent-run.json"
     marker = json.loads(marker_path.read_bytes())
-    assert marker["schema_version"] == "nano-agent-run-v2"
-    assert marker["publication_kind"] == "emergency_prefix"
+    assert marker["schema_version"] == "nano-agent-run-v4"
+    assert marker["publication_kind"] == "emergency_atif"
     marker["schema_version"] = "nano-agent-run-v3"
     marker["deadline_receipt_sha256"] = "f" * 64
     marker_path.write_bytes(_canonical(marker))
@@ -5542,7 +5961,7 @@ def test_emergency_prefix_rejects_unbound_v3_marker_relabel(
 
     assert artifacts.diagnostic_valid is False
     assert artifacts.usage_fallback is None
-    assert row["publication_kind"] == "emergency_prefix"
+    assert row["publication_kind"] == "emergency_atif"
     assert row["diagnostic_package_valid"] is False
     assert row["usage_receipt_valid"] is False
     assert row["runtime_terminal_status"] is None

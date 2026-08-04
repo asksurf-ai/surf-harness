@@ -2573,9 +2573,11 @@ def test_harbor_success_hands_off_background_but_diagnostic_failure_cleans(
     monkeypatch.setattr(harbor_adapter, "capture_after", real_capture_after)
     monkeypatch.setattr(harbor_adapter, "runtime_command", continued_runtime)
     monkeypatch.setattr(harbor_adapter, "run_stdio_bridge", continued_bridge)
-    setup_logs = tmp_path / "setup-failure"
-    setup_logs.mkdir()
+    setup_logs = tmp_path / "setup-failure" / "agent"
+    setup_logs.mkdir(parents=True)
     setup_agent = agent(setup_logs, Actor())
+    setup_private = setup_logs.parent / ".nano-control-v2"
+    setup_agent._run_spec["artifact_dir"] = str((setup_private / "runtime").resolve())
     setup_agent.session_id = "session"
     setup_agent.context_id = "context"
     environment = SnapshotTimeoutEnvironment()
@@ -2594,12 +2596,12 @@ def test_harbor_success_hands_off_background_but_diagnostic_failure_cleans(
     assert environment.preflight_calls == 1
     assert environment.capture_calls == 1
     assert environment.snapshot_cleanup_calls == 0
-    receipt = json.loads((setup_logs / "workspace-receipt.json").read_bytes())
+    receipt = json.loads((setup_private / "workspace-receipt.json").read_bytes())
     assert receipt["failure"]["stage"] == "remote-exec"
     assert receipt["failure"]["category"] == "internal"
     assert receipt["failure"]["attempt"] == 1
     assert not any(
-        (setup_logs / name).exists()
+        (setup_private / name).exists()
         for name in (
             "workspace-before.json",
             "workspace-after.json",
@@ -2643,9 +2645,11 @@ def test_harbor_success_hands_off_background_but_diagnostic_failure_cleans(
         "exec_snapshot_owned",
         proven_snapshot_timeout,
     )
-    proven_logs = tmp_path / "setup-proven-failure"
-    proven_logs.mkdir()
+    proven_logs = tmp_path / "setup-proven-failure" / "agent"
+    proven_logs.mkdir(parents=True)
     proven_agent = agent(proven_logs, Actor())
+    proven_private = proven_logs.parent / ".nano-control-v2"
+    proven_agent._run_spec["artifact_dir"] = str((proven_private / "runtime").resolve())
     proven_agent.session_id = "session-proven"
     proven_agent.context_id = "context-proven"
     proven_environment = SnapshotTimeoutEnvironment()
@@ -2667,7 +2671,9 @@ def test_harbor_success_hands_off_background_but_diagnostic_failure_cleans(
     assert proven_agent._before_snapshot.failure.termination_verified is True
     assert proven_agent._before_snapshot.failure.cleanup_verified is True
     assert proven_agent._before_snapshot.continuable is True
-    proven_receipt = json.loads((proven_logs / "workspace-receipt.json").read_bytes())
+    proven_receipt = json.loads(
+        (proven_private / "workspace-receipt.json").read_bytes()
+    )
     assert proven_receipt["failure"]["stage"] == "remote-exec"
     assert proven_receipt["failure"]["category"] == "timeout"
     assert proven_receipt["failure"]["attempt"] == 1
@@ -3144,3 +3150,31 @@ def test_verifier_opportunity_requires_runtime_receipt_result_and_readiness(
     )
     assert denied.eligible is False
     assert actor.cleanup_calls == 1
+
+
+def test_host_private_control_plane_keeps_sentinel_out_of_public_agent_dir(
+    tmp_path: Path,
+) -> None:
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    trial = tmp_path / "trial"
+    public = trial / "agent"
+    public.mkdir(parents=True)
+    plane = ControlPlane.create(public, run_spec_sha256="a" * 64)
+
+    assert plane.root == trial / ".nano-control-v2"
+    assert plane.root.stat().st_mode & 0o777 == 0o700
+    sentinel = plane.root / "input" / "run-spec.json"
+    sentinel.parent.mkdir()
+    sentinel.write_bytes(b"host-private-sentinel")
+    assert list(public.iterdir()) == []
+    assert not (public / "input" / "run-spec.json").exists()
+    plane.verify_pre_dispatch()
+
+    (public / "forged-control.json").write_bytes(b"forged")
+    with pytest.raises(RuntimeError, match="control_public_pre_dispatch_not_empty"):
+        plane.verify_pre_dispatch()
+    (public / "forged-control.json").unlink()
+
+    plane.cleanup()
+    assert not plane.root.exists()

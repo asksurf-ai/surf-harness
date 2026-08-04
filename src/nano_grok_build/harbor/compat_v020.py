@@ -454,7 +454,7 @@ def bind_run_specs(job: Any, inputs: RuntimeInputs) -> list[dict[str, Any]]:
         artifact_dir = (
             Path(trial_config.trials_dir)
             / trial_config.trial_name
-            / "agent"
+            / ".nano-control-v2"
             / "runtime"
         ).resolve()
         spec = {

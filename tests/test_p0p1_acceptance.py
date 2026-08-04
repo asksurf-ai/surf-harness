@@ -500,13 +500,23 @@ def test_all_controlled_failures_publish_one_truthful_terminal_package(
     assert not any(row["type"] == "tool.completed" for row in events)
     assert list(logs_dir.glob("agent-run.json")) == [logs_dir / "agent-run.json"]
 
-    partial_bytes = publication.trajectory_path.read_bytes()
+    trajectory_bytes = publication.trajectory_path.read_bytes()
+    trajectory = json.loads(trajectory_bytes)
+    diagnostic_path = logs_dir / "partial-trajectory.json"
+    partial_bytes = diagnostic_path.read_bytes()
     partial = json.loads(partial_bytes)
-    assert publication.publication_kind == "failure_partial"
+    assert publication.publication_kind == "failure_atif"
     assert publication.success_artifact_valid is False
     assert publication.diagnostic_package_valid is True
-    assert publication.trajectory_path.name == "partial-trajectory.json"
-    assert not (logs_dir / "trajectory.json").exists()
+    assert publication.trajectory_path.name == "trajectory.json"
+    assert trajectory["schema_version"] == "ATIF-v1.7"
+    assert trajectory["extra"]["terminal_failure"] == {
+        "status": scenario["status"],
+        "phase": scenario["phase"],
+        "code": scenario["code"],
+        "event_seq": len(events) - 1,
+        "elapsed_ms": (len(events) - 1) * 10,
+    }
     assert partial["assistant_final"] is None
     assert partial["terminal_failure"] == {
         "status": scenario["status"],
@@ -529,12 +539,15 @@ def test_all_controlled_failures_publish_one_truthful_terminal_package(
     assert usage["provider_call_coverage"] == record["provider_call_coverage"]
     assert usage["usage_totals"] == record["usage_totals"]
     marker = json.loads(publication.marker_bytes)
-    assert marker["schema_version"] == "nano-agent-run-v2"
+    assert marker["schema_version"] == "nano-agent-run-v4"
     assert "deadline_receipt_sha256" not in record
     assert "deadline_receipt_sha256" not in marker
-    assert marker["publication_kind"] == "failure_partial"
+    assert marker["publication_kind"] == "failure_atif"
     assert marker["events_sha256"] == sha256(event_bytes)
-    assert marker["trajectory_sha256"] == sha256(partial_bytes)
+    assert marker["trajectory_path"] == "trajectory.json"
+    assert marker["trajectory_sha256"] == sha256(trajectory_bytes)
+    assert marker["diagnostic_path"] == "partial-trajectory.json"
+    assert marker["diagnostic_sha256"] == sha256(partial_bytes)
     assert marker["usage_receipt_sha256"] == sha256(usage_bytes)
     assert marker["workspace_receipt_sha256"] == sha256(workspace_receipt)
     assert marker["background_manifest_sha256"] == sha256(background_manifest)
@@ -1129,8 +1142,8 @@ def test_collect_twice_is_byte_idempotent_and_v1_remains_collectible(
     assert (job_dir / "rows.jsonl").read_bytes() == first_rows
     assert (job_dir / "summary.json").read_bytes() == first_summary_bytes
     row = json.loads(first_rows)
-    assert row["schema_version"] == "nano-tb21-row-v3"
-    assert first_summary["schema_version"] == "nano-tb21-baseline-summary-v3"
+    assert row["schema_version"] == "nano-tb21-row-v4"
+    assert first_summary["schema_version"] == "nano-tb21-baseline-summary-v4"
     assert row["runtime_entry_state"] == "started"
     assert first_summary["terminal_evidence"]["valid_usage_receipts_for_started"] == 1
     assert row["runtime_terminal_status"] == "success"

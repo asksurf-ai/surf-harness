@@ -24,6 +24,7 @@ from types import ModuleType, SimpleNamespace
 import pytest
 
 from nano_grok_build.adapter.artifactizer import canonical_json, rust_run_spec_sha256
+from nano_grok_build.adapter.control_plane import ControlPlane, control_root_for
 from nano_grok_build.adapter.deadline import (
     RunDeadlineReceiptV1,
     RunDeadlineV1,
@@ -865,7 +866,7 @@ def test_harbor_deadline_receipt_crosses_real_adapter_cli_bridge_actor_and_artif
             "retry_max": 0,
         },
         "workspace_dir": "/workspace",
-        "artifact_dir": str((logs_dir / "runtime").resolve()),
+        "artifact_dir": str((control_root_for(logs_dir) / "runtime").resolve()),
         "agent_timeout_sec": 120,
     }
     agent = agent_type(
@@ -886,9 +887,17 @@ def test_harbor_deadline_receipt_crosses_real_adapter_cli_bridge_actor_and_artif
 
     async def scenario() -> None:
         await actor.setup()
+        agent._control_plane = ControlPlane.create(
+            logs_dir,
+            run_spec_sha256=rust_run_spec_sha256(run_spec),
+        )
         agent._actor = actor
         agent._before_snapshot = await capture_before(
-            SnapshotTarget(actor=actor, artifact_dir=logs_dir),
+            SnapshotTarget(
+                actor=actor,
+                artifact_dir=agent._control_plane.root,
+                publication_dir=logs_dir,
+            ),
             SnapshotPolicy(),
         )
         actor._background[task_id] = BackgroundTask(

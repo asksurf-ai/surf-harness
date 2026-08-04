@@ -8,6 +8,8 @@ import pytest
 from nano_grok_build.adapter import atif
 from nano_grok_build.adapter.atif import (
     AtifError,
+    project_emergency_trajectory,
+    project_failure_trajectory,
     project_partial_trajectory,
     project_trajectory,
     validate_minimal_trajectory,
@@ -243,6 +245,162 @@ def test_failed_projection_preserves_in_flight_operations_without_invention() ->
     assert trajectory["tool_calls"][0]["state"] == "in_flight"
     assert "observation" not in trajectory["tool_calls"][0]
     assert trajectory["assistant_final"] is None
+
+
+@pytest.mark.parametrize(
+    ("terminal_status", "terminal_phase", "terminal_code", "settlement"),
+    [
+        ("provider_failure", "provider", "provider_transport_timeout", "provider"),
+        ("tool_failure", "tool", "terminal_actor_cleanup_unverified", "tool"),
+        ("deadline_failure", "deadline", "run_deadline_exceeded", "registered"),
+    ],
+)
+def test_failure_atif_is_truthful_for_provider_tool_deadline_and_registered_only(
+    terminal_status: str,
+    terminal_phase: str,
+    terminal_code: str,
+    settlement: str,
+) -> None:
+    common = {
+        "schema_version": "event-v2",
+        "run_id": "run-1",
+        "trial_id": "trial-1",
+        "attempt_id": "attempt-0",
+        "elapsed_ms": 0,
+    }
+    bodies: list[tuple[str, dict[str, object]]] = [("run.started", {})]
+    if settlement == "provider":
+        bodies.extend(
+            [
+                (
+                    "provider.requested",
+                    {
+                        "turn_index": 0,
+                        "history_item_count": 1,
+                        "tool_count": 1,
+                        "function_output_call_ids": [],
+                    },
+                ),
+                (
+                    "provider.failed",
+                    {"turn_index": 0, "code": terminal_code},
+                ),
+            ]
+        )
+    else:
+        bodies.extend(
+            [
+                (
+                    "tool.registered",
+                    {
+                        "call_id": "call-1",
+                        "provider_name": "run_terminal_command",
+                        "known": True,
+                        "arguments_json": '{"command":"sleep 60"}',
+                    },
+                ),
+            ]
+        )
+        if settlement == "tool":
+            bodies.extend(
+                [
+                    (
+                        "tool.dispatched",
+                        {
+                            "call_id": "call-1",
+                            "provider_name": "run_terminal_command",
+                        },
+                    ),
+                    (
+                        "tool.failed",
+                        {
+                            "call_id": "call-1",
+                            "provider_name": "run_terminal_command",
+                            "code": terminal_code,
+                            "execution_may_have_started": True,
+                            "cleanup_verified": False,
+                            "census_verified": False,
+                            "recoverability": "fatal",
+                        },
+                    ),
+                ]
+            )
+    bodies.append(("run.failed", {"code": terminal_code}))
+    prefix = [
+        {**common, "seq": seq, "type": event_type, "data": data}
+        for seq, (event_type, data) in enumerate(bodies)
+    ]
+    failed_record = {
+        **run_record(),
+        "terminal_status": terminal_status,
+        "terminal_phase": terminal_phase,
+        "terminal_code": terminal_code,
+        "provider_call_coverage": {},
+        "usage_totals": {},
+    }
+
+    trajectory = project_failure_trajectory(
+        instruction="Create the proof.",
+        events=prefix,
+        run_record=failed_record,
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+    )
+
+    validate_minimal_trajectory(trajectory)
+    assert trajectory["schema_version"] == "ATIF-v1.7"
+    assert trajectory["extra"]["terminal_failure"] == {
+        "status": terminal_status,
+        "phase": terminal_phase,
+        "code": terminal_code,
+        "event_seq": len(prefix) - 1,
+        "elapsed_ms": 0,
+    }
+    assert all(step["message"] != "done" for step in trajectory["steps"])
+    if settlement == "provider":
+        assert trajectory["steps"] == [
+            {"step_id": 1, "source": "user", "message": "Create the proof."}
+        ]
+    else:
+        tool_step = trajectory["steps"][1]
+        assert tool_step["tool_calls"][0]["tool_call_id"] == "call-1"
+        assert "observation" not in tool_step
+        assert tool_step["tool_calls"][0]["extra"]["state"] == (
+            "failed" if settlement == "tool" else "in_flight"
+        )
+
+
+def test_empty_emergency_prefix_is_valid_atif_without_fabricated_agent_step() -> None:
+    trajectory = project_emergency_trajectory(
+        instruction="Create the proof.",
+        events=[],
+        identity={
+            "run_id": "run-1",
+            "trial_id": "trial-1",
+            "attempt_id": "attempt-0",
+            "run_spec_sha256": "a" * 64,
+        },
+        terminal_status="runtime_failure",
+        terminal_phase="runtime",
+        terminal_code="runtime_record_missing",
+        usage_coverage={},
+        usage_totals={},
+        source_events_sha256="b" * 64,
+        source_events_byte_length=0,
+        validated_prefix_sha256="b" * 64,
+        validated_prefix_byte_length=0,
+        stop_reason="event_log_missing",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+    )
+
+    validate_minimal_trajectory(trajectory)
+    assert trajectory["steps"] == [
+        {"step_id": 1, "source": "user", "message": "Create the proof."}
+    ]
+    assert trajectory["extra"]["terminal_failure"]["evidence"] == ("adapter_emergency")
 
 
 def test_pinned_harbor_conformance_uses_exact_version_and_validator(

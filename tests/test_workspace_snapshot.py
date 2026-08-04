@@ -3611,6 +3611,35 @@ def test_capture_returns_exactly_persisted_receipt_projection(tmp_path: Path) ->
     )
 
 
+def test_snapshot_target_separates_private_capture_from_publication_root(
+    tmp_path: Path,
+) -> None:
+    workspace = tmp_path / "workspace"
+    private = tmp_path / ".nano-control-v2"
+    public = tmp_path / "agent"
+    workspace.mkdir()
+    private.mkdir(mode=0o700)
+    public.mkdir()
+    (workspace / "sentinel.txt").write_text("private snapshot")
+    actor = LocalSnapshotActor(workspace, private)
+    target = workspace_snapshot.SnapshotTarget(
+        actor=actor,
+        artifact_dir=private,
+        publication_dir=public,
+    )
+
+    before = asyncio.run(
+        workspace_snapshot.capture_before(
+            target,
+            workspace_snapshot.SnapshotPolicy(),
+        )
+    )
+
+    assert before.target.publication_dir == public.resolve()
+    assert (private / "workspace-before.json").is_file()
+    assert list(public.iterdir()) == []
+
+
 def test_failed_before_uses_explicit_no_baseline_sentinel(tmp_path: Path) -> None:
     workspace = tmp_path / "workspace"
     artifacts = tmp_path / "artifacts"

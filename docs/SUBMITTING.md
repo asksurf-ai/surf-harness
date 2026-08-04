@@ -8,7 +8,7 @@ change.
 ## Frozen inputs
 
 - Public source commit and tree.
-- Agent `nano-grok-build`, version `0.1.0`.
+- Agent `nano-grok-build`, version `0.2.0`.
 - Model `xai/grok-4.5`, reasoning effort `high`.
 - Harbor 0.20.0 at commit
   `459ff6ec99417589b7f679d14ddf3b3f0ae4f1dc`.
@@ -29,7 +29,9 @@ After every job:
 3. Verify the job config reports the frozen agent, model, effort, and dataset.
 4. Verify every task ref matches the official digest set.
 5. Verify every reward-positive trial has a publicly readable ATIF trajectory.
-6. Upload the job publicly and re-read it from the Harbor Hub.
+6. Verify the protected-target audit contains no attempted, dispatched, or
+   byte-returning finding.
+7. Upload the job publicly and re-read it from the Harbor Hub.
 
 ## Anti-cheating review
 

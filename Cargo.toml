@@ -9,7 +9,7 @@ members = [
 exclude = ["tools/upstream-export"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.97.1"
 license = "Apache-2.0"
@@ -17,9 +17,9 @@ publish = false
 
 [workspace.dependencies]
 base64 = "=0.22.1"
-nano-provider-xai = { version = "=0.1.0", path = "crates/nano-provider-xai" }
-nano-runtime = { version = "=0.1.0", path = "crates/nano-runtime" }
-nano-types = { version = "=0.1.0", path = "crates/nano-types" }
+nano-provider-xai = { version = "=0.2.0", path = "crates/nano-provider-xai" }
+nano-runtime = { version = "=0.2.0", path = "crates/nano-runtime" }
+nano-types = { version = "=0.2.0", path = "crates/nano-types" }
 reqwest = { version = "=0.13.4", default-features = false, features = ["json", "rustls", "stream"] }
 rustix = { version = "=1.1.4", features = ["fs", "time"] }
 bytes = "=1.12.1"

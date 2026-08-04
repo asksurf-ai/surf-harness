@@ -39,6 +39,7 @@ from nano_grok_build.adapter.workspace_snapshot import (
     WorkspaceSnapshotError,
     load_workspace_receipt,
 )
+from nano_grok_build.harbor import protected_target
 from nano_grok_build.harbor.compat_v020 import HARBOR_VERSION, RuntimeInputs
 from nano_grok_build.harbor.dispatch import create_bound_job, load_runtime_inputs
 from nano_grok_build.harbor.live_smoke import (
@@ -80,8 +81,8 @@ ACTIVE_TOOLS = (
     "kill_terminal_command",
     "get_terminal_command_output",
 )
-SUMMARY_SCHEMA = "nano-tb21-baseline-summary-v3"
-ROW_SCHEMA = "nano-tb21-row-v3"
+SUMMARY_SCHEMA = "nano-tb21-baseline-summary-v4"
+ROW_SCHEMA = "nano-tb21-row-v4"
 COHORT_SCHEMA = "nano-tb21-cohort-v1"
 PRICING_SCHEMA = "nano-token-pricing-v1"
 CAPABILITY_MANIFEST_SCHEMA = "nano-tb21-capability-manifest-v1"
@@ -251,6 +252,13 @@ _V2_MARKER_OPTIONAL_KEYS = {
 _V3_MARKER_REQUIRED_KEYS = _V2_MARKER_REQUIRED_KEYS | {
     "deadline_receipt_sha256",
 }
+_V4_TERMINAL_MARKER_REQUIRED_KEYS = _V2_MARKER_REQUIRED_KEYS | {
+    "diagnostic_path",
+    "diagnostic_sha256",
+}
+_V4_TERMINAL_MARKER_OPTIONAL_KEYS = _V2_MARKER_OPTIONAL_KEYS | {
+    "deadline_receipt_sha256",
+}
 _USAGE_RECEIPT_KEYS = {
     "schema_version",
     "run_id",
@@ -329,7 +337,13 @@ _VERIFIER_RESULT_KINDS = (
     "not_run",
     "invalid",
 )
-_PUBLICATION_KINDS = ("success_atif", "failure_partial", "emergency_prefix")
+_PUBLICATION_KINDS = (
+    "success_atif",
+    "failure_partial",
+    "emergency_prefix",
+    "failure_atif",
+    "emergency_atif",
+)
 _VERIFIER_INFRA_MARKERS = (
     "could not resolve host",
     "connection refused",
@@ -351,10 +365,6 @@ _VERIFIER_STRONG_SETUP_MARKERS = _VERIFIER_INFRA_MARKERS + (
     "connectionerror",
     "networkerror",
     "verifiersetuperror",
-)
-_OFFICIAL_BENCHMARK_REPOSITORY_SLUGS = (
-    "harbor-framework/terminal-bench",
-    "laude-institute/terminal-bench",
 )
 
 
@@ -3202,6 +3212,250 @@ def _legacy_artifact_evidence(
     )
 
 
+def _terminal_atif_artifact_evidence(
+    *,
+    logs_dir: Path,
+    marker: Mapping[str, Any],
+    marker_raw: bytes,
+    spec: Mapping[str, Any],
+    read: _RunRecordRead,
+) -> _ArtifactEvidence:
+    """Validate the v4 direct-ATIF failure publication without reward input."""
+
+    kind = marker.get("publication_kind")
+    status = marker.get("terminal_status")
+    phase = marker.get("terminal_phase")
+    code = marker.get("terminal_code")
+    base = _empty_artifact_evidence(
+        publication_kind=str(kind) if isinstance(kind, str) else None,
+        terminal_status=str(status) if isinstance(status, str) else None,
+        terminal_phase=str(phase) if isinstance(phase, str) else None,
+        terminal_code=str(code) if isinstance(code, str) else None,
+        run_record_read=_compact_run_record_read(read),
+    )
+    if kind not in {"failure_atif", "emergency_atif"}:
+        return base
+    expected_diagnostic = {
+        "failure_atif": ("partial-trajectory.json", "nano-partial-trajectory-v1"),
+        "emergency_atif": ("emergency-prefix.json", "nano-emergency-prefix-v1"),
+    }[str(kind)]
+    diagnostic_name, diagnostic_schema = expected_diagnostic
+    marker_fields = set(marker)
+    optional_fields = marker_fields - _V4_TERMINAL_MARKER_REQUIRED_KEYS
+    expected_identity = (
+        spec.get("run_id"),
+        spec.get("trial_id"),
+        spec.get("attempt_id"),
+    )
+    terminal_phases = {
+        "provider_failure": {"provider"},
+        "tool_failure": {"tool", "bridge"},
+        "deadline_failure": {"deadline"},
+        "cancelled": {"cancellation"},
+        "runtime_failure": {"artifact", "runtime"},
+    }
+    if (
+        marker_raw != _canonical(marker)
+        or not _V4_TERMINAL_MARKER_REQUIRED_KEYS.issubset(marker_fields)
+        or not optional_fields.issubset(_V4_TERMINAL_MARKER_OPTIONAL_KEYS)
+        or (
+            ("background_manifest_sha256" in marker)
+            != ("background_task_count" in marker)
+        )
+        or (
+            marker.get("run_id"),
+            marker.get("trial_id"),
+            marker.get("attempt_id"),
+        )
+        != expected_identity
+        or marker.get("run_spec_sha256") != rust_run_spec_sha256(spec)
+        or marker.get("trajectory_path") != "trajectory.json"
+        or marker.get("diagnostic_path") != diagnostic_name
+        or not all(
+            _sha256_string(marker.get(field))
+            for field in (
+                "events_sha256",
+                "trajectory_sha256",
+                "diagnostic_sha256",
+                "usage_receipt_sha256",
+            )
+        )
+        or (
+            "deadline_receipt_sha256" in marker
+            and not _sha256_string(marker.get("deadline_receipt_sha256"))
+        )
+        or (
+            "background_manifest_sha256" in marker
+            and not _sha256_string(marker.get("background_manifest_sha256"))
+        )
+        or (
+            "workspace_receipt_sha256" in marker
+            and not _sha256_string(marker.get("workspace_receipt_sha256"))
+        )
+        or status not in terminal_phases
+        or phase not in terminal_phases[status]
+        or not isinstance(code, str)
+        or not code
+    ):
+        return base
+
+    parsed = read.parsed
+    record: Mapping[str, Any] | None = None
+    if kind == "failure_atif":
+        if (
+            parsed is None
+            or parsed.runtime is None
+            or read.record is None
+            or read.events_raw is None
+        ):
+            return base
+        record = read.record
+        runtime = parsed.runtime
+        deadline_field_present = "deadline_receipt_sha256" in marker
+        if (
+            marker.get("run_record_schema") != parsed.schema_version
+            or marker.get("events_sha256") != parsed.events_sha256
+            or marker.get("events_sha256")
+            != hashlib.sha256(read.events_raw).hexdigest()
+            or marker.get("terminal_status") != runtime.terminal_status
+            or marker.get("terminal_phase") != runtime.terminal_phase
+            or marker.get("terminal_code") != runtime.terminal_code
+            or deadline_field_present != (parsed.variant == "v3")
+            or (
+                deadline_field_present
+                and marker.get("deadline_receipt_sha256")
+                != parsed.deadline_receipt_sha256
+            )
+        ):
+            return base
+        events = read.events_raw
+    else:
+        if (
+            read.state != "absent"
+            or parsed is not None
+            or marker.get("run_record_schema") is not None
+            or "deadline_receipt_sha256" in marker
+        ):
+            return base
+        events = read.events_raw if read.events_raw is not None else b""
+        if marker.get("events_sha256") != hashlib.sha256(events).hexdigest():
+            return base
+
+    trajectory_document = _canonical_mapping(logs_dir / "trajectory.json")
+    diagnostic_document = _canonical_mapping(logs_dir / diagnostic_name)
+    if trajectory_document is None or diagnostic_document is None:
+        return base
+    trajectory, trajectory_raw = trajectory_document
+    diagnostic, diagnostic_raw = diagnostic_document
+    failure_identity = {
+        "status": status,
+        "phase": phase,
+        "code": code,
+    }
+    trajectory_extra = trajectory.get("extra")
+    diagnostic_extra = diagnostic.get("extra")
+    trajectory_failure = (
+        trajectory_extra.get("terminal_failure")
+        if isinstance(trajectory_extra, dict)
+        else None
+    )
+    diagnostic_failure = diagnostic.get("terminal_failure")
+    binding_fields = {
+        "trial_id": spec.get("trial_id"),
+        "attempt_id": spec.get("attempt_id"),
+        "run_spec_sha256": rust_run_spec_sha256(spec),
+    }
+    if (
+        hashlib.sha256(trajectory_raw).hexdigest() != marker.get("trajectory_sha256")
+        or hashlib.sha256(diagnostic_raw).hexdigest() != marker.get("diagnostic_sha256")
+        or trajectory.get("schema_version") != "ATIF-v1.7"
+        or trajectory.get("session_id") != spec.get("run_id")
+        or not isinstance(trajectory_extra, dict)
+        or any(
+            trajectory_extra.get(field) != value
+            for field, value in binding_fields.items()
+        )
+        or diagnostic.get("schema_version") != diagnostic_schema
+        or diagnostic.get("session_id") != spec.get("run_id")
+        or not isinstance(diagnostic_extra, dict)
+        or any(
+            diagnostic_extra.get(field) != value
+            for field, value in binding_fields.items()
+        )
+        or not isinstance(trajectory_failure, dict)
+        or not isinstance(diagnostic_failure, dict)
+        or any(
+            trajectory_failure.get(field) != value
+            for field, value in failure_identity.items()
+        )
+        or any(
+            diagnostic_failure.get(field) != value
+            for field, value in failure_identity.items()
+        )
+        or (
+            kind == "failure_atif"
+            and (
+                trajectory_extra.get("events_sha256") != marker.get("events_sha256")
+                or diagnostic_extra.get("events_sha256") != marker.get("events_sha256")
+            )
+        )
+        or (
+            kind == "emergency_atif"
+            and (
+                not isinstance(trajectory_extra.get("event_prefix"), dict)
+                or not isinstance(diagnostic.get("event_prefix"), dict)
+                or trajectory_extra["event_prefix"].get("source_sha256")
+                != marker.get("events_sha256")
+                or diagnostic["event_prefix"].get("source_sha256")
+                != marker.get("events_sha256")
+            )
+        )
+        or any(
+            (logs_dir / other).exists()
+            for other in {"partial-trajectory.json", "emergency-prefix.json"}
+            - {diagnostic_name}
+        )
+        or not _background_binding_valid(logs_dir=logs_dir, marker=marker, spec=spec)
+    ):
+        return base
+    receipt_usage = _usage_from_receipt(
+        logs_dir=logs_dir,
+        marker=marker,
+        spec=spec,
+        record=record,
+    )
+    if receipt_usage is None:
+        return base
+    workspace = _WorkspaceEvidence()
+    if "workspace_receipt_sha256" in marker:
+        workspace = _workspace_receipt_evidence(
+            logs_dir,
+            marker["workspace_receipt_sha256"],
+        )
+        if not workspace.receipt_valid:
+            return base
+    return _ArtifactEvidence(
+        artifacts_valid=False,
+        success_valid=False,
+        diagnostic_valid=True,
+        publication_valid=True,
+        trajectory_valid=True,
+        publication_kind=str(kind),
+        workspace_receipt_valid=workspace.receipt_valid,
+        workspace_snapshot_complete=workspace.snapshot_complete,
+        workspace_status=workspace.status,
+        workspace_failure_stage=workspace.failure_stage,
+        workspace_failure_category=workspace.failure_category,
+        workspace_failure_v3=workspace.failure_v3,
+        usage_receipt_valid=True,
+        terminal_status=str(status),
+        terminal_phase=str(phase),
+        terminal_code=str(code),
+        run_record_read=_compact_run_record_read(read),
+        usage_fallback=receipt_usage,
+    )
+
+
 def _artifact_evidence(
     trial_dir: Path,
     spec: Mapping[str, Any],
@@ -3216,6 +3470,14 @@ def _artifact_evidence(
     marker, marker_raw = marker_document
     if marker.get("schema_version") == "nano-agent-run-v1":
         return _legacy_artifact_evidence(
+            logs_dir=logs_dir,
+            marker=marker,
+            marker_raw=marker_raw,
+            spec=spec,
+            read=read,
+        )
+    if marker.get("schema_version") == "nano-agent-run-v4":
+        return _terminal_atif_artifact_evidence(
             logs_dir=logs_dir,
             marker=marker,
             marker_raw=marker_raw,
@@ -3484,49 +3746,14 @@ def _verifier_output_bucket(trial_dir: Path) -> str | None:
     return None
 
 
-def _contamination_audit(trial_dir: Path) -> dict[str, object]:
-    paths = (
-        trial_dir / "agent" / "trajectory.json",
-        trial_dir / "agent" / "partial-trajectory.json",
-        trial_dir / "agent" / "emergency-prefix.json",
-    )
-    path = next((candidate for candidate in paths if candidate.is_file()), None)
-    if path is None:
-        return {"state": "unavailable", "signals": []}
-    try:
-        value = json.loads(_read_regular(path, limit=32 * 1024 * 1024))
-    except (TB21Error, UnicodeDecodeError, json.JSONDecodeError):
-        return {"state": "invalid", "signals": []}
-    steps = value.get("steps") if isinstance(value, dict) else None
-    if not isinstance(steps, list):
-        return {"state": "available", "signals": []}
-    argument_text: list[str] = []
-    for step in steps:
-        tool_calls = step.get("tool_calls") if isinstance(step, dict) else None
-        if not isinstance(tool_calls, list):
-            continue
-        for call in tool_calls:
-            arguments = call.get("arguments") if isinstance(call, dict) else None
-            if isinstance(arguments, dict):
-                argument_text.append(
-                    json.dumps(
-                        arguments,
-                        ensure_ascii=False,
-                        sort_keys=True,
-                        separators=(",", ":"),
-                    ).lower()
-                )
-    combined = "\n".join(argument_text)
-    for _ in range(2):
-        combined = (
-            combined.replace("\\u002f", "/").replace("\\/", "/").replace("%2f", "/")
-        )
-    signals = (
-        ["official_benchmark_repository_access"]
-        if any(slug in combined for slug in _OFFICIAL_BENCHMARK_REPOSITORY_SLUGS)
-        else []
-    )
-    return {"state": "available", "signals": signals}
+def _contamination_audit(
+    trial_dir: Path,
+    *,
+    rewarded: bool = False,
+) -> dict[str, object]:
+    """Compatibility entry point for the shared protected-target audit."""
+
+    return protected_target.audit_trial(trial_dir, rewarded=rewarded)
 
 
 def _bounded_verifier_text(trial_dir: Path) -> str | None:
@@ -4115,7 +4342,7 @@ def _row(
         / Decimal(USD_TICKS_PER_USD)
     )
     resource = source.get("resources") if isinstance(source, dict) else None
-    contamination = _contamination_audit(trial_dir)
+    contamination = _contamination_audit(trial_dir, rewarded=collector_pass)
     workspace_failure_v3 = artifacts.workspace_failure_v3
     row: dict[str, object] = {
         "schema_version": ROW_SCHEMA,
@@ -4143,7 +4370,12 @@ def _row(
         "strict_pass": strict_pass,
         "contamination_audit_state": contamination["state"],
         "contamination_signals": contamination["signals"],
-        "contamination_signal": bool(contamination["signals"]),
+        "contamination_signal": bool(contamination["findings"]),
+        "protected_target_audit_schema": contamination["schema_version"],
+        "protected_target_policy_schema": contamination["policy_schema_version"],
+        "protected_target_policy_sha256": contamination["policy_sha256"],
+        "protected_target_counts": contamination["counts"],
+        "protected_target_findings": contamination["findings"],
         "reliable": reliable,
         "artifacts_valid": artifacts.artifacts_valid,
         "success_artifact_valid": artifacts.success_valid,
@@ -4998,6 +5230,26 @@ def collect_job(
     contamination_signaled_passes = sum(
         1 for row in rows if row["contamination_signal"] and row["collector_pass"]
     )
+    contamination_strong = sum(
+        int(row["protected_target_counts"]["strong"]) > 0 for row in rows
+    )
+    contamination_strong_passes = sum(
+        int(row["protected_target_counts"]["strong"]) > 0
+        and bool(row["collector_pass"])
+        for row in rows
+    )
+    protected_target_counts = {
+        field: sum(int(row["protected_target_counts"][field]) for row in rows)
+        for field in (
+            "findings",
+            "strong",
+            "attempted",
+            "access_blocked",
+            "dispatched",
+            "bytes_returned",
+            "causal_benefit",
+        )
+    }
     reliable = sum(1 for row in rows if row["reliable"])
     measurement_complete = sum(1 for row in rows if row["measurement_complete"])
     expected = len(specs)
@@ -5084,10 +5336,17 @@ def collect_job(
             "percent": round(100 * collector_passed / expected, 6),
         },
         "contamination": {
+            "schema_version": protected_target.AUDIT_SCHEMA,
+            "finding_schema_version": protected_target.FINDING_SCHEMA,
+            "policy_schema_version": protected_target.POLICY_SCHEMA,
+            "policy_sha256": protected_target.POLICY_SHA256,
             "audit_available": contamination_audited,
             "audit_denominator": expected,
-            "strong_signal_count": contamination_signaled,
-            "strong_signal_passes": contamination_signaled_passes,
+            "finding_trial_count": contamination_signaled,
+            "finding_trial_passes": contamination_signaled_passes,
+            "strong_signal_count": contamination_strong,
+            "strong_signal_passes": contamination_strong_passes,
+            "finding_counts": protected_target_counts,
             "signal_adjusted_collector_numerator": (
                 collector_passed - contamination_signaled_passes
             ),

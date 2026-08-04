@@ -16,11 +16,14 @@ from typing import Any
 
 from nano_grok_build.adapter.atif import (
     project_emergency_prefix,
+    project_emergency_trajectory,
+    project_failure_trajectory,
     project_partial_trajectory,
     project_trajectory,
     usage_context,
     validate_with_pinned_harbor,
 )
+from nano_grok_build.adapter.control_plane import ControlPlane, ControlPlaneError
 from nano_grok_build.adapter.deadline import (
     DeadlineContractError,
     RunDeadlineReceiptV1,
@@ -34,6 +37,7 @@ RUN_V3_SCHEMA = "nano-run-record-v3"
 LEGACY_RUN_SCHEMA = "nano-run-record-alpha-1"
 MARKER_SCHEMA = "nano-agent-run-v2"
 MARKER_V3_SCHEMA = "nano-agent-run-v3"
+TERMINAL_ATIF_MARKER_SCHEMA = "nano-agent-run-v4"
 LEGACY_MARKER_SCHEMA = "nano-agent-run-v1"
 USAGE_RECEIPT_SCHEMA = "nano-usage-receipt-v1"
 BACKGROUND_MANIFEST_SCHEMA = "nano-background-manifest-v1"
@@ -1813,6 +1817,97 @@ def _atomic_publish(path: Path, content: bytes) -> None:
         raise ArtifactError("artifact_publish_failed") from error
 
 
+_PRIVATE_EVIDENCE_LIMITS = {
+    "runtime/run.json": _MAX_RECORD_BYTES,
+    "runtime/events.jsonl": _MAX_EVENTS_BYTES,
+    "runtime/deadline.json": _MAX_RECEIPT_BYTES,
+    "runtime-stderr.json": _MAX_RECEIPT_BYTES,
+    "runtime-emergency.json": _MAX_RECEIPT_BYTES,
+    "runtime-background-manifest.json": _MAX_RECEIPT_BYTES,
+    "runtime-background-liveness-v1.json": _MAX_RECEIPT_BYTES,
+    "workspace-before.json": _MAX_EVENTS_BYTES,
+    "workspace-after.json": _MAX_EVENTS_BYTES,
+    "workspace-delta.json": _MAX_EVENTS_BYTES,
+    "workspace-diff.patch": _MAX_EVENTS_BYTES,
+    "workspace-changed.tar": _MAX_EVENTS_BYTES,
+    "workspace-receipt.json": _MAX_RECEIPT_BYTES,
+}
+
+
+def _publish_from_private_control(
+    *,
+    source_dir: Path,
+    publication_dir: Path,
+    run_spec_sha256: str,
+    generated: Mapping[str, bytes],
+) -> Mapping[str, Path]:
+    files: dict[str, bytes] = {}
+    for name, limit in _PRIVATE_EVIDENCE_LIMITS.items():
+        path = source_dir / name
+        if path.exists() or path.is_symlink():
+            files[name] = _read_regular(
+                path,
+                limit,
+                "private_evidence_invalid",
+            )
+    files.update(generated)
+    try:
+        plane = ControlPlane.open(
+            source_dir,
+            publication_dir,
+            run_spec_sha256=run_spec_sha256,
+        )
+        return plane.publish(files)
+    except ControlPlaneError as error:
+        raise ArtifactError(str(error)) from error
+
+
+_GENERATED_PUBLICATION_NAMES = frozenset(
+    {
+        "agent-run.json",
+        "trajectory.json",
+        "partial-trajectory.json",
+        "emergency-prefix.json",
+        "runtime-usage-receipt.json",
+    }
+)
+
+
+def _publish_generated_direct(
+    *,
+    logs_dir: Path,
+    generated: Mapping[str, bytes],
+) -> Mapping[str, Path]:
+    if "agent-run.json" not in generated or not set(generated) <= (
+        _GENERATED_PUBLICATION_NAMES
+    ):
+        raise ArtifactError("artifact_publication_set_invalid")
+    paths = {name: logs_dir / name for name in generated}
+    marker_path = paths["agent-run.json"]
+    if marker_path.exists() or marker_path.is_symlink():
+        for name, payload in generated.items():
+            if (
+                _read_regular(
+                    paths[name],
+                    _MAX_EVENTS_BYTES,
+                    "existing_publication_invalid",
+                )
+                != payload
+            ):
+                raise ArtifactError("existing_publication_mismatch")
+        unexpected = _GENERATED_PUBLICATION_NAMES - set(generated)
+        if any((logs_dir / name).exists() for name in unexpected):
+            raise ArtifactError("existing_publication_mismatch")
+        return paths
+    if any((logs_dir / name).exists() for name in _GENERATED_PUBLICATION_NAMES):
+        raise ArtifactError("uncommitted_trajectory_exists")
+    for name in sorted(generated):
+        if name != "agent-run.json":
+            _atomic_publish(paths[name], generated[name])
+    _atomic_publish(marker_path, generated["agent-run.json"])
+    return paths
+
+
 def _usage_receipt(record: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": USAGE_RECEIPT_SCHEMA,
@@ -2260,7 +2355,7 @@ def _atif_eligibility(
 ) -> AtifEligibility:
     """Classify judgeability without consulting reward or workspace quality."""
 
-    if publication_kind == "success_atif" and terminal_status == "success":
+    if publication_kind in {"success_atif", "failure_atif", "emergency_atif"}:
         if pinned_harbor_validated:
             return AtifEligibility(
                 leaderboard_eligible=True,
@@ -2288,12 +2383,14 @@ def _atif_eligibility(
 def _publish_emergency_artifacts(
     *,
     logs_dir: Path,
+    publication_dir: Path | None,
     run_spec: Mapping[str, Any],
     instruction: str,
     agent_name: str,
     agent_version: str,
     model_name: str,
     background: BackgroundManifestReceipt | None,
+    require_harbor_validator: bool,
 ) -> ArtifactPublication:
     receipt = _validate_emergency_receipt(logs_dir, run_spec)
     (
@@ -2315,7 +2412,7 @@ def _publish_emergency_artifacts(
         "attempt_id": run_spec["attempt_id"],
         "run_spec_sha256": rust_run_spec_sha256(run_spec),
     }
-    trajectory = project_emergency_prefix(
+    diagnostic = project_emergency_prefix(
         instruction=instruction,
         events=events,
         identity=identity,
@@ -2333,9 +2430,32 @@ def _publish_emergency_artifacts(
         agent_version=agent_version,
         model_name=model_name,
     )
+    trajectory = project_emergency_trajectory(
+        instruction=instruction,
+        events=events,
+        identity=identity,
+        terminal_status=terminal_status,
+        terminal_phase=terminal_phase,
+        terminal_code=terminal_code,
+        usage_coverage=coverage,
+        usage_totals=totals,
+        source_events_sha256=source_sha256,
+        source_events_byte_length=len(source_bytes),
+        validated_prefix_sha256=prefix_sha256,
+        validated_prefix_byte_length=len(prefix_bytes),
+        stop_reason=stop_reason,
+        agent_name=agent_name,
+        agent_version=agent_version,
+        model_name=model_name,
+    )
+    if require_harbor_validator:
+        validate_with_pinned_harbor(trajectory)
     trajectory_bytes = canonical_json(trajectory)
-    trajectory_path = logs_dir / "emergency-prefix.json"
+    trajectory_path = logs_dir / "trajectory.json"
     trajectory_sha256 = hashlib.sha256(trajectory_bytes).hexdigest()
+    diagnostic_bytes = canonical_json(diagnostic)
+    diagnostic_path = logs_dir / "emergency-prefix.json"
+    diagnostic_sha256 = hashlib.sha256(diagnostic_bytes).hexdigest()
     usage_receipt_path = logs_dir / "runtime-usage-receipt.json"
     usage_receipt = {
         "schema_version": USAGE_RECEIPT_SCHEMA,
@@ -2346,8 +2466,8 @@ def _publish_emergency_artifacts(
     }
     usage_receipt_bytes = canonical_json(usage_receipt)
     marker: dict[str, Any] = {
-        "schema_version": MARKER_SCHEMA,
-        "publication_kind": "emergency_prefix",
+        "schema_version": TERMINAL_ATIF_MARKER_SCHEMA,
+        "publication_kind": "emergency_atif",
         **identity,
         "run_record_schema": None,
         "events_sha256": source_sha256,
@@ -2356,6 +2476,8 @@ def _publish_emergency_artifacts(
         "terminal_code": terminal_code,
         "trajectory_path": trajectory_path.name,
         "trajectory_sha256": trajectory_sha256,
+        "diagnostic_path": diagnostic_path.name,
+        "diagnostic_sha256": diagnostic_sha256,
         "usage_receipt_sha256": hashlib.sha256(usage_receipt_bytes).hexdigest(),
     }
     if background is not None:
@@ -2373,41 +2495,28 @@ def _publish_emergency_artifacts(
         ).hexdigest()
     marker_bytes = canonical_json(marker)
     marker_path = logs_dir / "agent-run.json"
-    conflicts = (
-        logs_dir / "trajectory.json",
-        logs_dir / "partial-trajectory.json",
-    )
-    if marker_path.exists():
-        if (
-            _read_regular(
-                marker_path,
-                _MAX_RECORD_BYTES,
-                "existing_marker_invalid",
-            )
-            != marker_bytes
-            or _read_regular(
-                trajectory_path,
-                _MAX_RECORD_BYTES,
-                "existing_trajectory_invalid",
-            )
-            != trajectory_bytes
-            or _read_regular(
-                usage_receipt_path,
-                _MAX_RECORD_BYTES,
-                "existing_usage_receipt_invalid",
-            )
-            != usage_receipt_bytes
-            or any(path.exists() for path in conflicts)
-        ):
-            raise ArtifactError("existing_publication_mismatch")
+    generated = {
+        usage_receipt_path.name: usage_receipt_bytes,
+        trajectory_path.name: trajectory_bytes,
+        diagnostic_path.name: diagnostic_bytes,
+        marker_path.name: marker_bytes,
+    }
+    if publication_dir is not None:
+        published = _publish_from_private_control(
+            source_dir=logs_dir,
+            publication_dir=publication_dir,
+            run_spec_sha256=identity["run_spec_sha256"],
+            generated=generated,
+        )
     else:
-        if trajectory_path.exists() or any(path.exists() for path in conflicts):
-            raise ArtifactError("uncommitted_trajectory_exists")
-        if usage_receipt_path.exists():
-            raise ArtifactError("uncommitted_usage_receipt_exists")
-        _atomic_publish(usage_receipt_path, usage_receipt_bytes)
-        _atomic_publish(trajectory_path, trajectory_bytes)
-        _atomic_publish(marker_path, marker_bytes)
+        published = _publish_generated_direct(
+            logs_dir=logs_dir,
+            generated=generated,
+        )
+    trajectory_path = published[trajectory_path.name]
+    diagnostic_path = published[diagnostic_path.name]
+    usage_receipt_path = published[usage_receipt_path.name]
+    marker_path = published[marker_path.name]
     return ArtifactPublication(
         trajectory_path=trajectory_path,
         marker_path=marker_path,
@@ -2415,16 +2524,16 @@ def _publish_emergency_artifacts(
         context=usage_context(trajectory),
         marker_bytes=marker_bytes,
         background_manifest=background,
-        publication_kind="emergency_prefix",
+        publication_kind="emergency_atif",
         success_artifact_valid=False,
         diagnostic_package_valid=True,
         atif_eligibility=_atif_eligibility(
-            publication_kind="emergency_prefix",
+            publication_kind="emergency_atif",
             terminal_status=terminal_status,
             terminal_code=terminal_code,
             trajectory_name=trajectory_path.name,
             trajectory_sha256=trajectory_sha256,
-            pinned_harbor_validated=False,
+            pinned_harbor_validated=require_harbor_validator,
         ),
         usage_receipt_path=usage_receipt_path,
         usage_coverage=coverage,
@@ -2435,6 +2544,7 @@ def _publish_emergency_artifacts(
 def publish_artifacts(
     *,
     logs_dir: Path,
+    publication_dir: Path | None = None,
     run_spec: Mapping[str, Any],
     instruction: str,
     agent_name: str,
@@ -2456,12 +2566,14 @@ def publish_artifacts(
     if not run_record_path.exists():
         return _publish_emergency_artifacts(
             logs_dir=logs_dir,
+            publication_dir=publication_dir,
             run_spec=run_spec,
             instruction=instruction,
             agent_name=agent_name,
             agent_version=agent_version,
             model_name=model_name,
             background=background,
+            require_harbor_validator=require_harbor_validator,
         )
     record, events, _, _, tool_receipt_telemetry = _validate_run_and_events(
         runtime_dir,
@@ -2469,6 +2581,8 @@ def publish_artifacts(
     )
     legacy = record["schema_version"] == LEGACY_RUN_SCHEMA
     success = record["terminal_status"] == "success"
+    diagnostic_name: str | None = None
+    diagnostic_bytes: bytes | None = None
     if success:
         publication_kind = "success_atif"
         trajectory_name = "trajectory.json"
@@ -2483,9 +2597,10 @@ def publish_artifacts(
         if require_harbor_validator:
             validate_with_pinned_harbor(trajectory)
     else:
-        publication_kind = "failure_partial"
-        trajectory_name = "partial-trajectory.json"
-        trajectory = project_partial_trajectory(
+        publication_kind = "failure_atif"
+        trajectory_name = "trajectory.json"
+        diagnostic_name = "partial-trajectory.json"
+        diagnostic = project_partial_trajectory(
             instruction=instruction,
             events=events,
             run_record=record,
@@ -2493,6 +2608,17 @@ def publish_artifacts(
             agent_version=agent_version,
             model_name=model_name,
         )
+        diagnostic_bytes = canonical_json(diagnostic)
+        trajectory = project_failure_trajectory(
+            instruction=instruction,
+            events=events,
+            run_record=record,
+            agent_name=agent_name,
+            agent_version=agent_version,
+            model_name=model_name,
+        )
+        if require_harbor_validator:
+            validate_with_pinned_harbor(trajectory)
     trajectory_bytes = canonical_json(trajectory)
     trajectory_sha256 = hashlib.sha256(trajectory_bytes).hexdigest()
     usage_receipt_path: Path | None = None
@@ -2512,7 +2638,11 @@ def publish_artifacts(
         usage_receipt_bytes = canonical_json(_usage_receipt(record))
         v3 = record["schema_version"] == RUN_V3_SCHEMA
         marker = {
-            "schema_version": MARKER_V3_SCHEMA if v3 else MARKER_SCHEMA,
+            "schema_version": (
+                (MARKER_V3_SCHEMA if v3 else MARKER_SCHEMA)
+                if success
+                else TERMINAL_ATIF_MARKER_SCHEMA
+            ),
             "publication_kind": publication_kind,
             "run_id": record["run_id"],
             "trial_id": record["trial_id"],
@@ -2527,6 +2657,9 @@ def publish_artifacts(
             "trajectory_sha256": trajectory_sha256,
             "usage_receipt_sha256": hashlib.sha256(usage_receipt_bytes).hexdigest(),
         }
+        if diagnostic_name is not None and diagnostic_bytes is not None:
+            marker["diagnostic_path"] = diagnostic_name
+            marker["diagnostic_sha256"] = hashlib.sha256(diagnostic_bytes).hexdigest()
         if v3:
             marker[_DEADLINE_RECEIPT_FIELD] = record[_DEADLINE_RECEIPT_FIELD]
     if background is not None:
@@ -2544,50 +2677,31 @@ def publish_artifacts(
         ).hexdigest()
     marker_bytes = canonical_json(marker)
     trajectory_path = logs_dir / trajectory_name
-    other_trajectory_paths = tuple(
-        logs_dir / name
-        for name in (
-            "trajectory.json",
-            "partial-trajectory.json",
-            "emergency-prefix.json",
-        )
-        if name != trajectory_name
-    )
     marker_path = logs_dir / "agent-run.json"
-
-    if marker_path.exists():
-        existing_marker = _read_regular(
-            marker_path, _MAX_RECORD_BYTES, "existing_marker_invalid"
+    generated = {
+        trajectory_path.name: trajectory_bytes,
+        marker_path.name: marker_bytes,
+    }
+    if diagnostic_name is not None and diagnostic_bytes is not None:
+        generated[diagnostic_name] = diagnostic_bytes
+    if usage_receipt_path is not None and usage_receipt_bytes is not None:
+        generated[usage_receipt_path.name] = usage_receipt_bytes
+    if publication_dir is not None:
+        published = _publish_from_private_control(
+            source_dir=logs_dir,
+            publication_dir=publication_dir,
+            run_spec_sha256=str(record["run_spec_sha256"]),
+            generated=generated,
         )
-        existing_trajectory = _read_regular(
-            trajectory_path, _MAX_RECORD_BYTES, "existing_trajectory_invalid"
-        )
-        if existing_marker != marker_bytes or existing_trajectory != trajectory_bytes:
-            raise ArtifactError("existing_publication_mismatch")
-        if (
-            usage_receipt_path is not None
-            and usage_receipt_bytes is not None
-            and _read_regular(
-                usage_receipt_path,
-                _MAX_RECORD_BYTES,
-                "existing_usage_receipt_invalid",
-            )
-            != usage_receipt_bytes
-        ):
-            raise ArtifactError("existing_publication_mismatch")
-        if any(path.exists() for path in other_trajectory_paths):
-            raise ArtifactError("existing_publication_mismatch")
     else:
-        if trajectory_path.exists() or any(
-            path.exists() for path in other_trajectory_paths
-        ):
-            raise ArtifactError("uncommitted_trajectory_exists")
-        if usage_receipt_path is not None and usage_receipt_path.exists():
-            raise ArtifactError("uncommitted_usage_receipt_exists")
-        if usage_receipt_path is not None and usage_receipt_bytes is not None:
-            _atomic_publish(usage_receipt_path, usage_receipt_bytes)
-        _atomic_publish(trajectory_path, trajectory_bytes)
-        _atomic_publish(marker_path, marker_bytes)
+        published = _publish_generated_direct(
+            logs_dir=logs_dir,
+            generated=generated,
+        )
+    trajectory_path = published[trajectory_path.name]
+    marker_path = published[marker_path.name]
+    if usage_receipt_path is not None:
+        usage_receipt_path = published[usage_receipt_path.name]
     return ArtifactPublication(
         trajectory_path=trajectory_path,
         marker_path=marker_path,
@@ -2604,7 +2718,7 @@ def publish_artifacts(
             terminal_code=str(record["terminal_code"]),
             trajectory_name=trajectory_name,
             trajectory_sha256=trajectory_sha256,
-            pinned_harbor_validated=bool(success and require_harbor_validator),
+            pinned_harbor_validated=require_harbor_validator,
         ),
         usage_receipt_path=usage_receipt_path,
         usage_coverage=(None if legacy else dict(record["provider_call_coverage"])),

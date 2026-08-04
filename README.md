@@ -10,7 +10,7 @@ This repository is the public release and evaluation surface for the internal
 remain `nano_grok_build` and `nano-grok-build` for compatibility. The public
 project and display name are Surf Harness.
 
-Version `0.1.0` is a release candidate for the first formal Terminal-Bench 2.1
+Version `0.2.0` is a release candidate for the first formal Terminal-Bench 2.1
 submission. No leaderboard score is claimed until five complete, public,
 audited jobs have passed the upstream submission checks.
 
@@ -20,6 +20,8 @@ audited jobs have passed the upstream submission checks.
   strict runtime types.
 - A Python Harbor 0.20.0 adapter, sandbox tool actor, ATIF publisher,
   deterministic collector, prelaunch checks, and TB2.1 runner.
+- The exact public protected-target policy used by both the runtime guard and
+  collector; the wheel packages these same bytes without a second copy.
 - The exact approved `nano-v1` contract and required Apache/MIT notices.
 - Runtime schemas, locked dependencies, core regression tests, and public CI.
 
@@ -92,7 +94,7 @@ and report the Harbor metadata key:
 
 ```text
 agent=nano-grok-build
-agent_version=0.1.0
+agent_version=0.2.0
 model=xai/grok-4.5
 reasoning_effort=high
 ```
