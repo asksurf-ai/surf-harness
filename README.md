@@ -10,9 +10,9 @@ This repository is the public release and evaluation surface for the internal
 remain `nano_grok_build` and `nano-grok-build` for compatibility. The public
 project and display name are Surf Harness.
 
-Version `0.2.0` is a release candidate for the first formal Terminal-Bench 2.1
-submission. No leaderboard score is claimed until five complete, public,
-audited jobs have passed the upstream submission checks.
+Version `0.3.0` includes the exact, owner-approved task-neutral
+workspace-integrity contract. No leaderboard score is claimed until five complete,
+public, audited jobs pass the upstream submission checks.
 
 ## What is included
 
@@ -94,7 +94,7 @@ and report the Harbor metadata key:
 
 ```text
 agent=nano-grok-build
-agent_version=0.2.0
+agent_version=0.3.0
 model=xai/grok-4.5
 reasoning_effort=high
 ```

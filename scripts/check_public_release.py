@@ -11,7 +11,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-EXPECTED_VERSION = "0.2.0"
+EXPECTED_VERSION = "0.3.0"
 PUBLIC_PROTECTED_POLICY = "policy/protected-targets-v1.json"
 EXPECTED_APPROVED_ARTIFACTS = {
     "NOTICE": (648, "48f7687551795354b316162b0bdf189a6bb57d6e5e9e6db4bf7a4ad79ea8426d"),
@@ -21,15 +21,15 @@ EXPECTED_APPROVED_ARTIFACTS = {
     ),
     "contracts/nano-v1/agent-profile.json": (
         2973,
-        "5d2f709d53c496bdd94eb2680c7e6da982e1dd526e2a2b1bbdca937acc1fafd6",
+        "5adf3039a92472629119db9c5ed17aa9177118e2996423e9e5bfbe3b88940bb4",
     ),
     "contracts/nano-v1/contract-delta.json": (
-        757074,
-        "b33c0f20fc5976bfe73744e8f5deeb2a419f85db79409229095937b01f6d8f13",
+        757520,
+        "b335ed6dc62b39ea874db78a4dd2c454cbb538a6c6ac6677d30f6de1ee233b99",
     ),
     "contracts/nano-v1/effective-contract.json": (
-        16978,
-        "6ddd80115c3f82d2aade8ca67df70f6f12ef81fb64cfc0547f647d37d442fbb8",
+        17424,
+        "1a22d7cbc7f20fb2e48aee2ca0fa30157e99c83db96c572c187be3f8412576e9",
     ),
     "contracts/nano-v1/normalization-manifest.json": (
         13226,
@@ -172,6 +172,14 @@ def check_public_release(root: Path) -> list[str]:
             errors.append("SOURCE-MANIFEST.json model identity changed")
         if release["model"]["reasoning_effort"] != "high":
             errors.append("SOURCE-MANIFEST.json reasoning effort changed")
+        readiness = release["readiness"]
+        reason = (
+            readiness.get("reason", "release-readiness-invalid")
+            if isinstance(readiness, dict)
+            else "release-readiness-invalid"
+        )
+        if readiness != {"reason": "", "status": "ready"}:
+            errors.append(f"contract approval pending: {reason}")
         listed = manifest["files"]
     except (KeyError, json.JSONDecodeError, TypeError) as error:
         errors.append(f"invalid SOURCE-MANIFEST.json: {error}")

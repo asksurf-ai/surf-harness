@@ -193,19 +193,24 @@ def main() -> int:
             ),
         ]
         if (root / "scripts/check_contract_approval_v2.py").is_file():
-            commands.append(
-                (
-                    str(uv),
-                    "run",
-                    "--no-sync",
-                    "--frozen",
-                    "python",
-                    "scripts/check_contract_approval_v2.py",
-                    "policy",
-                    "--approval-policy",
-                    "policy/contracts/nano-v1-approval-v2.json",
-                )
-            )
+            for approval_policy in (
+                "policy/contracts/nano-v1-approval-v2.json",
+                "policy/contracts/nano-v1-approval-v2-v103.json",
+            ):
+                if (root / approval_policy).is_file():
+                    commands.append(
+                        (
+                            str(uv),
+                            "run",
+                            "--no-sync",
+                            "--frozen",
+                            "python",
+                            "scripts/check_contract_approval_v2.py",
+                            "policy",
+                            "--approval-policy",
+                            approval_policy,
+                        )
+                    )
         commands.extend(
             [
                 (

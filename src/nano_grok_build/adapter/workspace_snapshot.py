@@ -23,6 +23,9 @@ from enum import Enum
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from nano_grok_build.adapter.artifact_limits import (
+    WORKSPACE_CHANGED_TAR_MAX_BYTES,
+)
 from nano_grok_build.adapter.deadline import host_monotonic_ns
 from nano_grok_build.adapter.terminal_actor import (
     SNAPSHOT_OUTPUT_CAP_BYTES,
@@ -3199,6 +3202,8 @@ async def capture_after(
             contents=after.safe_contents,
             omissions=omissions,
         )
+        if len(archive) > WORKSPACE_CHANGED_TAR_MAX_BYTES:
+            raise WorkspaceSnapshotError("workspace_snapshot_archive_limit_exceeded")
         _capture_checkpoint(deadline)
         patch_paths = sorted(
             [

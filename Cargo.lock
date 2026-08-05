@@ -654,7 +654,7 @@ dependencies = [
 
 [[package]]
 name = "nano-cli"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "nano-provider-xai",
  "nano-runtime",
@@ -668,7 +668,7 @@ dependencies = [
 
 [[package]]
 name = "nano-provider-xai"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "base64",
  "bytes",
@@ -683,7 +683,7 @@ dependencies = [
 
 [[package]]
 name = "nano-runtime"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "base64",
  "nano-provider-xai",
@@ -699,7 +699,7 @@ dependencies = [
 
 [[package]]
 name = "nano-types"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "serde",
  "serde_json",

@@ -2369,7 +2369,7 @@ mod tests {
     }
 
     #[test]
-    fn tracked_v10_1_contract_has_exact_three_file_identity() {
+    fn tracked_v10_3_contract_has_exact_three_file_identity() {
         let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../..")
             .canonicalize()
@@ -2379,18 +2379,18 @@ mod tests {
         let contract = super::LocalContract::load(&directory).expect("load tracked nano-v1");
         assert_eq!(
             contract.contract_set_sha256(),
-            "5556083eb942a3f438538f7bc5b153afa0f7760fe2e4ccd365dec5b95f9d2288"
+            "38971deb36eb777303169e9edad212b0baf4788556d8416c54ef69c5c894f28d"
         );
         assert_eq!(
             contract.effective().system_prompt.utf8_sha256,
-            "4658a97463dcfa721e7557ee6e79cfc2b7b4c9018ce207ec125efa047e333602"
+            "7006b1c3da050b89c6eb15551b470da783e54243e94771783fabb64c0a09f37f"
         );
         assert!(
             contract
                 .effective()
                 .system_prompt
                 .text
-                .contains("<benchmark_integrity>")
+                .contains("<workspace_integrity>")
         );
     }
 }

@@ -36,7 +36,7 @@ use crate::deadline::DeadlineContext;
 use crate::event_writer::{EventWriteError, EventWriter, EventWriterLimits, RunRecordPublication};
 use crate::external_stdio::SettlementStageCutoffsV1;
 use crate::foreground::truncate_utf8;
-use crate::protected_target::{PROTECTED_HARNESS_MATERIAL_ACCESS_BLOCKED, match_protected_target};
+use crate::protected_target::{PROTECTED_TARGET_PERMISSION_DENIED, match_protected_target};
 use crate::tool::{
     ToolExecutionError, ToolExecutionFailureClass, ToolExecutor, ToolResult, WorkspaceMode,
 };
@@ -1697,19 +1697,15 @@ async fn settle_tool_call<T: ToolExecutor>(
             )
         })?;
     if match_protected_target(&call.name, &call.arguments_json).is_some() {
-        return Err(record_tool_failure(
+        return prepare_tool_completion(
             state,
             call,
-            PROTECTED_HARNESS_MATERIAL_ACCESS_BLOCKED,
-            ToolFailureSettlement {
-                status: TerminalStatus::ToolFailure,
-                phase: TerminalPhase::Tool,
-                execution_may_have_started: false,
-                cleanup_verified: None,
-                census_verified: None,
-            },
-            None,
-        ));
+            ToolResult::rejected(PROTECTED_TARGET_PERMISSION_DENIED),
+            window.runtime_deadline,
+            window.max_provider_turns,
+            window.output_limits,
+            window.projected_tool_output_bytes,
+        );
     }
     if let Some(code) = window.admission_rejection {
         return prepare_tool_completion(
@@ -2986,7 +2982,7 @@ mod tests {
         }
 
         fn validate(&self, _call: &FunctionCall) -> Result<(), ToolResult> {
-            Ok(())
+            panic!("call must reject before validation")
         }
 
         async fn execute(
@@ -3048,7 +3044,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn official_repository_commands_fail_before_validation_or_dispatch() {
+    async fn official_repository_commands_reject_before_validation_or_dispatch() {
         for (index, (command, background)) in [
             (
                 "git clone https://github.com/harbor-framework/terminal-bench",
@@ -3107,7 +3103,7 @@ mod tests {
             };
             let cancellation = super::RunCancellation::new();
             let mut executor = NeverExecute;
-            let terminal = settle_tool_call(
+            let completion = settle_tool_call(
                 &mut state,
                 &mut executor,
                 &BTreeSet::from(["run_terminal_command"]),
@@ -3128,10 +3124,14 @@ mod tests {
                 },
             )
             .await
-            .expect_err("official benchmark repository access must be terminal");
-            state
-                .finalize_once(terminal)
-                .expect_err("official benchmark repository access must fail the run");
+            .expect("official benchmark repository access must be model-visible");
+            assert!(!completion.dispatched);
+            assert!(!completion.event.execution_attempted);
+            assert_eq!(
+                completion.event.outcome,
+                nano_types::event::ToolOutcome::Rejected
+            );
+            assert_eq!(completion.event.output, "permission_denied");
 
             let events =
                 std::fs::read_to_string(directory.path().join("events.jsonl")).expect("events");
@@ -3161,44 +3161,15 @@ mod tests {
             assert_eq!(
                 parsed
                     .iter()
-                    .filter(|event| event["type"] == "tool.completed")
+                    .filter(|event| event["type"] == "tool.failed")
                     .count(),
                 0
-            );
-            let failed = parsed
-                .iter()
-                .find(|event| event["type"] == "tool.failed")
-                .expect("tool failure evidence");
-            assert_eq!(
-                failed["data"]["code"],
-                "protected_harness_material_access_blocked"
-            );
-            assert_eq!(failed["data"]["execution_may_have_started"], false);
-            assert!(failed["data"]["cleanup_verified"].is_null());
-            assert!(failed["data"]["census_verified"].is_null());
-            assert_eq!(failed["data"]["recoverability"], "fatal");
-            assert_eq!(
-                parsed
-                    .iter()
-                    .filter(|event| event["type"] == "assistant.final")
-                    .count(),
-                0
-            );
-            let run: serde_json::Value = serde_json::from_slice(
-                &std::fs::read(directory.path().join("run.json")).expect("run record"),
-            )
-            .expect("run JSON");
-            assert_eq!(run["terminal_status"], "tool_failure");
-            assert_eq!(run["terminal_phase"], "tool");
-            assert_eq!(
-                run["terminal_code"],
-                "protected_harness_material_access_blocked"
             );
         }
     }
 
     #[tokio::test]
-    async fn protected_target_calls_fail_after_registration_and_before_validation_or_dispatch() {
+    async fn protected_target_calls_reject_after_registration_and_before_validation_or_dispatch() {
         for (index, (tool_name, field, target)) in [
             (
                 "run_terminal_command",
@@ -3257,7 +3228,7 @@ mod tests {
             };
             let cancellation = super::RunCancellation::new();
             let mut executor = NeverExecute;
-            let terminal = settle_tool_call(
+            let completion = settle_tool_call(
                 &mut state,
                 &mut executor,
                 &BTreeSet::from([tool_name]),
@@ -3278,10 +3249,14 @@ mod tests {
                 },
             )
             .await
-            .expect_err("protected target access must be terminal");
-            state
-                .finalize_once(terminal)
-                .expect_err("protected target access must fail the run");
+            .expect("protected target access must be model-visible");
+            assert!(!completion.dispatched);
+            assert!(!completion.event.execution_attempted);
+            assert_eq!(
+                completion.event.outcome,
+                nano_types::event::ToolOutcome::Rejected
+            );
+            assert_eq!(completion.event.output, "permission_denied");
 
             let events =
                 std::fs::read_to_string(directory.path().join("events.jsonl")).expect("events");
@@ -3294,19 +3269,9 @@ mod tests {
                     .iter()
                     .map(|event| event["type"].as_str().expect("event type"))
                     .collect::<Vec<_>>(),
-                ["tool.registered", "tool.failed", "run.failed"]
+                ["tool.registered"]
             );
             assert_eq!(parsed[0]["data"]["arguments_json"], arguments_json);
-            assert_eq!(
-                parsed[1]["data"]["code"],
-                "protected_harness_material_access_blocked"
-            );
-            assert_eq!(parsed[1]["data"]["execution_may_have_started"], false);
-            assert_eq!(parsed[1]["data"]["recoverability"], "fatal");
-            assert_eq!(
-                parsed[2]["data"]["code"],
-                "protected_harness_material_access_blocked"
-            );
         }
     }
 

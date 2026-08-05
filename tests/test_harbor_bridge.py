@@ -3178,3 +3178,68 @@ def test_host_private_control_plane_keeps_sentinel_out_of_public_agent_dir(
 
     plane.cleanup()
     assert not plane.root.exists()
+
+
+def test_control_plane_applies_exact_name_and_total_publication_bounds(
+    tmp_path: Path,
+) -> None:
+    from nano_grok_build.adapter.artifact_limits import (
+        DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+        PUBLICATION_TOTAL_MAX_BYTES,
+        WORKSPACE_CHANGED_TAR_MAX_BYTES,
+    )
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    exact_trial = tmp_path / "exact"
+    exact_public = exact_trial / "agent"
+    exact_public.mkdir(parents=True)
+    exact_plane = ControlPlane.create(exact_public, run_spec_sha256="a" * 64)
+    archive = b"x" * WORKSPACE_CHANGED_TAR_MAX_BYTES
+    files = {"workspace-changed.tar": archive, "agent-run.json": b""}
+    published = exact_plane.publish(files)
+    replayed = exact_plane.publish(files)
+    assert published == replayed
+    assert published["workspace-changed.tar"].stat().st_size == len(archive)
+    assert (
+        published["agent-run.json"].stat().st_mtime_ns
+        >= published["workspace-changed.tar"].stat().st_mtime_ns
+    )
+
+    for name, size in (
+        ("workspace-changed.tar", WORKSPACE_CHANGED_TAR_MAX_BYTES + 1),
+        ("trajectory.json", DEFAULT_PUBLICATION_FILE_MAX_BYTES + 1),
+    ):
+        trial = tmp_path / f"reject-{name}"
+        public = trial / "agent"
+        public.mkdir(parents=True)
+        plane = ControlPlane.create(public, run_spec_sha256="b" * 64)
+        with pytest.raises(RuntimeError, match="control_publication_payload_invalid"):
+            plane.publish({name: b"x" * size, "agent-run.json": b""})
+        assert list(public.iterdir()) == []
+
+    alias_public = tmp_path / "alias" / "agent"
+    alias_public.mkdir(parents=True)
+    alias_plane = ControlPlane.create(alias_public, run_spec_sha256="c" * 64)
+    with pytest.raises(RuntimeError, match="control_publication_allowlist_invalid"):
+        alias_plane.publish({"Workspace-changed.tar": b"x", "agent-run.json": b""})
+
+    total_public = tmp_path / "total" / "agent"
+    total_public.mkdir(parents=True)
+    total_plane = ControlPlane.create(total_public, run_spec_sha256="d" * 64)
+    chunk = b"z" * DEFAULT_PUBLICATION_FILE_MAX_BYTES
+    total_files = {
+        "runtime/events.jsonl": chunk,
+        "trajectory.json": chunk,
+        "workspace-after.json": chunk,
+        "workspace-changed.tar": chunk,
+        "agent-run.json": b"",
+    }
+    assert sum(map(len, total_files.values())) == PUBLICATION_TOTAL_MAX_BYTES
+    total_plane.publish(total_files)
+
+    over_public = tmp_path / "over-total" / "agent"
+    over_public.mkdir(parents=True)
+    over_plane = ControlPlane.create(over_public, run_spec_sha256="e" * 64)
+    with pytest.raises(RuntimeError, match="control_publication_payload_invalid"):
+        over_plane.publish(total_files | {"agent-run.json": b"!"})
+    assert list(over_public.iterdir()) == []

@@ -12,7 +12,7 @@ Example::
 
     python scripts/submission_preflight.py \
       --job-dir /absolute/path/to/job \
-      --expected-agent-version 0.2.0 \
+      --expected-agent-version 0.3.0 \
       --expected-runtime-git-head "$GIT_SHA" \
       --expected-runtime-binary-sha256 "$BINARY_SHA256" \
       --expected-contract-set-sha256 "$CONTRACT_SHA256"
@@ -47,7 +47,7 @@ from nano_grok_build.adapter.atif import (  # noqa: E402
 from nano_grok_build.harbor import protected_target, tb21  # noqa: E402
 from scripts import check_v10_candidate as candidate  # noqa: E402
 
-SUBMISSION_PREFLIGHT_SCHEMA = "nano-submission-preflight-v1"
+SUBMISSION_PREFLIGHT_SCHEMA = "nano-submission-preflight-v3"
 UPLOADER_TRAJECTORY_PATH = Path("agent/trajectory.json")
 _EXPECTED_MARKER_SHAPES = {
     ("nano-agent-run-v2", "success_atif"),
@@ -55,7 +55,6 @@ _EXPECTED_MARKER_SHAPES = {
     ("nano-agent-run-v4", "failure_atif"),
     ("nano-agent-run-v4", "emergency_atif"),
 }
-_BLOCKED_CLASSIFICATIONS = {"strong", "attempted", "access_blocked"}
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 
@@ -270,6 +269,15 @@ def _validate_trajectory(
 
 def _audit_projection(audit: Mapping[str, object]) -> dict[str, object]:
     findings = audit.get("findings")
+    blocking_count = (
+        sum(
+            protected_target.submission_blocking_finding(finding)
+            for finding in findings
+        )
+        if isinstance(findings, list)
+        else 0
+    )
+    warning_count = len(findings) - blocking_count if isinstance(findings, list) else 0
     return {
         "contamination_audit_state": audit.get("state"),
         "contamination_signal": bool(findings),
@@ -279,6 +287,11 @@ def _audit_projection(audit: Mapping[str, object]) -> dict[str, object]:
         "protected_target_findings": audit.get("findings"),
         "protected_target_policy_schema": audit.get("policy_schema_version"),
         "protected_target_policy_sha256": audit.get("policy_sha256"),
+        "submission_integrity_blocking": bool(
+            audit.get("state") != "available" or blocking_count
+        ),
+        "submission_integrity_blocking_count": blocking_count,
+        "submission_integrity_warning_count": warning_count,
     }
 
 
@@ -306,21 +319,75 @@ def _audit_protected_target(
         issues.add("protected_evidence_unavailable", task=task_id, trial=trial_id)
         return dict(audit) if isinstance(audit, dict) else {}
     for finding in audit["findings"]:
-        classification = (
-            finding.get("classification") if isinstance(finding, dict) else None
-        )
-        if classification in _BLOCKED_CLASSIFICATIONS:
-            issues.add(
-                f"protected_target_{classification}",
-                task=task_id,
-                trial=trial_id,
-            )
-        elif classification is not None:
-            issues.add(
-                "protected_target_classification_invalid",
-                task=task_id,
-                trial=trial_id,
-            )
+        if not protected_target.submission_blocking_finding(finding):
+            continue
+        if not isinstance(finding, dict):
+            code = "protected_target_finding_invalid"
+        elif finding.get("classification") == "strong":
+            code = "protected_target_strong"
+        elif finding.get("dispatched") is True:
+            code = "protected_target_dispatched"
+        elif finding.get("bytes_returned") is True:
+            code = "protected_target_bytes_returned"
+        elif finding.get("causal_benefit") is True:
+            code = "protected_target_causal_benefit"
+        else:
+            code = "protected_target_finding_invalid"
+        issues.add(code, task=task_id, trial=trial_id)
+    return dict(audit)
+
+
+def _git_audit_projection(audit: Mapping[str, object]) -> dict[str, object]:
+    return {
+        "git_history_audit_schema": audit.get("schema_version"),
+        "git_history_finding_schema": audit.get("finding_schema_version"),
+        "git_history_audit_state": audit.get("state"),
+        "git_history_required": audit.get("history_required"),
+        "git_history_evidence_complete": audit.get("evidence_complete"),
+        "git_history_findings": audit.get("findings"),
+        "git_history_counts": audit.get("counts"),
+        "git_history_submission_blocking": audit.get("submission_blocking"),
+    }
+
+
+def _audit_git_history(
+    trial_dir: Path,
+    *,
+    instruction: object,
+    issues: _Issues,
+    task_id: str,
+    trial_id: str,
+) -> dict[str, object]:
+    audit = tb21.git_history_audit.audit_trial(trial_dir, instruction=instruction)
+    if (
+        audit.get("state") != "available"
+        or audit.get("schema_version") != tb21.git_history_audit.AUDIT_SCHEMA
+        or audit.get("finding_schema_version") != tb21.git_history_audit.FINDING_SCHEMA
+        or audit.get("evidence_complete") is not True
+        or not isinstance(audit.get("findings"), list)
+    ):
+        issues.add("git_history_evidence_unavailable", task=task_id, trial=trial_id)
+        return dict(audit)
+    if audit.get("history_required") is None:
+        issues.add("git_history_intent_ambiguous", task=task_id, trial=trial_id)
+    for finding in audit["findings"]:
+        if not tb21.git_history_audit.submission_blocking_finding(finding):
+            continue
+        if (
+            isinstance(finding, dict)
+            and finding.get("causal_reuse") is True
+            and finding.get("history_required") is False
+        ):
+            code = "git_history_oracle_reuse"
+        elif (
+            isinstance(finding, dict)
+            and finding.get("bytes_returned") is True
+            and finding.get("history_required") is False
+        ):
+            code = "git_history_oracle_access"
+        else:
+            code = "git_history_finding_invalid"
+        issues.add(code, task=task_id, trial=trial_id)
     return dict(audit)
 
 
@@ -332,7 +399,7 @@ def _scan_trial(
     require_pinned_harbor: bool,
     issues: _Issues,
     hashes: list[tuple[str, str]],
-) -> tuple[float | None, str | None, dict[str, object]]:
+) -> tuple[float | None, str | None, dict[str, object], dict[str, object]]:
     task = spec.get("task")
     task_id = str(task.get("id", "")) if isinstance(task, dict) else ""
     digest = str(task.get("digest", "")) if isinstance(task, dict) else ""
@@ -340,7 +407,7 @@ def _scan_trial(
     trial_dir = job_dir / trial_id
     if trial_dir.is_symlink() or not trial_dir.is_dir():
         issues.add("trial_directory_invalid", task=task_id, trial=trial_id)
-        return None, None, {}
+        return None, None, {}, {}
 
     reward: float | None = None
     result: Mapping[str, object] | None = None
@@ -433,7 +500,14 @@ def _scan_trial(
         task_id=task_id,
         trial_id=trial_id,
     )
-    return reward, version, audit
+    git_audit = _audit_git_history(
+        trial_dir,
+        instruction=task.get("instruction") if isinstance(task, dict) else None,
+        issues=issues,
+        task_id=task_id,
+        trial_id=trial_id,
+    )
+    return reward, version, audit, git_audit
 
 
 def _read_rows(
@@ -472,6 +546,7 @@ def _validate_collector(
     specs: Sequence[Mapping[str, object]],
     rewards: Mapping[str, float | None],
     audits: Mapping[str, Mapping[str, object]],
+    git_audits: Mapping[str, Mapping[str, object]],
     cohort: Mapping[str, object],
     issues: _Issues,
     hashes: list[tuple[str, str]],
@@ -493,6 +568,7 @@ def _validate_collector(
         task = spec["task"]
         task_id = str(task["id"])  # type: ignore[index]
         expected_audit = _audit_projection(audits.get(trial_id, {}))
+        expected_git_audit = _git_audit_projection(git_audits.get(trial_id, {}))
         if (
             row.get("task") != task_id
             or row.get("digest") != task["digest"]  # type: ignore[index]
@@ -501,6 +577,8 @@ def _validate_collector(
         ):
             issues.add("collector_projection_mismatch", task=task_id, trial=trial_id)
         if any(row.get(key) != value for key, value in expected_audit.items()):
+            issues.add("collector_projection_mismatch", task=task_id, trial=trial_id)
+        if any(row.get(key) != value for key, value in expected_git_audit.items()):
             issues.add("collector_projection_mismatch", task=task_id, trial=trial_id)
 
     try:
@@ -563,7 +641,7 @@ def _validate_collector(
             "exact_inventory",
             "result_identity",
             "collect_idempotent",
-            "contamination_clean",
+            "submission_integrity_clean",
         )
     ):
         issues.add("collector_summary_invalid")
@@ -573,7 +651,12 @@ def _validate_collector(
     # for the second collect-only projection.  No pass opens verifier or
     # solution paths.
     first_projection = receipt_bytes(
-        {"rows": list(rows), "summary": dict(summary), "audits": dict(audits)}
+        {
+            "rows": list(rows),
+            "summary": dict(summary),
+            "audits": dict(audits),
+            "git_audits": dict(git_audits),
+        }
     )
     second_rows = _read_rows(job_dir / "rows.jsonl", issues=issues, hashes=hashes)
     try:
@@ -585,6 +668,7 @@ def _validate_collector(
         issues.add("collector_malformed")
         second_summary = {}
     second_audits: dict[str, Mapping[str, object]] = {}
+    second_git_audits: dict[str, Mapping[str, object]] = {}
     for spec in specs:
         task = spec["task"]
         task_id = str(task["id"])  # type: ignore[index]
@@ -596,11 +680,19 @@ def _validate_collector(
             task_id=task_id,
             trial_id=trial_id,
         )
+        second_git_audits[trial_id] = _audit_git_history(
+            job_dir / trial_id,
+            instruction=task.get("instruction"),  # type: ignore[union-attr]
+            issues=issues,
+            task_id=task_id,
+            trial_id=trial_id,
+        )
     second_projection = receipt_bytes(
         {
             "rows": list(second_rows),
             "summary": dict(second_summary),
             "audits": second_audits,
+            "git_audits": second_git_audits,
         }
     )
     if first_projection != second_projection:
@@ -718,10 +810,11 @@ def _scan_job(
 
     rewards: dict[str, float | None] = {}
     audits: dict[str, Mapping[str, object]] = {}
+    git_audits: dict[str, Mapping[str, object]] = {}
     versions: list[str] = []
     for spec in specs:
         trial_id = str(spec["trial_id"])
-        reward, version, audit = _scan_trial(
+        reward, version, audit, git_audit = _scan_trial(
             job_dir,
             spec,
             expectation=expectation,
@@ -731,6 +824,7 @@ def _scan_job(
         )
         rewards[trial_id] = reward
         audits[trial_id] = audit
+        git_audits[trial_id] = git_audit
         if version is not None:
             versions.append(version)
     if len(set(versions)) > 1:
@@ -741,6 +835,7 @@ def _scan_job(
         specs=specs,
         rewards=rewards,
         audits=audits,
+        git_audits=git_audits,
         cohort=cohort,
         issues=issues,
         hashes=hashes,
@@ -842,7 +937,7 @@ def static_errors(root: Path) -> list[str]:
             errors.append("submission preflight: protected-target policy hash drift")
     if UPLOADER_TRAJECTORY_PATH.as_posix() != "agent/trajectory.json":
         errors.append("submission preflight: uploader trajectory path drift")
-    if SUBMISSION_PREFLIGHT_SCHEMA != "nano-submission-preflight-v1":
+    if SUBMISSION_PREFLIGHT_SCHEMA != "nano-submission-preflight-v3":
         errors.append("submission preflight: receipt schema drift")
     if not (resolved / "scripts/submission_preflight.py").is_file():
         errors.append("submission preflight: CLI missing")

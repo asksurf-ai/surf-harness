@@ -15,16 +15,117 @@ POLICY_SCHEMA = "protected-targets-v1"
 AUDIT_SCHEMA = "nano-protected-target-audit-v1"
 FINDING_SCHEMA = "nano-protected-target-finding-v1"
 BLOCKED_CODE = "protected_harness_material_access_blocked"
+PERMISSION_DENIED_OUTPUT = "permission_denied"
 _MAX_SURFACE_BYTES = 32 * 1024 * 1024
 _TERMINAL_SPLIT = re.compile(r"[\s'\"`;|&()<>{}\[\],=]+")
 _SOURCE_POLICY_PATH = (
     Path(__file__).resolve().parents[3] / "policy/protected-targets-v1.json"
 )
 _PACKAGE_POLICY_PATH = "policy/protected-targets-v1.json"
+_CONFIRMED_ACCESS_FIELDS = frozenset(
+    {
+        "confirmed_access",
+        "confirmed_use",
+        "confirmed_privileged_access",
+        "confirmed_privileged_use",
+    }
+)
 
 
 class ProtectedTargetError(ValueError):
     """The shared policy or an evidence surface is structurally invalid."""
+
+
+def submission_blocking_finding(finding: object) -> bool:
+    """Project one raw protected finding into submission admission.
+
+    Only a canonical attempt that was blocked before dispatch, returned no bytes,
+    and supplied no causal benefit is warning-only.  Unknown or contradictory
+    shapes fail closed.  The raw finding is never modified.
+    """
+
+    if not isinstance(finding, Mapping):
+        return True
+    required = {
+        "schema_version",
+        "call_id",
+        "tool_name",
+        "target_kind",
+        "target_field",
+        "policy_value",
+        "classification",
+        "attempted",
+        "dispatched",
+        "bytes_returned",
+        "causal_benefit",
+        "access_blocked",
+        "evidence_sources",
+    }
+    keys = set(finding)
+    optional = keys - required
+    if not required.issubset(keys) or not optional.issubset(_CONFIRMED_ACCESS_FIELDS):
+        return True
+    if finding.get("schema_version") != FINDING_SCHEMA:
+        return True
+    if any(
+        not isinstance(finding.get(field), str) or not finding.get(field)
+        for field in (
+            "call_id",
+            "tool_name",
+            "target_kind",
+            "target_field",
+            "policy_value",
+            "classification",
+        )
+    ):
+        return True
+    if finding.get("target_kind") not in {
+        "protected_path",
+        "official_benchmark_repository",
+    }:
+        return True
+    boolean_fields = (
+        "attempted",
+        "dispatched",
+        "bytes_returned",
+        "causal_benefit",
+        "access_blocked",
+    )
+    if any(not isinstance(finding.get(field), bool) for field in boolean_fields):
+        return True
+    if any(not isinstance(finding.get(field), bool) for field in optional):
+        return True
+    sources = finding.get("evidence_sources")
+    if not isinstance(sources, list) or not sources:
+        return True
+    for source in sources:
+        if (
+            not isinstance(source, Mapping)
+            or set(source) != {"kind", "path", "sha256"}
+            or any(
+                not isinstance(source.get(field), str) or not source.get(field)
+                for field in ("kind", "path", "sha256")
+            )
+            or re.fullmatch(r"[0-9a-f]{64}", str(source.get("sha256"))) is None
+        ):
+            return True
+
+    if any(finding.get(field) is True for field in _CONFIRMED_ACCESS_FIELDS):
+        return True
+    if (
+        finding["classification"] == "strong"
+        or finding["dispatched"] is True
+        or finding["bytes_returned"] is True
+        or finding["causal_benefit"] is True
+    ):
+        return True
+    if finding["attempted"] is not True:
+        return True
+    if finding["classification"] == "access_blocked":
+        return finding["access_blocked"] is not True
+    if finding["classification"] == "attempted":
+        return finding["access_blocked"] is not False
+    return True
 
 
 def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -328,6 +429,18 @@ def _merge_finding(
         sources.append(dict(source))
 
 
+def _is_permission_denial(
+    output: object,
+    execution_attempted: object,
+    outcome: object,
+) -> bool:
+    return (
+        output == PERMISSION_DENIED_OUTPUT
+        and execution_attempted is False
+        and outcome == "rejected"
+    )
+
+
 def _atif_calls(value: object) -> list[dict[str, object]]:
     if not isinstance(value, dict):
         raise ProtectedTargetError("trajectory_invalid")
@@ -342,7 +455,7 @@ def _atif_calls(value: object) -> list[dict[str, object]]:
             tool_calls = step.get("tool_calls", [])
             if not isinstance(tool_calls, list):
                 raise ProtectedTargetError("trajectory_invalid")
-            observations: dict[str, object] = {}
+            observations: dict[str, dict[str, object]] = {}
             observation = step.get("observation")
             if isinstance(observation, dict):
                 results = observation.get("results", [])
@@ -353,22 +466,34 @@ def _atif_calls(value: object) -> list[dict[str, object]]:
                         raise ProtectedTargetError("trajectory_invalid")
                     result_id = result.get("source_call_id")
                     if isinstance(result_id, str):
-                        observations[result_id] = result.get("content")
+                        observations[result_id] = result
             for call_index, call in enumerate(tool_calls):
                 if not isinstance(call, dict):
                     raise ProtectedTargetError("trajectory_invalid")
                 call_id = call.get("tool_call_id")
                 if not isinstance(call_id, str) or not call_id:
                     call_id = f"atif-step-{step_index}-call-{call_index}"
-                content = observations.get(call_id)
+                result = observations.get(call_id)
+                content = result.get("content") if result is not None else None
+                extra = result.get("extra") if result is not None else None
+                access_blocked = bool(
+                    isinstance(extra, dict)
+                    and _is_permission_denial(
+                        content,
+                        extra.get("execution_attempted"),
+                        extra.get("outcome"),
+                    )
+                )
                 calls.append(
                     {
                         "call_id": call_id,
                         "tool_name": call.get("function_name"),
                         "arguments": call.get("arguments"),
-                        "dispatched": call_id in observations,
-                        "bytes_returned": isinstance(content, str) and bool(content),
-                        "access_blocked": False,
+                        "dispatched": call_id in observations and not access_blocked,
+                        "bytes_returned": bool(
+                            isinstance(content, str) and content and not access_blocked
+                        ),
+                        "access_blocked": access_blocked,
                     }
                 )
     partial_calls = value.get("tool_calls")
@@ -386,16 +511,29 @@ def _atif_calls(value: object) -> list[dict[str, object]]:
                 observation.get("output") if isinstance(observation, dict) else None
             )
             failure = call.get("failure")
+            permission_denied = bool(
+                isinstance(observation, dict)
+                and _is_permission_denial(
+                    content,
+                    observation.get("execution_attempted"),
+                    observation.get("outcome"),
+                )
+            )
             calls.append(
                 {
                     "call_id": call_id,
                     "tool_name": call.get("function_name"),
                     "arguments": call.get("arguments"),
                     "dispatched": call.get("dispatched") is True,
-                    "bytes_returned": isinstance(content, str) and bool(content),
+                    "bytes_returned": bool(
+                        isinstance(content, str) and content and not permission_denied
+                    ),
                     "access_blocked": bool(
-                        isinstance(failure, dict)
-                        and failure.get("code") == BLOCKED_CODE
+                        permission_denied
+                        or (
+                            isinstance(failure, dict)
+                            and failure.get("code") == BLOCKED_CODE
+                        )
                     ),
                 }
             )
@@ -441,7 +579,13 @@ def _event_calls(events: list[object]) -> list[dict[str, object]]:
                 output = data.get("output")
                 if not isinstance(output, str):
                     raise ProtectedTargetError("event_prefix_invalid")
-                call["bytes_returned"] = bool(output)
+                permission_denied = _is_permission_denial(
+                    output,
+                    data.get("execution_attempted"),
+                    data.get("outcome"),
+                )
+                call["bytes_returned"] = bool(output and not permission_denied)
+                call["access_blocked"] = permission_denied
             else:
                 call["access_blocked"] = data.get("code") == BLOCKED_CODE
     return list(calls.values())

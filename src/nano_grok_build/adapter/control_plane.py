@@ -11,6 +11,12 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
+from nano_grok_build.adapter.artifact_limits import (
+    DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+    PUBLICATION_TOTAL_MAX_BYTES,
+    publication_file_max_bytes,
+)
+
 CONTROL_DIR_NAME = ".nano-control-v2"
 ISOLATION_RECEIPT_NAME = "isolation-receipt.json"
 ISOLATION_SCHEMA = "nano-control-isolation-v2"
@@ -41,8 +47,6 @@ PUBLICATION_ALLOWLIST = frozenset(
 )
 
 _EMPTY_PUBLIC_SHA256 = hashlib.sha256(b"[]\n").hexdigest()
-_MAX_FILE_BYTES = 64 * 1024 * 1024
-_MAX_TOTAL_BYTES = 256 * 1024 * 1024
 
 
 class ControlPlaneError(RuntimeError):
@@ -76,7 +80,11 @@ def _sha256_valid(value: object) -> bool:
     )
 
 
-def _regular_bytes(path: Path, *, limit: int = _MAX_FILE_BYTES) -> bytes:
+def _regular_bytes(
+    path: Path,
+    *,
+    limit: int = DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+) -> bytes:
     descriptor: int | None = None
     try:
         descriptor = os.open(
@@ -275,10 +283,10 @@ class ControlPlane:
             name = _relative_name(raw_name)
             if not isinstance(raw_payload, bytes) or name in normalized:
                 raise ControlPlaneError("control_publication_payload_invalid")
-            if len(raw_payload) > _MAX_FILE_BYTES:
+            if len(raw_payload) > publication_file_max_bytes(name):
                 raise ControlPlaneError("control_publication_payload_invalid")
             total += len(raw_payload)
-            if total > _MAX_TOTAL_BYTES:
+            if total > PUBLICATION_TOTAL_MAX_BYTES:
                 raise ControlPlaneError("control_publication_payload_invalid")
             normalized[name] = raw_payload
         marker = _relative_name(marker_name)
@@ -297,7 +305,13 @@ class ControlPlane:
             }:
                 raise ControlPlaneError("control_publication_existing_mismatch")
             for name, payload in normalized.items():
-                if _regular_bytes(self.public_root / name) != payload:
+                if (
+                    _regular_bytes(
+                        self.public_root / name,
+                        limit=publication_file_max_bytes(name),
+                    )
+                    != payload
+                ):
                     raise ControlPlaneError("control_publication_existing_mismatch")
             return {name: self.public_root / name for name in normalized}
         if _public_entries(self.public_root):

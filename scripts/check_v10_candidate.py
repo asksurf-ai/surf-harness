@@ -35,7 +35,7 @@ from nano_grok_build.adapter.atif import (  # noqa: E402
 from nano_grok_build.harbor import tb21  # noqa: E402
 from nano_grok_build.harbor.compat_v020 import HARBOR_VERSION  # noqa: E402
 
-CANDIDATE_REPORT_SCHEMA = "nano-v10-candidate-report-v1"
+CANDIDATE_REPORT_SCHEMA = "nano-v10-candidate-report-v3"
 CANARY_PLAN_SCHEMA = "nano-v10-canary-plan-v1"
 _MAX_JSON_BYTES = 64 * 1024 * 1024
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -219,6 +219,17 @@ _ROW_REQUIRED_KEYS = {
     "protected_target_policy_sha256",
     "protected_target_counts",
     "protected_target_findings",
+    "submission_integrity_blocking",
+    "submission_integrity_blocking_count",
+    "submission_integrity_warning_count",
+    "git_history_audit_schema",
+    "git_history_finding_schema",
+    "git_history_audit_state",
+    "git_history_required",
+    "git_history_evidence_complete",
+    "git_history_findings",
+    "git_history_counts",
+    "git_history_submission_blocking",
     "exception",
     "failure_bucket",
     "failure_phase",
@@ -918,6 +929,9 @@ def _validate_row(
         "terminal_record_valid",
         "result_binding_valid",
         "contamination_signal",
+        "submission_integrity_blocking",
+        "git_history_evidence_complete",
+        "git_history_submission_blocking",
         "cost_coverage",
     )
     counts = (
@@ -933,6 +947,29 @@ def _validate_row(
     signals = row.get("contamination_signals")
     protected_counts = row.get("protected_target_counts")
     protected_findings = row.get("protected_target_findings")
+    blocking_count = (
+        sum(
+            tb21.protected_target.submission_blocking_finding(finding)
+            for finding in protected_findings
+        )
+        if isinstance(protected_findings, list)
+        else -1
+    )
+    warning_count = (
+        len(protected_findings) - blocking_count
+        if isinstance(protected_findings, list) and blocking_count >= 0
+        else -1
+    )
+    git_findings = row.get("git_history_findings")
+    git_counts = row.get("git_history_counts")
+    git_blocking_count = (
+        sum(
+            tb21.git_history_audit.submission_blocking_finding(finding)
+            for finding in git_findings
+        )
+        if isinstance(git_findings, list)
+        else -1
+    )
     exception = row.get("exception")
     requested = row.get("provider_calls_requested")
     completed = row.get("provider_calls_completed")
@@ -971,6 +1008,43 @@ def _validate_row(
         or not isinstance(protected_findings, list)
         or protected_counts.get("findings") != len(protected_findings)
         or row.get("contamination_signal") != bool(protected_findings)
+        or not _nonnegative_int(row.get("submission_integrity_blocking_count"))
+        or not _nonnegative_int(row.get("submission_integrity_warning_count"))
+        or row.get("submission_integrity_blocking_count") != blocking_count
+        or row.get("submission_integrity_warning_count") != warning_count
+        or row.get("submission_integrity_blocking")
+        != bool(row.get("contamination_audit_state") != "available" or blocking_count)
+        or row.get("git_history_audit_schema") != tb21.git_history_audit.AUDIT_SCHEMA
+        or row.get("git_history_finding_schema")
+        != tb21.git_history_audit.FINDING_SCHEMA
+        or row.get("git_history_audit_state")
+        not in {"available", "unavailable", "invalid"}
+        or (
+            row.get("git_history_required") is not None
+            and not isinstance(row.get("git_history_required"), bool)
+        )
+        or not isinstance(git_findings, list)
+        or not isinstance(git_counts, dict)
+        or set(git_counts)
+        != {
+            "findings",
+            "attempted",
+            "dispatched",
+            "bytes_returned",
+            "causal_reuse",
+            "warnings",
+            "blocking",
+        }
+        or any(not _nonnegative_int(value) for value in git_counts.values())
+        or git_counts.get("findings") != len(git_findings)
+        or git_counts.get("blocking") != git_blocking_count
+        or row.get("git_history_submission_blocking")
+        != bool(
+            row.get("git_history_audit_state") != "available"
+            or row.get("git_history_required") is None
+            or not row.get("git_history_evidence_complete")
+            or git_blocking_count
+        )
         or (exception is not None and not isinstance(exception, dict))
         or (
             isinstance(exception, dict)
@@ -1187,6 +1261,20 @@ def _validate_row_evidence(
         trial_dir,
         rewarded=bool(row.get("collector_pass")),
     )
+    findings = contamination.get("findings")
+    blocking_count = (
+        sum(
+            tb21.protected_target.submission_blocking_finding(finding)
+            for finding in findings
+        )
+        if isinstance(findings, list)
+        else 1
+    )
+    warning_count = len(findings) - blocking_count if isinstance(findings, list) else 0
+    git_history = tb21.git_history_audit.audit_trial(
+        trial_dir,
+        instruction=spec["task"].get("instruction"),  # type: ignore[union-attr]
+    )
     if (
         row.get("contamination_audit_state") != contamination.get("state")
         or row.get("contamination_signals") != contamination.get("signals")
@@ -1199,6 +1287,21 @@ def _validate_row_evidence(
         != contamination.get("policy_sha256")
         or row.get("protected_target_counts") != contamination.get("counts")
         or row.get("protected_target_findings") != contamination.get("findings")
+        or row.get("submission_integrity_blocking_count") != blocking_count
+        or row.get("submission_integrity_warning_count") != warning_count
+        or row.get("submission_integrity_blocking")
+        != bool(contamination.get("state") != "available" or blocking_count)
+        or row.get("git_history_audit_schema") != git_history.get("schema_version")
+        or row.get("git_history_finding_schema")
+        != git_history.get("finding_schema_version")
+        or row.get("git_history_audit_state") != git_history.get("state")
+        or row.get("git_history_required") != git_history.get("history_required")
+        or row.get("git_history_evidence_complete")
+        != git_history.get("evidence_complete")
+        or row.get("git_history_findings") != git_history.get("findings")
+        or row.get("git_history_counts") != git_history.get("counts")
+        or row.get("git_history_submission_blocking")
+        != git_history.get("submission_blocking")
     ):
         raise CandidateError("candidate_row_contamination_projection_mismatch")
 
@@ -1603,6 +1706,12 @@ def audit_jobs(
         effective_pass(row) and not row.get("contamination_signal")
         for row in mechanism_rows
     )
+    submission_eligible_raw = sum(
+        effective_pass(row)
+        and not row.get("submission_integrity_blocking")
+        and not row.get("git_history_submission_blocking")
+        for row in mechanism_rows
+    )
     strict = sum(
         bool(row.get("strict_pass") and row.get("exception") is None)
         for row in mechanism_rows
@@ -1610,12 +1719,25 @@ def audit_jobs(
     reliable = sum(bool(row.get("reliable")) for row in mechanism_rows)
     measurement = sum(bool(row.get("measurement_complete")) for row in mechanism_rows)
 
-    integrity_rows = [
+    legacy_integrity_rows = [
         row for row in mechanism_rows if bool(row.get("contamination_signal"))
+    ]
+    integrity_rows = [
+        row for row in mechanism_rows if bool(row.get("submission_integrity_blocking"))
+    ]
+    git_integrity_rows = [
+        row
+        for row in mechanism_rows
+        if bool(row.get("git_history_submission_blocking"))
+    ]
+    warning_integrity_rows = [
+        row
+        for row in mechanism_rows
+        if int(row.get("submission_integrity_warning_count", 0)) > 0
     ]
     integrity_findings = [
         finding
-        for row in integrity_rows
+        for row in legacy_integrity_rows
         for finding in row.get("protected_target_findings", [])
         if isinstance(finding, dict)
     ]
@@ -1624,7 +1746,7 @@ def audit_jobs(
         for row in mechanism_rows
         if row.get("contamination_audit_state") != "available"
     ]
-    if integrity_rows:
+    if integrity_rows or git_integrity_rows:
         violations.append("integrity_policy_violation")
     if unavailable_integrity_rows:
         violations.append("contamination_evidence_unavailable")
@@ -1642,14 +1764,17 @@ def audit_jobs(
     if (
         coverage_complete
         and policy.min_trusted_raw is not None
-        and trusted_raw < policy.min_trusted_raw
+        and submission_eligible_raw < policy.min_trusted_raw
     ):
-        violations.append("trusted_raw_below_threshold")
+        violations.append("submission_eligible_raw_below_threshold")
 
     violations = list(dict.fromkeys(violations))
     metrics = {
         "raw": _metric(raw, expected_task_trials, coverage_complete),
         "trusted_raw": _metric(trusted_raw, expected_task_trials, coverage_complete),
+        "submission_eligible_raw": _metric(
+            submission_eligible_raw, expected_task_trials, coverage_complete
+        ),
         "strict": _metric(strict, expected_task_trials, coverage_complete),
         "reliable": _metric(reliable, expected_task_trials, coverage_complete),
         "measurement_complete": _metric(
@@ -1664,6 +1789,11 @@ def audit_jobs(
         if mechanism_denominator
         else None,
         "trusted_raw_percent": round(100 * trusted_raw / mechanism_denominator, 6)
+        if mechanism_denominator
+        else None,
+        "submission_eligible_raw_percent": round(
+            100 * submission_eligible_raw / mechanism_denominator, 6
+        )
         if mechanism_denominator
         else None,
         "strict_percent": round(100 * strict / mechanism_denominator, 6)
@@ -1754,6 +1884,17 @@ def audit_jobs(
             "policy_sha256": tb21.protected_target.POLICY_SHA256,
             "execution_isolation": False,
             "violation_count": len(integrity_rows),
+            "legacy_finding_trial_count": len(legacy_integrity_rows),
+            "blocking_trial_count": len(integrity_rows),
+            "blocking_finding_count": sum(
+                int(row.get("submission_integrity_blocking_count", 0))
+                for row in mechanism_rows
+            ),
+            "warning_trial_count": len(warning_integrity_rows),
+            "warning_finding_count": sum(
+                int(row.get("submission_integrity_warning_count", 0))
+                for row in mechanism_rows
+            ),
             "finding_count": len(integrity_findings),
             "evidence_unavailable_count": len(unavailable_integrity_rows),
             "classifications": _counter(
@@ -1762,9 +1903,25 @@ def audit_jobs(
             "signals": _counter(
                 [
                     str(signal)
-                    for row in integrity_rows
+                    for row in legacy_integrity_rows
                     for signal in row.get("contamination_signals", [])
                 ]
+            ),
+        },
+        "git_history_integrity": {
+            "audit_schema": tb21.git_history_audit.AUDIT_SCHEMA,
+            "finding_schema": tb21.git_history_audit.FINDING_SCHEMA,
+            "blocking_trial_count": len(git_integrity_rows),
+            "finding_count": sum(
+                len(row.get("git_history_findings", [])) for row in mechanism_rows
+            ),
+            "causal_reuse_count": sum(
+                int(row.get("git_history_counts", {}).get("causal_reuse", 0))
+                for row in mechanism_rows
+            ),
+            "warning_count": sum(
+                int(row.get("git_history_counts", {}).get("warnings", 0))
+                for row in mechanism_rows
             ),
         },
         "atif_eligibility": {

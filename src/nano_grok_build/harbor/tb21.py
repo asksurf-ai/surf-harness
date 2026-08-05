@@ -39,7 +39,7 @@ from nano_grok_build.adapter.workspace_snapshot import (
     WorkspaceSnapshotError,
     load_workspace_receipt,
 )
-from nano_grok_build.harbor import protected_target
+from nano_grok_build.harbor import git_history_audit, protected_target
 from nano_grok_build.harbor.compat_v020 import HARBOR_VERSION, RuntimeInputs
 from nano_grok_build.harbor.dispatch import create_bound_job, load_runtime_inputs
 from nano_grok_build.harbor.live_smoke import (
@@ -81,8 +81,8 @@ ACTIVE_TOOLS = (
     "kill_terminal_command",
     "get_terminal_command_output",
 )
-SUMMARY_SCHEMA = "nano-tb21-baseline-summary-v4"
-ROW_SCHEMA = "nano-tb21-row-v4"
+SUMMARY_SCHEMA = "nano-tb21-baseline-summary-v6"
+ROW_SCHEMA = "nano-tb21-row-v6"
 COHORT_SCHEMA = "nano-tb21-cohort-v1"
 PRICING_SCHEMA = "nano-token-pricing-v1"
 CAPABILITY_MANIFEST_SCHEMA = "nano-tb21-capability-manifest-v1"
@@ -4343,6 +4343,19 @@ def _row(
     )
     resource = source.get("resources") if isinstance(source, dict) else None
     contamination = _contamination_audit(trial_dir, rewarded=collector_pass)
+    git_history = git_history_audit.audit_trial(
+        trial_dir, instruction=task.get("instruction")
+    )
+    protected_findings = contamination["findings"]
+    assert isinstance(protected_findings, list)
+    submission_blocking_count = sum(
+        protected_target.submission_blocking_finding(finding)
+        for finding in protected_findings
+    )
+    submission_warning_count = len(protected_findings) - submission_blocking_count
+    submission_integrity_blocking = bool(
+        contamination["state"] != "available" or submission_blocking_count
+    )
     workspace_failure_v3 = artifacts.workspace_failure_v3
     row: dict[str, object] = {
         "schema_version": ROW_SCHEMA,
@@ -4375,7 +4388,18 @@ def _row(
         "protected_target_policy_schema": contamination["policy_schema_version"],
         "protected_target_policy_sha256": contamination["policy_sha256"],
         "protected_target_counts": contamination["counts"],
-        "protected_target_findings": contamination["findings"],
+        "protected_target_findings": protected_findings,
+        "submission_integrity_blocking": submission_integrity_blocking,
+        "submission_integrity_blocking_count": submission_blocking_count,
+        "submission_integrity_warning_count": submission_warning_count,
+        "git_history_audit_schema": git_history["schema_version"],
+        "git_history_finding_schema": git_history["finding_schema_version"],
+        "git_history_audit_state": git_history["state"],
+        "git_history_required": git_history["history_required"],
+        "git_history_evidence_complete": git_history["evidence_complete"],
+        "git_history_findings": git_history["findings"],
+        "git_history_counts": git_history["counts"],
+        "git_history_submission_blocking": git_history["submission_blocking"],
         "reliable": reliable,
         "artifacts_valid": artifacts.artifacts_valid,
         "success_artifact_valid": artifacts.success_valid,
@@ -5250,6 +5274,33 @@ def collect_job(
             "causal_benefit",
         )
     }
+    submission_integrity_blocking_trials = sum(
+        bool(row["submission_integrity_blocking"]) for row in rows
+    )
+    submission_integrity_blocking_findings = sum(
+        int(row["submission_integrity_blocking_count"]) for row in rows
+    )
+    submission_integrity_warning_trials = sum(
+        int(row["submission_integrity_warning_count"]) > 0 for row in rows
+    )
+    submission_integrity_warning_findings = sum(
+        int(row["submission_integrity_warning_count"]) for row in rows
+    )
+    git_history_blocking_trials = sum(
+        bool(row["git_history_submission_blocking"]) for row in rows
+    )
+    git_history_counts = {
+        field: sum(int(row["git_history_counts"][field]) for row in rows)
+        for field in (
+            "findings",
+            "attempted",
+            "dispatched",
+            "bytes_returned",
+            "causal_reuse",
+            "warnings",
+            "blocking",
+        )
+    }
     reliable = sum(1 for row in rows if row["reliable"])
     measurement_complete = sum(1 for row in rows if row["measurement_complete"])
     expected = len(specs)
@@ -5347,6 +5398,12 @@ def collect_job(
             "strong_signal_count": contamination_strong,
             "strong_signal_passes": contamination_strong_passes,
             "finding_counts": protected_target_counts,
+            "submission_blocking_trial_count": (submission_integrity_blocking_trials),
+            "submission_blocking_finding_count": (
+                submission_integrity_blocking_findings
+            ),
+            "submission_warning_trial_count": submission_integrity_warning_trials,
+            "submission_warning_finding_count": (submission_integrity_warning_findings),
             "signal_adjusted_collector_numerator": (
                 collector_passed - contamination_signaled_passes
             ),
@@ -5355,6 +5412,16 @@ def collect_job(
                 100 * (collector_passed - contamination_signaled_passes) / expected,
                 6,
             ),
+        },
+        "git_history_integrity": {
+            "schema_version": git_history_audit.AUDIT_SCHEMA,
+            "finding_schema_version": git_history_audit.FINDING_SCHEMA,
+            "audit_available": sum(
+                row["git_history_audit_state"] == "available" for row in rows
+            ),
+            "audit_denominator": expected,
+            "blocking_trial_count": git_history_blocking_trials,
+            "finding_counts": git_history_counts,
         },
         "reliability": {
             "numerator": reliable,
@@ -5369,6 +5436,11 @@ def collect_job(
         "gates": {
             "job_terminal": True,
             "contamination_clean": contamination_signaled == 0,
+            "submission_integrity_clean": (
+                submission_integrity_blocking_trials == 0
+                and git_history_blocking_trials == 0
+            ),
+            "git_history_integrity_clean": git_history_blocking_trials == 0,
             "exact_inventory": (
                 observed == expected
                 and not missing_tasks

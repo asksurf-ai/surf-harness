@@ -361,6 +361,76 @@ async def capture_workspace(logs_dir: Path, workspace: Path) -> bytes:
     return (logs_dir / "workspace-receipt.json").read_bytes()
 
 
+def test_near_cap_snapshot_publishes_through_private_control_and_replays(
+    tmp_path: Path,
+) -> None:
+    from nano_grok_build.adapter.artifact_limits import (
+        DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+        WORKSPACE_CHANGED_TAR_MAX_BYTES,
+    )
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    trial = tmp_path / "trial"
+    public = trial / "agent"
+    public.mkdir(parents=True)
+    private = trial / ".nano-control-v2"
+    spec = run_spec(private, "archive-boundary")
+    plane = ControlPlane.create(
+        public,
+        run_spec_sha256=rust_run_spec_sha256(spec),
+    )
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    actor = LocalSnapshotActor(workspace=workspace, artifacts=plane.root)
+    before = asyncio.run(capture_before(actor, SnapshotPolicy()))
+    for index in range(8):
+        with (workspace / f"chunk-{index}.bin").open("wb") as handle:
+            handle.truncate(8 * 1024 * 1024)
+    workspace_receipt = asyncio.run(capture_after(actor, before))
+    archive = plane.root / "workspace-changed.tar"
+    archive_bytes = archive.read_bytes()
+    assert len(archive_bytes) > DEFAULT_PUBLICATION_FILE_MAX_BYTES
+    assert len(archive_bytes) <= WORKSPACE_CHANGED_TAR_MAX_BYTES
+    assert workspace_receipt.artifact_byte_lengths[archive.name] == len(archive_bytes)
+    assert workspace_receipt.artifact_hashes[archive.name] == sha256(archive_bytes)
+
+    scenario = TERMINAL_FIXTURES[0]
+    write_failure_runtime(plane.root, spec, scenario)
+    write_background_manifest(plane.root, spec)
+    first = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction=spec["task"]["instruction"],
+        agent_name="nano-grok-build",
+        agent_version="acceptance",
+        model_name=str(spec["provider"]["model"]),
+        require_harbor_validator=False,
+        require_background_manifest=True,
+    )
+    second = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction=spec["task"]["instruction"],
+        agent_name="nano-grok-build",
+        agent_version="acceptance",
+        model_name=str(spec["provider"]["model"]),
+        require_harbor_validator=False,
+        require_background_manifest=True,
+    )
+
+    assert second.marker_bytes == first.marker_bytes
+    assert (public / archive.name).read_bytes() == archive_bytes
+    assert (
+        first.marker_path.stat().st_mtime_ns
+        >= (public / archive.name).stat().st_mtime_ns
+    )
+    plane.cleanup()
+    assert not private.exists()
+    assert first.marker_path.is_file()
+
+
 def write_background_manifest(logs_dir: Path, spec: dict[str, Any]) -> bytes:
     payload = canonical_json(
         {
@@ -1142,8 +1212,15 @@ def test_collect_twice_is_byte_idempotent_and_v1_remains_collectible(
     assert (job_dir / "rows.jsonl").read_bytes() == first_rows
     assert (job_dir / "summary.json").read_bytes() == first_summary_bytes
     row = json.loads(first_rows)
-    assert row["schema_version"] == "nano-tb21-row-v4"
-    assert first_summary["schema_version"] == "nano-tb21-baseline-summary-v4"
+    assert row["schema_version"] == "nano-tb21-row-v6"
+    assert first_summary["schema_version"] == "nano-tb21-baseline-summary-v6"
+    assert row["submission_integrity_blocking"] is False
+    assert row["submission_integrity_blocking_count"] == 0
+    assert row["submission_integrity_warning_count"] == 0
+    assert first_summary["gates"]["submission_integrity_clean"] is False
+    assert row["git_history_audit_state"] == "invalid"
+    assert row["git_history_submission_blocking"] is True
+    assert first_summary["gates"]["git_history_integrity_clean"] is False
     assert row["runtime_entry_state"] == "started"
     assert first_summary["terminal_evidence"]["valid_usage_receipts_for_started"] == 1
     assert row["runtime_terminal_status"] == "success"

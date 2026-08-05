@@ -781,7 +781,7 @@ fn phase_message_response(response_id: &str, text: &str) -> CompletedTurn {
 }
 
 #[tokio::test]
-async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
+async fn protected_denial_is_model_visible_then_legal_tool_and_final_continue() {
     let root = tempfile::tempdir().expect("test root");
     let contract = write_contract(root.path());
     let artifacts = root.path().join("artifacts");
@@ -792,19 +792,36 @@ async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
         "background": true,
     });
     let mut provider = PhaseProvider {
-        responses: VecDeque::from([phase_terminal_response("official", arguments.clone())]),
+        responses: VecDeque::from([
+            phase_terminal_response("official", arguments.clone()),
+            phase_tool_response(),
+            phase_final_response(),
+        ]),
         requests: Vec::new(),
         action_return_at: None,
     };
     let mut executor = ImmediateExecutor::default();
     let spec = phase_spec(&contract, &artifacts);
 
-    let error = run_agent_with_deadline(&spec, &contract, &mut provider, &mut executor, &deadline)
-        .await
-        .expect_err("official repository call must fail closed");
+    let outcome =
+        run_agent_with_deadline(&spec, &contract, &mut provider, &mut executor, &deadline)
+            .await
+            .expect("pre-dispatch denial must remain nonterminal");
 
-    assert_eq!(error.code(), "protected_harness_material_access_blocked");
-    assert_eq!(executor.executions, 0);
+    assert_eq!(outcome.record.terminal_status, TerminalStatus::Success);
+    assert_eq!(executor.executions, 1);
+    assert_eq!(executor.executed_call_ids, ["call-phase"]);
+    assert_eq!(provider.requests.len(), 3);
+    assert!(provider.requests[1].history.iter().any(|item| matches!(
+        item,
+        HistoryItem::FunctionCallOutput { call_id, output }
+            if call_id == "call-official" && output == "permission_denied"
+    )));
+    assert!(provider.requests[2].history.iter().any(|item| matches!(
+        item,
+        HistoryItem::FunctionCallOutput { call_id, output }
+            if call_id == "call-phase" && output == "settled"
+    )));
     let events = fs::read_to_string(artifacts.join("events.jsonl")).expect("events");
     let parsed = events
         .lines()
@@ -815,7 +832,7 @@ async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
             .iter()
             .filter(|event| event["type"] == "tool.registered")
             .count(),
-        1
+        2
     );
     assert_eq!(
         parsed
@@ -824,31 +841,34 @@ async fn official_benchmark_repository_call_is_a_fatal_registered_only_run() {
             .expect("registered")["data"]["arguments_json"],
         serde_json::to_string(&arguments).expect("arguments")
     );
-    assert_eq!(events.matches("\"type\":\"tool.dispatched\"").count(), 0);
-    assert_eq!(events.matches("\"type\":\"tool.completed\"").count(), 0);
-    assert_eq!(events.matches("\"type\":\"tool.failed\"").count(), 1);
-    assert_eq!(events.matches("\"type\":\"run.failed\"").count(), 1);
-    assert_eq!(events.matches("\"type\":\"assistant.final\"").count(), 0);
-    let failed = parsed
+    assert_eq!(events.matches("\"type\":\"tool.dispatched\"").count(), 1);
+    assert_eq!(events.matches("\"type\":\"tool.completed\"").count(), 2);
+    assert_eq!(events.matches("\"type\":\"tool.failed\"").count(), 0);
+    assert_eq!(events.matches("\"type\":\"run.failed\"").count(), 0);
+    assert_eq!(events.matches("\"type\":\"assistant.final\"").count(), 1);
+    let denied = parsed
         .iter()
-        .find(|event| event["type"] == "tool.failed")
-        .expect("failed evidence");
-    assert_eq!(failed["data"]["execution_may_have_started"], false);
-    assert!(failed["data"]["cleanup_verified"].is_null());
-    assert!(failed["data"]["census_verified"].is_null());
-    assert_eq!(failed["data"]["recoverability"], "fatal");
+        .find(|event| {
+            event["type"] == "tool.completed" && event["data"]["call_id"] == "call-official"
+        })
+        .expect("denied completion evidence");
+    assert_eq!(denied["data"]["execution_attempted"], false);
+    assert_eq!(denied["data"]["outcome"], "rejected");
+    assert_eq!(denied["data"]["output"], "permission_denied");
+    assert!(
+        !denied["data"]["output"]
+            .as_str()
+            .expect("denial output")
+            .contains("terminal-bench")
+    );
     let run: Value = serde_json::from_slice(&fs::read(artifacts.join("run.json")).expect("run"))
         .expect("run JSON");
-    assert_eq!(run["terminal_status"], "tool_failure");
-    assert_eq!(run["terminal_phase"], "tool");
-    assert_eq!(
-        run["terminal_code"],
-        "protected_harness_material_access_blocked"
-    );
+    assert_eq!(run["terminal_status"], "success");
+    assert_eq!(run["terminal_code"], "completed");
 }
 
 #[tokio::test]
-async fn protected_path_alias_calls_are_fatal_registered_only_runs() {
+async fn repeated_protected_path_alias_calls_are_denied_without_dispatch() {
     for (name, command) in [
         (
             "split-logs",
@@ -869,20 +889,37 @@ async fn protected_path_alias_calls_are_fatal_registered_only_runs() {
             "background": true,
         });
         let mut provider = PhaseProvider {
-            responses: VecDeque::from([phase_terminal_response(name, arguments.clone())]),
+            responses: VecDeque::from([
+                phase_named_calls_response(
+                    name,
+                    vec![
+                        ("call-denied-1", "run_terminal_command", arguments.clone()),
+                        ("call-denied-2", "run_terminal_command", arguments.clone()),
+                    ],
+                ),
+                phase_final_response(),
+            ]),
             requests: Vec::new(),
             action_return_at: None,
         };
         let mut executor = ImmediateExecutor::default();
         let spec = phase_spec(&contract, &artifacts);
 
-        let error =
+        let outcome =
             run_agent_with_deadline(&spec, &contract, &mut provider, &mut executor, &deadline)
                 .await
-                .expect_err("protected path alias must fail closed");
+                .expect("protected path aliases must be ordinary denials");
 
-        assert_eq!(error.code(), "protected_harness_material_access_blocked");
+        assert_eq!(outcome.record.terminal_status, TerminalStatus::Success);
         assert_eq!(executor.executions, 0);
+        assert_eq!(provider.requests.len(), 2);
+        for call_id in ["call-denied-1", "call-denied-2"] {
+            assert!(provider.requests[1].history.iter().any(|item| matches!(
+                item,
+                HistoryItem::FunctionCallOutput { call_id: observed, output }
+                    if observed == call_id && output == "permission_denied"
+            )));
+        }
         let events = fs::read_to_string(artifacts.join("events.jsonl")).expect("events");
         let parsed = events
             .lines()
@@ -893,7 +930,7 @@ async fn protected_path_alias_calls_are_fatal_registered_only_runs() {
                 .iter()
                 .filter(|event| event["type"] == "tool.registered")
                 .count(),
-            1
+            2
         );
         assert_eq!(
             parsed
@@ -903,19 +940,23 @@ async fn protected_path_alias_calls_are_fatal_registered_only_runs() {
             serde_json::to_string(&arguments).expect("arguments")
         );
         assert_eq!(events.matches("\"type\":\"tool.dispatched\"").count(), 0);
-        assert_eq!(events.matches("\"type\":\"tool.completed\"").count(), 0);
-        assert_eq!(events.matches("\"type\":\"tool.failed\"").count(), 1);
-        assert_eq!(events.matches("\"type\":\"run.failed\"").count(), 1);
-        let failed = parsed
+        assert_eq!(events.matches("\"type\":\"tool.completed\"").count(), 2);
+        assert_eq!(events.matches("\"type\":\"tool.failed\"").count(), 0);
+        assert_eq!(events.matches("\"type\":\"run.failed\"").count(), 0);
+        for denied in parsed
             .iter()
-            .find(|event| event["type"] == "tool.failed")
-            .expect("failed evidence");
-        assert_eq!(
-            failed["data"]["code"],
-            "protected_harness_material_access_blocked"
-        );
-        assert_eq!(failed["data"]["execution_may_have_started"], false);
-        assert_eq!(failed["data"]["recoverability"], "fatal");
+            .filter(|event| event["type"] == "tool.completed")
+        {
+            assert_eq!(denied["data"]["execution_attempted"], false);
+            assert_eq!(denied["data"]["outcome"], "rejected");
+            assert_eq!(denied["data"]["output"], "permission_denied");
+            assert!(
+                !denied["data"]["output"]
+                    .as_str()
+                    .expect("denial output")
+                    .contains("/logs")
+            );
+        }
     }
 }
 

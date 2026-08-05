@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0
+
+- Publish workspace archives up to the exact 80 MiB protocol bound while retaining
+  the 64 MiB captured-payload and 256 MiB aggregate limits.
+- Separate blocked-before-dispatch warnings from actual protected access in the
+  submission gate while preserving the conservative raw audit.
+- Add task-neutral Git-history oracle behavior auditing and fail-closed preflight.
+- Export the new audit implementation and tests under one deterministic,
+  owner-approved release identity.
+
+The exact-hash owner approval covers the workspace-integrity contract. A fresh,
+audited five-run cohort follows from the final public release commit.
+
 ## 0.2.0
 
 - Isolate run control artifacts from the task-visible agent log mount.

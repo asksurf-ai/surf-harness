@@ -1427,6 +1427,120 @@ fn unsupported_known_tool_settles_without_dispatch_then_recovers() {
 }
 
 #[test]
+fn protected_denials_continue_through_legal_tool_to_scripted_final() {
+    let (_root, artifact_dir, output) = run_scripted_fixture(
+        4,
+        json!([
+            {
+                "type": "completed",
+                "response": {
+                    "response_id": "response-protected",
+                    "model": "synthetic-model",
+                    "output": [
+                        {
+                            "type": "function_call",
+                            "call_id": "call-protected-1",
+                            "name": "run_terminal_command",
+                            "arguments_json": "{\"command\":\"cat /logs/agent/private-token\",\"text\":\"secret-one\"}"
+                        },
+                        {
+                            "type": "function_call",
+                            "call_id": "call-protected-2",
+                            "name": "run_terminal_command",
+                            "arguments_json": "{\"command\":\"cat /proc/self/root/logs/verifier/reward.txt\",\"text\":\"secret-two\"}"
+                        }
+                    ],
+                    "usage": null
+                }
+            },
+            {
+                "type": "completed",
+                "response": {
+                    "response_id": "response-legal",
+                    "model": "synthetic-model",
+                    "output": [{
+                        "type": "function_call",
+                        "call_id": "call-legal",
+                        "name": "run_terminal_command",
+                        "arguments_json": "{\"text\":\"legal-tool-output\"}"
+                    }],
+                    "usage": null
+                }
+            },
+            {
+                "type": "completed",
+                "response": {
+                    "response_id": "response-final",
+                    "model": "synthetic-model",
+                    "output": [{
+                        "type": "assistant_message",
+                        "text": "continued after permission denial"
+                    }],
+                    "usage": null
+                }
+            }
+        ]),
+    );
+    assert!(
+        output.status.success(),
+        "scripted continuation failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let events = fs::read_to_string(artifact_dir.join("events.jsonl")).expect("read events");
+    let parsed = events
+        .lines()
+        .map(|line| serde_json::from_str::<Value>(line).expect("event"))
+        .collect::<Vec<_>>();
+    let denied = parsed
+        .iter()
+        .filter(|event| {
+            event["type"] == "tool.completed"
+                && matches!(
+                    event["data"]["call_id"].as_str(),
+                    Some("call-protected-1" | "call-protected-2")
+                )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(denied.len(), 2);
+    for event in denied {
+        assert_eq!(event["data"]["execution_attempted"], false);
+        assert_eq!(event["data"]["outcome"], "rejected");
+        assert_eq!(event["data"]["output"], "permission_denied");
+        let output = event["data"]["output"].as_str().expect("denial output");
+        assert!(!output.contains("/logs"));
+        assert!(!output.contains("secret"));
+    }
+    let dispatched = parsed
+        .iter()
+        .filter(|event| event["type"] == "tool.dispatched")
+        .collect::<Vec<_>>();
+    assert_eq!(dispatched.len(), 1);
+    assert_eq!(dispatched[0]["data"]["call_id"], "call-legal");
+    let legal = parsed
+        .iter()
+        .find(|event| event["type"] == "tool.completed" && event["data"]["call_id"] == "call-legal")
+        .expect("legal tool completion");
+    assert_eq!(legal["data"]["execution_attempted"], true);
+    assert_eq!(legal["data"]["outcome"], "succeeded");
+    assert_eq!(legal["data"]["output"], "legal-tool-output");
+    assert!(!parsed.iter().any(|event| event["type"] == "tool.failed"));
+    assert!(
+        parsed
+            .iter()
+            .any(|event| event["type"] == "assistant.final")
+    );
+    assert!(parsed.iter().any(|event| event["type"] == "run.completed"));
+
+    let record: Value =
+        serde_json::from_slice(&fs::read(artifact_dir.join("run.json")).expect("read run record"))
+            .expect("run record JSON");
+    assert_eq!(record["terminal_status"], "success");
+    assert_eq!(record["terminal_code"], "completed");
+    assert_eq!(record["tool_call_count"], 3);
+}
+
+#[test]
 fn max_turns_settles_after_the_first_completed_tool_turn_without_retry() {
     let (_root, artifact_dir, output) = run_scripted_fixture(
         1,

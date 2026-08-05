@@ -16,6 +16,7 @@ from types import SimpleNamespace
 import pytest
 
 from nano_grok_build.adapter.artifactizer import publish_artifacts
+from nano_grok_build.adapter.atif import project_trajectory, validate_minimal_trajectory
 from nano_grok_build.adapter.deadline import (
     DeadlineReservesV1,
     RunDeadlineReceiptV1,
@@ -4049,11 +4050,16 @@ def test_contamination_audit_reads_only_model_tool_arguments_and_stays_advisory(
             "bytes_returned": 1,
             "causal_benefit": 1,
         },
+        "submission_blocking_trial_count": 1,
+        "submission_blocking_finding_count": 1,
+        "submission_warning_trial_count": 0,
+        "submission_warning_finding_count": 0,
         "signal_adjusted_collector_numerator": 0,
         "signal_adjusted_collector_denominator": 1,
         "signal_adjusted_collector_percent": 0.0,
     }
     assert summary["gates"]["contamination_clean"] is False
+    assert summary["gates"]["submission_integrity_clean"] is False
 
 
 def test_protected_target_policy_parity_uses_versioned_fixture_cases() -> None:
@@ -4254,6 +4260,108 @@ def test_protected_target_audit_deduplicates_atif_and_events_as_strong(
     assert audit["findings"][0]["causal_benefit"] is True
 
 
+def test_protected_denial_success_atif_and_events_remain_warning_only(
+    tmp_path: Path,
+) -> None:
+    agent_dir = tmp_path / "agent"
+    runtime_dir = agent_dir / "runtime"
+    runtime_dir.mkdir(parents=True)
+    arguments = {"command": "cat /logs/agent/private-token"}
+    common = {
+        "schema_version": "event-v1",
+        "run_id": "run-protected-denial",
+        "trial_id": "trial-protected-denial",
+        "attempt_id": "attempt-0",
+        "elapsed_ms": 0,
+    }
+    bodies = [
+        ("run.started", {}),
+        (
+            "tool.registered",
+            {
+                "call_id": "call-denied",
+                "provider_name": "run_terminal_command",
+                "known": True,
+                "arguments_json": json.dumps(arguments),
+            },
+        ),
+        (
+            "tool.completed",
+            {
+                "call_id": "call-denied",
+                "provider_name": "run_terminal_command",
+                "execution_attempted": False,
+                "outcome": "rejected",
+                "output": "permission_denied",
+            },
+        ),
+        ("assistant.final", {"text": "continued safely"}),
+        ("run.completed", {"code": "completed"}),
+    ]
+    events = [
+        {**common, "seq": seq, "type": event_type, "data": data}
+        for seq, (event_type, data) in enumerate(bodies)
+    ]
+    run_record = {
+        "run_id": common["run_id"],
+        "trial_id": common["trial_id"],
+        "attempt_id": common["attempt_id"],
+        "run_spec_sha256": "a" * 64,
+        "events_sha256": "b" * 64,
+        "terminal_status": "success",
+        "raw_usage": [],
+    }
+    trajectory = project_trajectory(
+        instruction="Finish without protected data.",
+        events=events,
+        run_record=run_record,
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+    )
+    validate_minimal_trajectory(trajectory)
+    trajectory_raw = _canonical(trajectory)
+    (agent_dir / "trajectory.json").write_bytes(trajectory_raw)
+    event_raw = b"".join(_canonical(event) for event in events)
+    (runtime_dir / "events.jsonl").write_bytes(event_raw)
+    (agent_dir / "agent-run.json").write_bytes(
+        _canonical(
+            {
+                "schema_version": "nano-agent-run-v3",
+                "publication_kind": "success_atif",
+                "terminal_status": "success",
+                "terminal_phase": None,
+                "terminal_code": "completed",
+                "trajectory_path": "trajectory.json",
+                "trajectory_sha256": hashlib.sha256(trajectory_raw).hexdigest(),
+                "events_sha256": hashlib.sha256(event_raw).hexdigest(),
+            }
+        )
+    )
+
+    audit = protected_target.audit_trial(tmp_path, rewarded=True)
+
+    assert audit["state"] == "available"
+    assert audit["signals"] == ["protected_harness_material_access_blocked"]
+    assert audit["counts"] == {
+        "findings": 1,
+        "strong": 0,
+        "attempted": 0,
+        "access_blocked": 1,
+        "dispatched": 0,
+        "bytes_returned": 0,
+        "causal_benefit": 0,
+    }
+    finding = audit["findings"][0]
+    assert finding["classification"] == "access_blocked"
+    assert finding["attempted"] is True
+    assert finding["dispatched"] is False
+    assert finding["bytes_returned"] is False
+    assert finding["causal_benefit"] is False
+    assert finding["access_blocked"] is True
+    assert protected_target.submission_blocking_finding(finding) is False
+
+
 def test_protected_target_audit_reads_v4_failure_atif_and_block_marker(
     tmp_path: Path,
 ) -> None:
@@ -4335,6 +4443,47 @@ def test_protected_target_audit_classifies_registered_only_as_attempted(
     assert audit["signals"] == ["protected_harness_material_access_attempted"]
     assert audit["counts"]["attempted"] == 1
     assert audit["findings"][0]["classification"] == "attempted"
+
+
+def test_submission_blocking_projection_is_official_aligned_and_fail_closed() -> None:
+    def finding(**overrides: object) -> dict[str, object]:
+        value: dict[str, object] = {
+            "schema_version": protected_target.FINDING_SCHEMA,
+            "call_id": "call-1",
+            "tool_name": "run_terminal_command",
+            "target_kind": "protected_path",
+            "target_field": "command",
+            "policy_value": "/logs",
+            "classification": "attempted",
+            "attempted": True,
+            "dispatched": False,
+            "bytes_returned": False,
+            "causal_benefit": False,
+            "access_blocked": False,
+            "evidence_sources": [
+                {"kind": "atif", "path": "trajectory.json", "sha256": "a" * 64}
+            ],
+        }
+        value.update(overrides)
+        return value
+
+    cases = (
+        (finding(), False),
+        (
+            finding(classification="access_blocked", access_blocked=True),
+            False,
+        ),
+        (finding(classification="strong"), True),
+        (finding(dispatched=True), True),
+        (finding(bytes_returned=True), True),
+        (finding(causal_benefit=True), True),
+        (finding(attempted=False), True),
+        (finding(classification="unknown"), True),
+        ({"classification": "access_blocked"}, True),
+    )
+
+    for value, expected in cases:
+        assert protected_target.submission_blocking_finding(value) is expected
 
 
 def test_protected_target_audit_fails_closed_on_malformed_surface(

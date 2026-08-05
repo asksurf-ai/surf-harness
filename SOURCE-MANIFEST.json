@@ -14,17 +14,17 @@
       {
         "byte_length": 2973,
         "path": "contracts/nano-v1/agent-profile.json",
-        "sha256": "5d2f709d53c496bdd94eb2680c7e6da982e1dd526e2a2b1bbdca937acc1fafd6"
+        "sha256": "5adf3039a92472629119db9c5ed17aa9177118e2996423e9e5bfbe3b88940bb4"
       },
       {
-        "byte_length": 757074,
+        "byte_length": 757520,
         "path": "contracts/nano-v1/contract-delta.json",
-        "sha256": "b33c0f20fc5976bfe73744e8f5deeb2a419f85db79409229095937b01f6d8f13"
+        "sha256": "b335ed6dc62b39ea874db78a4dd2c454cbb538a6c6ac6677d30f6de1ee233b99"
       },
       {
-        "byte_length": 16978,
+        "byte_length": 17424,
         "path": "contracts/nano-v1/effective-contract.json",
-        "sha256": "6ddd80115c3f82d2aade8ca67df70f6f12ef81fb64cfc0547f647d37d442fbb8"
+        "sha256": "1a22d7cbc7f20fb2e48aee2ca0fa30157e99c83db96c572c187be3f8412576e9"
       },
       {
         "byte_length": 13226,
@@ -42,7 +42,7 @@
         "sha256": "998cd1ce4e542482fb113be18e18a41105772121d5851ac669ac37cec4532ab4"
       }
     ],
-    "policy_sha256": "eaf23652cd61f7c422fbd6276cbb4a1ab563dfd4992b08a8c6c254feffd2e340"
+    "policy_sha256": "d60c62a1a2ce8a9e60bdee935b9ac585f44347b8da1c36b782cceaa7fbd7fcfe"
   },
   "files": [
     {
@@ -70,10 +70,10 @@
       "sha256": "43fd694bd564dd2215f51a6b23f6a3712834850225e629d7781c81c71076092d"
     },
     {
-      "byte_length": 1100,
+      "byte_length": 1739,
       "mode": "100644",
       "path": "CHANGELOG.md",
-      "sha256": "97b462eb9aa62ca9ab30bc6da532846905ec1e983d0218abd5bf43dc7bb89236"
+      "sha256": "e8e76c112244bdbee8d345f4ea3332675f5090e5a22e3fcad7193cfc61c3c12f"
     },
     {
       "byte_length": 915,
@@ -85,13 +85,13 @@
       "byte_length": 43597,
       "mode": "100644",
       "path": "Cargo.lock",
-      "sha256": "7ff9879e50d102d7320c2325656ade4c8ea29adb06de5b8b0e896f7805b54265"
+      "sha256": "53c7e02ec6c7d403b2acd8c85d1696120efb2fe6bd94d823fd494e61cb8ad322"
     },
     {
       "byte_length": 1038,
       "mode": "100644",
       "path": "Cargo.toml",
-      "sha256": "39d8092c4bc9e5a9f3b4583add3ca3286137f728e0a0944dd9ebf91c66875e89"
+      "sha256": "daab2a1537eef929ceec850b46e879f0f640575e8e686a3320e5fc1698507fdd"
     },
     {
       "byte_length": 10258,
@@ -106,16 +106,16 @@
       "sha256": "48f7687551795354b316162b0bdf189a6bb57d6e5e9e6db4bf7a4ad79ea8426d"
     },
     {
-      "byte_length": 5206,
+      "byte_length": 5202,
       "mode": "100644",
       "path": "README.md",
-      "sha256": "2337b3c6aebac9d3ee434bde8fc231708bcf244259405e9f8e3a75707af0109c"
+      "sha256": "574ae5a4897446543438141bfa98fc6eb4a3388bd67240868556102bd939d601"
     },
     {
       "byte_length": 175801,
       "mode": "100644",
       "path": "SBOM.spdx.json",
-      "sha256": "487ce1760a2fb4af24cbece274262b11e58617adb10a34aa8d6b020fe009afed"
+      "sha256": "d76332d03280f98b6bbbbc3a16e9237beab50deaff15db14290cf17df6ac2bb1"
     },
     {
       "byte_length": 777,
@@ -133,19 +133,19 @@
       "byte_length": 2973,
       "mode": "100644",
       "path": "contracts/nano-v1/agent-profile.json",
-      "sha256": "5d2f709d53c496bdd94eb2680c7e6da982e1dd526e2a2b1bbdca937acc1fafd6"
+      "sha256": "5adf3039a92472629119db9c5ed17aa9177118e2996423e9e5bfbe3b88940bb4"
     },
     {
-      "byte_length": 757074,
+      "byte_length": 757520,
       "mode": "100644",
       "path": "contracts/nano-v1/contract-delta.json",
-      "sha256": "b33c0f20fc5976bfe73744e8f5deeb2a419f85db79409229095937b01f6d8f13"
+      "sha256": "b335ed6dc62b39ea874db78a4dd2c454cbb538a6c6ac6677d30f6de1ee233b99"
     },
     {
-      "byte_length": 16978,
+      "byte_length": 17424,
       "mode": "100644",
       "path": "contracts/nano-v1/effective-contract.json",
-      "sha256": "6ddd80115c3f82d2aade8ca67df70f6f12ef81fb64cfc0547f647d37d442fbb8"
+      "sha256": "1a22d7cbc7f20fb2e48aee2ca0fa30157e99c83db96c572c187be3f8412576e9"
     },
     {
       "byte_length": 13226,
@@ -178,10 +178,10 @@
       "sha256": "8178073e57887c3db3f3df83599fed6fa2f50a6cb603cdead800d53c322d23a7"
     },
     {
-      "byte_length": 58561,
+      "byte_length": 63028,
       "mode": "100644",
       "path": "crates/nano-cli/tests/cli_integration.rs",
-      "sha256": "b2d0c26da76ed13937fef052d03ef990eac95ee0ad969aa43415c3500b358547"
+      "sha256": "52e205b94bd0332874e4ad8e32207e98fd485bf9cdc3ef6d8b210278956aa0d8"
     },
     {
       "byte_length": 620,
@@ -238,10 +238,10 @@
       "sha256": "57e59d2f48511e87f9e7c189336505e541af1be6885bfca0ee2e53d183e3397f"
     },
     {
-      "byte_length": 223223,
+      "byte_length": 221771,
       "mode": "100644",
       "path": "crates/nano-runtime/src/agent_loop.rs",
-      "sha256": "58eb3650b51ab5d4110a4b8b1985bd260c032c69ae5c12c2b9350050c340e855"
+      "sha256": "c83fcbf6685f3b696abbf5c86f0c3a463564b4c006a4276d241d69cb61d81e1e"
     },
     {
       "byte_length": 30648,
@@ -280,10 +280,10 @@
       "sha256": "c099fa4ed18fcae689bffc308ded9629b71df92e4ea452e66ad44cbdd6f293ec"
     },
     {
-      "byte_length": 16776,
+      "byte_length": 16850,
       "mode": "100644",
       "path": "crates/nano-runtime/src/protected_target.rs",
-      "sha256": "e2154bbb236bae97404644c9d18675e4bfcf5f9fa737ad8a456c29b3233c82bb"
+      "sha256": "200d4941050a8aee3b78220b0c8122582dfeffb274043d82ccdc67bd1942feed"
     },
     {
       "byte_length": 17260,
@@ -304,10 +304,10 @@
       "sha256": "bcad483d90a72df85569cf0807dc3f94b67edbfc3dc6b23da66d64066163c26f"
     },
     {
-      "byte_length": 114079,
+      "byte_length": 115640,
       "mode": "100644",
       "path": "crates/nano-runtime/tests/xai_terminal_roundtrip.rs",
-      "sha256": "5ed7127f66c29f9c4f21d0356dca8d1dae413a62b95f6fb4427591fe1c8b268c"
+      "sha256": "bbb0d1fa1802decd2b0a647e44cddcfac3c60265f81f465da9a82a78e3fedb15"
     },
     {
       "byte_length": 249,
@@ -325,7 +325,7 @@
       "byte_length": 91511,
       "mode": "100644",
       "path": "crates/nano-types/src/contract.rs",
-      "sha256": "ea1a2be42dfdbe5df1ec91e2264ff9fe723312a41c8e696791f12dbd6d742e32"
+      "sha256": "9c2bcfa9689da46e96eacd91e106bdb5f68b4bb8184dd62a71e3b1d13934da9c"
     },
     {
       "byte_length": 65486,
@@ -364,10 +364,10 @@
       "sha256": "da79f53dcd00f9c298e13bd5a3569a5ae3539518fdfd5df41f2e29759ad92798"
     },
     {
-      "byte_length": 2563,
+      "byte_length": 2769,
       "mode": "100644",
       "path": "docs/SUBMITTING.md",
-      "sha256": "d34ff64066be45346ab79ca677b595d69398148fd35dcb057491e863d57c6918"
+      "sha256": "7546e21eb1e65ee7b750948e71557aba6060edc3d747f5025fb514593cc0ca37"
     },
     {
       "byte_length": 10161,
@@ -385,7 +385,7 @@
       "byte_length": 1006,
       "mode": "100644",
       "path": "pyproject.toml",
-      "sha256": "afbbf59999de0d3a2a3ec8f467a755d0c33497ed84b2d8b848e937df987a5c90"
+      "sha256": "211f500bf69394a09c125f74f3e1a840f66360fcdb9ca72cb4bec867dde837e1"
     },
     {
       "byte_length": 86,
@@ -436,10 +436,10 @@
       "sha256": "3ca79e8da33b38a6c0f8f5ea9e68b1ba96db8cf8e97dcd761dc2be3af617c45e"
     },
     {
-      "byte_length": 9461,
+      "byte_length": 9771,
       "mode": "100755",
       "path": "scripts/check.py",
-      "sha256": "c341784329c57210a6c9baf78736a6b03a7bee54501174bd384976dd07252ec1"
+      "sha256": "a72c50742aed4cecb5b2c61aaa2f6d8c6b4b72d16d357aeb48c14f067e814fca"
     },
     {
       "byte_length": 5147,
@@ -472,10 +472,10 @@
       "sha256": "d2a05812b4166226f902dca319a578465d62d7448d63abde658a7d96e0f21ba4"
     },
     {
-      "byte_length": 8175,
+      "byte_length": 8523,
       "mode": "100755",
       "path": "scripts/check_public_release.py",
-      "sha256": "ef5a1173aabc644110d36021fb8195416de74da506ef97404bec5147c4f2552a"
+      "sha256": "e510021c2bf3258c45452d968631515ee4aa0abc87b001bcf30678841b9cd8ce"
     },
     {
       "byte_length": 1952,
@@ -484,10 +484,10 @@
       "sha256": "323ce69e8eae3b27b75f5c7eeaf47a6cc70cbd932fa2fe601bee9716faae61b2"
     },
     {
-      "byte_length": 68490,
+      "byte_length": 75129,
       "mode": "100755",
       "path": "scripts/check_v10_candidate.py",
-      "sha256": "ec9d386602ddeaf377ac44fd389ff1bfa83d99d2653bd7f32b0362bf0862d489"
+      "sha256": "a32644ff7365ed78ef359da8e081b74a0587cae164131391defb00e5e2243347"
     },
     {
       "byte_length": 7731,
@@ -508,16 +508,16 @@
       "sha256": "4e5f5e73f77f97273fcf65c3126d5c09ca917fb43147f8341e9cf4069591d406"
     },
     {
-      "byte_length": 32442,
+      "byte_length": 36405,
       "mode": "100755",
       "path": "scripts/submission_preflight.py",
-      "sha256": "92956efb10ad1d0f1e517a5e02fb822b0f4676039d3c8de21b8167406979560a"
+      "sha256": "f888cf287e3b69b2ca81a08b6f70a8926c81e991b4c42fa36d48ddd3d8a32538"
     },
     {
       "byte_length": 85,
       "mode": "100644",
       "path": "src/nano_grok_build/__init__.py",
-      "sha256": "649c48fd547bf605c8d2e7c5d539439320fa4b10be1b73a33901edcfdcbf822f"
+      "sha256": "5d44f1f0a73e227af1b91377f27e4ec7698b6a8f0a19a9dfbb2fca61e11ed381"
     },
     {
       "byte_length": 215,
@@ -526,10 +526,16 @@
       "sha256": "37fae43b2f1eecf2a5f10190e074be4a536d677a6b9954d85f51a1019996cd4d"
     },
     {
-      "byte_length": 98824,
+      "byte_length": 510,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/artifact_limits.py",
+      "sha256": "4af5a7f14635e105082480b624cfc97c6f3b17464751a055f3bc20f42e05e8de"
+    },
+    {
+      "byte_length": 98922,
       "mode": "100644",
       "path": "src/nano_grok_build/adapter/artifactizer.py",
-      "sha256": "135612060011ddf748526a00e9e945766abcf590e68237734afb8e414a70901b"
+      "sha256": "717c3ffc8885bc1eb085b08628cd16ecf424d6930d4f38d23d38f9468c11c766"
     },
     {
       "byte_length": 27553,
@@ -538,10 +544,10 @@
       "sha256": "e44777cd11c45a7f0765263c5e544a1a123ea5e12fde701f714b35a4b5b54ef3"
     },
     {
-      "byte_length": 13299,
+      "byte_length": 13622,
       "mode": "100644",
       "path": "src/nano_grok_build/adapter/control_plane.py",
-      "sha256": "69efdc268b3c511d41fd0d07179bd4a28b34de01e6b609f8bcdb26385e3a1965"
+      "sha256": "9d8562badddf73a9c7f5ff8ae258b8d3452bf12dfad0f3a0a4c369319b9fcf17"
     },
     {
       "byte_length": 14695,
@@ -568,10 +574,10 @@
       "sha256": "084572694489559c70b389e74312a18d22e681b669e9ee755f54ed56b4849762"
     },
     {
-      "byte_length": 120859,
+      "byte_length": 121097,
       "mode": "100644",
       "path": "src/nano_grok_build/adapter/workspace_snapshot.py",
-      "sha256": "ae908951bcdd6c402da09ae4db9d39349003c1eec792555f775d87b90b5a1a43"
+      "sha256": "c69bfb4c889ad2024e34fa71feb1fe8f5656f3341f531ac02f976dd255218f6e"
     },
     {
       "byte_length": 42,
@@ -598,6 +604,12 @@
       "sha256": "dcc1d437351c0d10d2bc9413a085decdae127f2d878c0f318610b906a6269f64"
     },
     {
+      "byte_length": 14818,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/git_history_audit.py",
+      "sha256": "d060b31e1cf7e2d0f6425ad5eecdd5a8e77ade162e7c62404a587693f8b17912"
+    },
+    {
       "byte_length": 21670,
       "mode": "100644",
       "path": "src/nano_grok_build/harbor/live_smoke.py",
@@ -610,10 +622,10 @@
       "sha256": "a7ff98f2a16b0fb05d06cfe2ad96198f87c04ebdc8bb29f22e18dd138cff4337"
     },
     {
-      "byte_length": 26558,
+      "byte_length": 31288,
       "mode": "100644",
       "path": "src/nano_grok_build/harbor/protected_target.py",
-      "sha256": "ed03cd26c28e081b6d475d82e99b7d09b7c91223fa7895fd6487b66189d605b9"
+      "sha256": "2baa2942da948092b6bf39005a01df06e19fa4d30cad6102b42140fc5473b1f8"
     },
     {
       "byte_length": 3667,
@@ -622,10 +634,10 @@
       "sha256": "1ec5bc27bc177fb1f61b20e135bb26a3a8b0a3b04bc1d8723be6fb04ff5f8416"
     },
     {
-      "byte_length": 212123,
+      "byte_length": 215477,
       "mode": "100644",
       "path": "src/nano_grok_build/harbor/tb21.py",
-      "sha256": "3895a2db7c974478872beb53e300095f5d455119caf32083276137c8f1515586"
+      "sha256": "8f03d9517b1c81060486f3eae4d5a54a361ab044d8386e286c778827d3927a91"
     },
     {
       "byte_length": 3380,
@@ -850,16 +862,22 @@
       "sha256": "f9bc98b6a87517ee7ee56f128c94fb6dceeec38872060b04baceb7611dde4ece"
     },
     {
+      "byte_length": 7559,
+      "mode": "100644",
+      "path": "tests/test_git_history_audit.py",
+      "sha256": "e29229e55264cf224785598e8b3553525d208c8b302ad13432e8b449158b84d0"
+    },
+    {
       "byte_length": 4463,
       "mode": "100644",
       "path": "tests/test_gitleaks_worktree.py",
       "sha256": "7c3ce4cca64934c9a584029a78c57c19910aac10ff4ba44241f7973cc6734684"
     },
     {
-      "byte_length": 77851,
+      "byte_length": 80743,
       "mode": "100644",
       "path": "tests/test_harbor_artifactizer.py",
-      "sha256": "d6d766edd07c052d0677b6b79f8c26168827c643491f901ecf3e2367c4f7fb2b"
+      "sha256": "271630ad30fe507df5d0b646f9eb90d1396f24eb9645e00ecad3e520a738a345"
     },
     {
       "byte_length": 13686,
@@ -868,10 +886,10 @@
       "sha256": "0e8a10ee5400586f4cb8d1aaf3f75055069c091207f3bce7d23aefd5d5f5c2bc"
     },
     {
-      "byte_length": 110432,
+      "byte_length": 113232,
       "mode": "100644",
       "path": "tests/test_harbor_bridge.py",
-      "sha256": "4b3689976c0f6f556df47f42c37f5a67f61b0400fdbe80ac71a45df6973585df"
+      "sha256": "4ff8e823f6ecc1043a7c3aa35c5c1d8782a0788a2b7fdd82c98a7e973a57b1ca"
     },
     {
       "byte_length": 29456,
@@ -904,10 +922,10 @@
       "sha256": "22102c0dd628efd4989704a330c2cbf15202789d0a5d91ab62437792b9ed1f4b"
     },
     {
-      "byte_length": 48180,
+      "byte_length": 51252,
       "mode": "100644",
       "path": "tests/test_p0p1_acceptance.py",
-      "sha256": "c4bcb7d03a2d84f77de93c9bf0348f8225f5c87073bf48f88c882ac8394d341e"
+      "sha256": "8d839dbe675267f6a58f10cf4bc76efe2245cf9f8e7d1d8b3484125538c4c70e"
     },
     {
       "byte_length": 35372,
@@ -934,16 +952,16 @@
       "sha256": "3703366b8eb838b6fdda73df4659ffd7359541252849e8be129a87acb0e25c72"
     },
     {
-      "byte_length": 23383,
+      "byte_length": 30055,
       "mode": "100644",
       "path": "tests/test_submission_preflight.py",
-      "sha256": "b111e08b51db43dad94bac65c528c2d4b6e1ce7efe75d625af96d2982c64dd1b"
+      "sha256": "e5d01e512ab88c320cc1efe0e141c64cc5cb7d7d1213e518447dc49e96757545"
     },
     {
-      "byte_length": 229747,
+      "byte_length": 235081,
       "mode": "100644",
       "path": "tests/test_tb21.py",
-      "sha256": "9a8f50eb8d5f48fe19333dcbcbcb9f666eed6f206110d6e531d71dc36d7d6d95"
+      "sha256": "cbe5336a72e659d97050d985b240a53c990a89f1acc662d32d34b8b3284a6207"
     },
     {
       "byte_length": 253888,
@@ -958,10 +976,10 @@
       "sha256": "de346259f8cf6b3c98a6e6b62ac7ddc9e38dea3f1a7a8607af90b2d1229255d4"
     },
     {
-      "byte_length": 129708,
+      "byte_length": 135861,
       "mode": "100644",
       "path": "tests/test_workspace_snapshot.py",
-      "sha256": "c94a932f22a771a7b805760c842d4bde31a5afaf3e389b482ca9163c9b753057"
+      "sha256": "3ea98f45a38167153e13355286b8ae55e0645079f35174e1f67220d5caf4b16d"
     },
     {
       "byte_length": 2195,
@@ -973,15 +991,15 @@
       "byte_length": 22072,
       "mode": "100644",
       "path": "uv.lock",
-      "sha256": "8e0db73323b233748bc6fe4079907cecba97b15928138b056d191c3f94877f73"
+      "sha256": "237e993e310e2dd221187853bc71fb9eb8bdf43096d7fb1cdcd6bad62bac604d"
     }
   ],
-  "generated_at": "2026-08-04T05:37:53Z",
-  "payload_tree_sha256": "f45eed4297054c048ac17f83d6a7fb062c24b6a2875a10d503078b833c7fb628",
+  "generated_at": "2026-08-05T05:33:24Z",
+  "payload_tree_sha256": "24776f989ddfd197f0f297c0e60746a47c331ab4fb9909b7cd2fe1d3df1f098a",
   "release": {
     "agent": {
       "name": "nano-grok-build",
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     "harbor": {
       "commit": "459ff6ec99417589b7f679d14ddf3b3f0ae4f1dc",
@@ -992,6 +1010,10 @@
       "reasoning_effort": "high"
     },
     "project": "surf-harness",
+    "readiness": {
+      "reason": "",
+      "status": "ready"
+    },
     "terminal_bench": {
       "commit": "5c8eadf1f393183288fa08b8f73ca9a469cc5e00",
       "dataset_digest": "sha256:7d7bdc1cbedad549fc1140404bd4dc45e5fd0ea7c4186773687d177ad3a0699a",
@@ -999,12 +1021,12 @@
       "minimum_independent_trials": 5,
       "tasks_per_job": 89
     },
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "schema_version": "surf-harness-source-manifest-v1",
   "source": {
-    "export_manifest_sha256": "7f411f4d6280d272d69704ebe833ac173647fd384986dcb1b6e7a41adfbfc409",
-    "git_commit": "1cc8392ceaad8884d5fcda5e266a903f527b4918",
-    "git_tree": "da45a11306ccaf0074e2e884e41d8ec030619545"
+    "export_manifest_sha256": "fd60e65f57bf69d9f4f29cd79a117ee8316ffc78108f4b25a72c51e6f8a9c8bc",
+    "git_commit": "a25b5e21b48f416e1f400a8b32b3c71c9057c2c8",
+    "git_tree": "b743b968cee77bd31826dc16e86867d2e0a78c3c"
   }
 }

@@ -749,6 +749,99 @@ def test_private_source_publication_is_allowlisted_marker_last_and_conflict_clos
         )
 
 
+def test_private_workspace_archive_above_64mib_publishes_and_replays_marker_last(
+    tmp_path: Path,
+) -> None:
+    from nano_grok_build.adapter.artifact_limits import (
+        DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+    )
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    trial = tmp_path / "trial"
+    public = trial / "agent"
+    public.mkdir(parents=True)
+    spec = run_spec(trial / ".nano-control-v2")
+    plane = ControlPlane.create(
+        public,
+        run_spec_sha256=rust_run_spec_sha256(spec),
+    )
+    write_committed_runtime(plane.root, spec)
+    archive = plane.root / "workspace-changed.tar"
+    with archive.open("wb") as handle:
+        handle.truncate(DEFAULT_PUBLICATION_FILE_MAX_BYTES + 10_240)
+
+    first = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=False,
+    )
+    second = publish_artifacts(
+        logs_dir=plane.root,
+        publication_dir=public,
+        run_spec=spec,
+        instruction="Create the sentinel.",
+        agent_name="nano-grok-build",
+        agent_version="test",
+        model_name="synthetic-model",
+        require_harbor_validator=False,
+    )
+
+    assert (public / "workspace-changed.tar").stat().st_size == (
+        DEFAULT_PUBLICATION_FILE_MAX_BYTES + 10_240
+    )
+    assert second.marker_bytes == first.marker_bytes
+    assert (
+        first.marker_path.stat().st_mtime_ns
+        >= (public / "workspace-changed.tar").stat().st_mtime_ns
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "extra"),
+    [
+        ("workspace-changed.tar", 80 * 1024 * 1024 + 1),
+        ("workspace-diff.patch", 64 * 1024 * 1024 + 1),
+    ],
+)
+def test_private_evidence_per_name_limits_still_fail_closed(
+    tmp_path: Path,
+    name: str,
+    extra: int,
+) -> None:
+    from nano_grok_build.adapter.control_plane import ControlPlane
+
+    trial = tmp_path / name.replace(".", "-")
+    public = trial / "agent"
+    public.mkdir(parents=True)
+    spec = run_spec(trial / ".nano-control-v2")
+    plane = ControlPlane.create(
+        public,
+        run_spec_sha256=rust_run_spec_sha256(spec),
+    )
+    write_committed_runtime(plane.root, spec)
+    with (plane.root / name).open("wb") as handle:
+        handle.truncate(extra)
+
+    with pytest.raises(ArtifactError, match="^private_evidence_invalid$"):
+        publish_artifacts(
+            logs_dir=plane.root,
+            publication_dir=public,
+            run_spec=spec,
+            instruction="Create the sentinel.",
+            agent_name="nano-grok-build",
+            agent_version="test",
+            model_name="synthetic-model",
+            require_harbor_validator=False,
+        )
+
+    assert list(public.iterdir()) == []
+
+
 def test_v2_success_keeps_atif_and_publishes_v2_usage_marker(tmp_path: Path) -> None:
     logs = tmp_path / "agent"
     spec = run_spec(logs)

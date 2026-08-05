@@ -808,6 +808,85 @@ def test_remote_script_caps_content_without_exact_plan_failure() -> None:
     assert "C\\tarchive_wall_budget" in script
 
 
+def test_generated_remote_script_round_trips_capped_inventory_deterministically(
+    tmp_path: Path,
+) -> None:
+    if shutil.which("timeout") is None:
+        pytest.skip("GNU timeout unavailable")
+    head_probe = subprocess.run(
+        ["head", "-z", "-n", "1"],
+        input=b"probe\0",
+        capture_output=True,
+        check=False,
+    )
+    if head_probe.returncode != 0:
+        pytest.skip("GNU head -z unavailable")
+
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    payloads = {f"fixture-{index}.txt": f"{index}\n".encode() for index in range(6)}
+    for name, payload in payloads.items():
+        (workspace / name).write_bytes(payload)
+    policy = workspace_snapshot.SnapshotPolicy(
+        max_files=5,
+        max_total_bytes=100,
+        max_file_bytes=100,
+        max_patch_bytes=100,
+    )
+
+    captures = []
+    for capture_index in range(2):
+        stage = tmp_path / f"stage-{capture_index}"
+        stage.mkdir()
+        completed = subprocess.run(
+            ["bash"],
+            input=workspace_snapshot._remote_script(
+                str(workspace),
+                policy,
+                str(stage),
+            ).encode(),
+            capture_output=True,
+            check=False,
+        )
+        assert completed.returncode == 0, completed.stderr.decode("utf-8", "replace")
+        parsed = workspace_snapshot._parse_remote_inventory(
+            stage / "inventory.tsv",
+            stage / "safe.tar",
+            policy,
+        )
+        captures.append(
+            (
+                parsed,
+                (stage / "inventory.tsv").read_bytes(),
+                (stage / "safe.tar").read_bytes(),
+            )
+        )
+
+    first, second = captures
+    retained = set(first[0].entries)
+    assert len(retained) == policy.max_files
+    assert set(first[0].safe_contents) == retained
+    assert first[0].safe_contents == {name: payloads[name] for name in retained}
+    assert {name: first[0].entries[name]["sha256"] for name in retained} == {
+        name: hashlib.sha256(payloads[name]).hexdigest() for name in retained
+    }
+    assert first[0].manifest["scan_complete"] is False
+    assert first[0].content_omissions == {
+        "": {
+            "path": "",
+            "reason": "file_count_cap",
+            "count": 1,
+            "count_is_lower_bound": True,
+        }
+    }
+    assert workspace_snapshot.canonical_json(first[0].manifest) == (
+        workspace_snapshot.canonical_json(second[0].manifest)
+    )
+    assert first[0].safe_contents == second[0].safe_contents
+    assert first[0].content_omissions == second[0].content_omissions
+    assert first[1:] == second[1:]
+
+
 def test_git_snapshot_records_tracked_staged_binary_and_nul_safe_untracked(
     tmp_path: Path,
 ) -> None:
@@ -3638,6 +3717,111 @@ def test_snapshot_target_separates_private_capture_from_publication_root(
     assert before.target.publication_dir == public.resolve()
     assert (private / "workspace-before.json").is_file()
     assert list(public.iterdir()) == []
+
+
+def test_workspace_archive_publication_limit_has_safe_ustar_headroom() -> None:
+    from nano_grok_build.adapter.artifact_limits import (
+        DEFAULT_PUBLICATION_FILE_MAX_BYTES,
+        PUBLICATION_TOTAL_MAX_BYTES,
+        WORKSPACE_CHANGED_TAR_MAX_BYTES,
+        publication_file_max_bytes,
+    )
+
+    worst_case = 64 * 1024 * 1024 + 10_000 * (512 + 511) + 10_240
+    assert worst_case == 77_349_104
+    assert DEFAULT_PUBLICATION_FILE_MAX_BYTES == 64 * 1024 * 1024
+    assert WORKSPACE_CHANGED_TAR_MAX_BYTES == 80 * 1024 * 1024
+    assert PUBLICATION_TOTAL_MAX_BYTES == 256 * 1024 * 1024
+    assert worst_case < WORKSPACE_CHANGED_TAR_MAX_BYTES
+    assert (
+        publication_file_max_bytes("workspace-changed.tar")
+        == WORKSPACE_CHANGED_TAR_MAX_BYTES
+    )
+    assert (
+        publication_file_max_bytes("Workspace-changed.tar")
+        == DEFAULT_PUBLICATION_FILE_MAX_BYTES
+    )
+    assert (
+        publication_file_max_bytes("nested/workspace-changed.tar")
+        == DEFAULT_PUBLICATION_FILE_MAX_BYTES
+    )
+
+
+def test_capture_after_fails_closed_before_writing_an_oversize_archive(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    artifacts = tmp_path / "artifacts"
+    artifacts.mkdir()
+    actor = SimpleNamespace(artifacts=artifacts)
+    target = workspace_snapshot.SnapshotTarget(actor=actor, artifact_dir=artifacts)
+    policy = workspace_snapshot.SnapshotPolicy(
+        max_files=1,
+        max_total_bytes=8,
+        max_file_bytes=8,
+        max_patch_bytes=8,
+    )
+    before = workspace_snapshot.BeforeSnapshot(
+        target=target,
+        policy=policy,
+        manifest={
+            "schema_version": workspace_snapshot.MANIFEST_SCHEMA,
+            "policy_version": policy.version,
+            "entries": [],
+            "entry_count": 0,
+            "scan_complete": True,
+        },
+        safe_contents={},
+    )
+    payload = b"changed\n"
+    entry = {
+        "path": "answer.txt",
+        "kind": "file",
+        "mode": "0644",
+        "size": len(payload),
+        "sha256": hashlib.sha256(payload).hexdigest(),
+    }
+    after = workspace_snapshot._Inventory(
+        manifest={
+            "schema_version": workspace_snapshot.MANIFEST_SCHEMA,
+            "policy_version": policy.version,
+            "entries": [entry],
+            "entry_count": 1,
+            "scan_complete": True,
+        },
+        entries={"answer.txt": entry},
+        safe_contents={"answer.txt": payload},
+        content_omissions={},
+        stage_validated=True,
+        termination_verified=True,
+        cleanup_verified=True,
+        zero_census_verified=True,
+    )
+
+    async def captured(*_args, **_kwargs):
+        return after
+
+    monkeypatch.setattr(workspace_snapshot, "_capture_inventory", captured)
+    monkeypatch.setattr(workspace_snapshot, "_tar", lambda **_kwargs: b"xx")
+    monkeypatch.setattr(
+        workspace_snapshot,
+        "WORKSPACE_CHANGED_TAR_MAX_BYTES",
+        1,
+        raising=False,
+    )
+
+    receipt = asyncio.run(workspace_snapshot.capture_after(actor, before))
+
+    assert receipt.status == "failed"
+    assert receipt.code == "workspace_after_capture_failed"
+    assert receipt.failure is not None
+    assert receipt.failure.stage == "host-evidence"
+    assert receipt.failure.category == "evidence"
+    assert (
+        receipt.failure.subtype
+        is SnapshotFailureSubtypeV1.HOST_EVIDENCE_MATERIALIZATION_FAILED
+    )
+    assert set(artifacts.iterdir()) == {artifacts / "workspace-receipt.json"}
 
 
 def test_failed_before_uses_explicit_no_baseline_sentinel(tmp_path: Path) -> None:

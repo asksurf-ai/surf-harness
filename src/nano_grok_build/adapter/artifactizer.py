@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from nano_grok_build.adapter.artifact_limits import WORKSPACE_CHANGED_TAR_MAX_BYTES
 from nano_grok_build.adapter.atif import (
     project_emergency_prefix,
     project_emergency_trajectory,
@@ -1829,7 +1830,7 @@ _PRIVATE_EVIDENCE_LIMITS = {
     "workspace-after.json": _MAX_EVENTS_BYTES,
     "workspace-delta.json": _MAX_EVENTS_BYTES,
     "workspace-diff.patch": _MAX_EVENTS_BYTES,
-    "workspace-changed.tar": _MAX_EVENTS_BYTES,
+    "workspace-changed.tar": WORKSPACE_CHANGED_TAR_MAX_BYTES,
     "workspace-receipt.json": _MAX_RECEIPT_BYTES,
 }
 

@@ -9,6 +9,7 @@ pub const PROTECTED_TARGET_POLICY_JSON: &str =
     include_str!("../../../policy/protected-targets-v1.json");
 pub const PROTECTED_HARNESS_MATERIAL_ACCESS_BLOCKED: &str =
     "protected_harness_material_access_blocked";
+pub const PROTECTED_TARGET_PERMISSION_DENIED: &str = "permission_denied";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ProtectedTargetKind {

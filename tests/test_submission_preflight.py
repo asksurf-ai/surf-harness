@@ -57,6 +57,27 @@ def _clean_audit() -> dict[str, object]:
     }
 
 
+def _clean_git_audit() -> dict[str, object]:
+    return {
+        "schema_version": tb21.git_history_audit.AUDIT_SCHEMA,
+        "finding_schema_version": tb21.git_history_audit.FINDING_SCHEMA,
+        "state": "available",
+        "history_required": False,
+        "evidence_complete": True,
+        "findings": [],
+        "counts": {
+            "findings": 0,
+            "attempted": 0,
+            "dispatched": 0,
+            "bytes_returned": 0,
+            "causal_reuse": 0,
+            "warnings": 0,
+            "blocking": 0,
+        },
+        "submission_blocking": False,
+    }
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(_canonical(value))
@@ -175,7 +196,7 @@ def _synthetic_job(tmp_path: Path) -> tuple[Path, preflight.ReleaseExpectation]:
             "session_id": spec["run_id"],
             "agent": {
                 "name": "nano-grok-build",
-                "version": "0.2.0",
+                "version": "0.3.0",
                 "model_name": "grok-4.5",
             },
             "steps": [
@@ -238,6 +259,7 @@ def _synthetic_job(tmp_path: Path) -> tuple[Path, preflight.ReleaseExpectation]:
             },
         )
         audit = _clean_audit()
+        git_audit = _clean_git_audit()
         rows.append(
             {
                 "schema_version": tb21.ROW_SCHEMA,
@@ -255,6 +277,17 @@ def _synthetic_job(tmp_path: Path) -> tuple[Path, preflight.ReleaseExpectation]:
                 "protected_target_policy_sha256": audit["policy_sha256"],
                 "protected_target_counts": audit["counts"],
                 "protected_target_findings": audit["findings"],
+                "submission_integrity_blocking": False,
+                "submission_integrity_blocking_count": 0,
+                "submission_integrity_warning_count": 0,
+                "git_history_audit_schema": git_audit["schema_version"],
+                "git_history_finding_schema": git_audit["finding_schema_version"],
+                "git_history_audit_state": git_audit["state"],
+                "git_history_required": git_audit["history_required"],
+                "git_history_evidence_complete": git_audit["evidence_complete"],
+                "git_history_findings": git_audit["findings"],
+                "git_history_counts": git_audit["counts"],
+                "git_history_submission_blocking": git_audit["submission_blocking"],
             }
         )
 
@@ -389,6 +422,8 @@ def _synthetic_job(tmp_path: Path) -> tuple[Path, preflight.ReleaseExpectation]:
                 "result_identity": True,
                 "collect_idempotent": True,
                 "contamination_clean": True,
+                "submission_integrity_clean": True,
+                "git_history_integrity_clean": True,
             },
             "contamination": {
                 "schema_version": protected_target.AUDIT_SCHEMA,
@@ -403,7 +438,7 @@ def _synthetic_job(tmp_path: Path) -> tuple[Path, preflight.ReleaseExpectation]:
         },
     )
     return job, preflight.ReleaseExpectation(
-        agent_version="0.2.0",
+        agent_version="0.3.0",
         runtime_git_head=runtime_git_head,
         runtime_binary_sha256=runtime_binary_sha256,
         contract_set_sha256=contract_set_sha256,
@@ -546,41 +581,180 @@ def test_dirty_jobs_fail_closed(
     assert expected_code in _codes(receipt)
 
 
-@pytest.mark.parametrize("classification", ["strong", "attempted", "access_blocked"])
-def test_every_protected_target_classification_blocks_submission(
+@pytest.mark.parametrize(
+    ("classification", "access_blocked", "expected_code"),
+    [
+        ("strong", False, "protected_target_strong"),
+        ("attempted", False, None),
+        ("access_blocked", True, None),
+    ],
+)
+def test_protected_target_projection_only_blocks_actual_access(
     tmp_path: Path,
-    valid_artifacts: None,
     monkeypatch: pytest.MonkeyPatch,
     classification: str,
+    access_blocked: bool,
+    expected_code: str | None,
 ) -> None:
-    job, expectation = _synthetic_job(tmp_path)
-    original = tb21._contamination_audit
-
-    def classified(trial_dir: Path, *, rewarded: bool = False) -> dict[str, object]:
-        if trial_dir.name != "task-00__trial":
-            return original(trial_dir, rewarded=rewarded)
+    def classified(_trial_dir: Path, *, rewarded: bool = False) -> dict[str, object]:
         audit = _clean_audit()
         audit["signals"] = [f"synthetic_{classification}"]
         finding = {
+            "schema_version": protected_target.FINDING_SCHEMA,
             "classification": classification,
             "call_id": "call-0",
             "tool_name": "read_file",
+            "target_kind": "protected_path",
+            "target_field": "path",
+            "policy_value": "/logs",
+            "attempted": True,
+            "dispatched": classification == "strong",
+            "bytes_returned": classification == "strong",
+            "causal_benefit": bool(rewarded and classification == "strong"),
+            "access_blocked": access_blocked,
+            "evidence_sources": [
+                {"kind": "atif", "path": "trajectory.json", "sha256": "a" * 64}
+            ],
         }
         audit["findings"] = [finding]
         audit["counts"] = {
             **audit["counts"],
             "findings": 1,
             classification: 1,
+            "dispatched": int(classification == "strong"),
+            "bytes_returned": int(classification == "strong"),
+            "causal_benefit": int(rewarded and classification == "strong"),
         }
         return audit
 
     monkeypatch.setattr(tb21, "_contamination_audit", classified)
+    issues = preflight._Issues()
+    audit = preflight._audit_protected_target(
+        tmp_path,
+        rewarded=True,
+        issues=issues,
+        task_id="terminal-bench/synthetic",
+        trial_id="synthetic__trial",
+    )
+
+    codes = {str(row["code"]) for row in issues.values()}
+    assert audit["findings"]
+    if expected_code is None:
+        assert not codes
+    else:
+        assert expected_code in codes
+
+
+def test_blocked_before_dispatch_is_disclosed_and_submission_ready(
+    tmp_path: Path,
+    valid_artifacts: None,
+) -> None:
+    job, expectation = _synthetic_job(tmp_path)
+    trial_id = "task-00__trial"
+    agent_dir = job / trial_id / "agent"
+    events = b"".join(
+        _canonical(event)
+        for event in (
+            {
+                "type": "tool.registered",
+                "data": {
+                    "call_id": "call-blocked",
+                    "provider_name": "run_terminal_command",
+                    "arguments_json": json.dumps({"command": "ls /logs"}),
+                },
+            },
+            {
+                "type": "tool.failed",
+                "data": {
+                    "call_id": "call-blocked",
+                    "provider_name": "run_terminal_command",
+                    "code": protected_target.BLOCKED_CODE,
+                },
+            },
+        )
+    )
+    runtime = agent_dir / "runtime"
+    runtime.mkdir()
+    (runtime / "events.jsonl").write_bytes(events)
+    marker_path = agent_dir / "agent-run.json"
+    marker = json.loads(marker_path.read_bytes())
+    marker["events_sha256"] = hashlib.sha256(events).hexdigest()
+    marker_path.write_bytes(_canonical(marker))
+
+    audit = protected_target.audit_trial(job / trial_id, rewarded=True)
+    assert audit["findings"][0]["classification"] == "access_blocked"
+    rows_path = job / "rows.jsonl"
+    rows = [json.loads(line) for line in rows_path.read_bytes().splitlines()]
+    rows[0].update(preflight._audit_projection(audit))
+    rows_path.write_bytes(b"".join(_canonical(row) for row in rows))
+    summary_path = job / "summary.json"
+    summary = json.loads(summary_path.read_bytes())
+    summary["gates"]["contamination_clean"] = False
+    summary["gates"]["submission_integrity_clean"] = True
+    summary_path.write_bytes(_canonical(summary))
 
     receipt = preflight.audit_jobs(
         (job,), expectation=expectation, require_pinned_harbor=False
     )
 
-    assert f"protected_target_{classification}" in _codes(receipt)
+    assert receipt["status"] == "passed"
+    assert receipt["submit_ready"] is True
+    assert not _codes(receipt)
+
+
+def test_actual_git_history_bytes_fail_submission_preflight(
+    tmp_path: Path,
+    valid_artifacts: None,
+) -> None:
+    job, expectation = _synthetic_job(tmp_path)
+    trial_id = "task-00__trial"
+    trajectory_path = job / trial_id / "agent" / "trajectory.json"
+    trajectory = json.loads(trajectory_path.read_bytes())
+    trajectory["steps"].append(
+        {
+            "step_id": len(trajectory["steps"]) + 1,
+            "source": "agent",
+            "message": "",
+            "tool_calls": [
+                {
+                    "tool_call_id": "history-call",
+                    "function_name": "run_terminal_command",
+                    "arguments": {"command": "git log -p -1"},
+                }
+            ],
+            "observation": {
+                "results": [
+                    {"source_call_id": "history-call", "content": "history bytes"}
+                ]
+            },
+        }
+    )
+    trajectory_path.write_bytes(_canonical(trajectory))
+    marker_path = job / trial_id / "agent" / "agent-run.json"
+    marker = json.loads(marker_path.read_bytes())
+    marker["trajectory_sha256"] = hashlib.sha256(
+        trajectory_path.read_bytes()
+    ).hexdigest()
+    marker_path.write_bytes(_canonical(marker))
+    audit = tb21.git_history_audit.audit_trial(
+        job / trial_id, instruction="Synthetic submission preflight fixture."
+    )
+    rows_path = job / "rows.jsonl"
+    rows = [json.loads(line) for line in rows_path.read_bytes().splitlines()]
+    rows[0].update(preflight._git_audit_projection(audit))
+    rows_path.write_bytes(b"".join(_canonical(row) for row in rows))
+    summary_path = job / "summary.json"
+    summary = json.loads(summary_path.read_bytes())
+    summary["gates"]["submission_integrity_clean"] = False
+    summary["gates"]["git_history_integrity_clean"] = False
+    summary_path.write_bytes(_canonical(summary))
+
+    receipt = preflight.audit_jobs(
+        (job,), expectation=expectation, require_pinned_harbor=False
+    )
+
+    assert receipt["submit_ready"] is False
+    assert "git_history_oracle_access" in _codes(receipt)
 
 
 def test_split_protected_target_attempt_fails_submission_preflight(
