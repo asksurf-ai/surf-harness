@@ -1,0 +1,9 @@
+# Deliberately fake secret-like test value in the commit that introduced it.
+78a8fa3a28b078d47de5d140be0bc759a1efc075:tests/test_tb21.py:generic-api-key:1276
+# Official TB2.1 task checksums, byte-attested by check_gitleaks_worktree.py.
+evaluation/tb21-2-1-task-checksums.json:generic-api-key:26
+evaluation/tb21-2-1-task-checksums.json:generic-api-key:67
+evaluation/tb21-2-1-task-checksums.json:generic-api-key:97
+8c49d3ec7bbe6150d2bef7cadb9d4181068d3bf0:evaluation/tb21-2-1-task-checksums.json:generic-api-key:26
+8c49d3ec7bbe6150d2bef7cadb9d4181068d3bf0:evaluation/tb21-2-1-task-checksums.json:generic-api-key:67
+8c49d3ec7bbe6150d2bef7cadb9d4181068d3bf0:evaluation/tb21-2-1-task-checksums.json:generic-api-key:97
