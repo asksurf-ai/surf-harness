@@ -1,0 +1,770 @@
+{
+  "$defs": {
+    "base64": {
+      "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+      "type": "string"
+    },
+    "actor_receipt": {
+      "additionalProperties": false,
+      "properties": {
+        "census_verified": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "cleanup_verified": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "diagnostic_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "effective_cutoff_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "execution_may_have_started": {
+          "type": "boolean"
+        },
+        "origin": {
+          "enum": [
+            "semantic",
+            "transport",
+            "protocol",
+            "actor"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "mapping_preflight",
+            "remote_setup",
+            "command_upload",
+            "remote_exec",
+            "recovery_download",
+            "result_download",
+            "meta_validate",
+            "cleanup",
+            "census",
+            "actor_done"
+          ]
+        },
+        "primary_subtype": {
+          "$ref": "#/$defs/actor_subtype"
+        },
+        "recovery_subtype": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/actor_subtype"
+            }
+          ]
+        },
+        "schema_version": {
+          "const": "terminal-actor-receipt-v1"
+        }
+      },
+      "required": [
+        "schema_version",
+        "phase",
+        "origin",
+        "primary_subtype",
+        "recovery_subtype",
+        "execution_may_have_started",
+        "effective_cutoff_monotonic_ns",
+        "cleanup_verified",
+        "census_verified",
+        "diagnostic_digest_sha256"
+      ],
+      "type": "object"
+    },
+    "actor_subtype": {
+      "enum": [
+        "completed",
+        "semantic_execution_timed_out",
+        "actor_deadline_exceeded",
+        "workspace_mapping_check_timeout",
+        "workspace_mapping_changed",
+        "request_setup_failed",
+        "command_upload_failed",
+        "run_transport_timeout",
+        "run_transport_failed",
+        "run_response_nonzero",
+        "recovered_settled",
+        "recovery_download_failed",
+        "meta_invalid",
+        "output_download_failed",
+        "output_limit_exceeded",
+        "cleanup_unverified",
+        "cancelled",
+        "unexpected_failure"
+      ]
+    },
+    "background_start_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "child_exit_code": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "not_started",
+            "quick_exit"
+          ]
+        },
+        "proof_version": {
+          "const": "background-start-no-id-proof-v1"
+        },
+        "task_id_published": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "proof_version",
+        "kind",
+        "task_id_published",
+        "child_exit_code"
+      ],
+      "type": "object"
+    },
+    "cleanup": {
+      "additionalProperties": false,
+      "properties": {
+        "attempted": {
+          "type": "boolean"
+        },
+        "kill_sent": {
+          "type": "boolean"
+        },
+        "term_sent": {
+          "type": "boolean"
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "attempted",
+        "term_sent",
+        "kill_sent",
+        "verified"
+      ],
+      "type": "object"
+    },
+    "completed_result": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_receipt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/actor_receipt"
+            }
+          ]
+        },
+        "background_start_observation": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/background_start_observation"
+            }
+          ]
+        },
+        "census": {
+          "$ref": "#/$defs/process_census"
+        },
+        "cleanup": {
+          "$ref": "#/$defs/cleanup"
+        },
+        "media": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/media"
+            }
+          ]
+        },
+        "process_disposition": {
+          "enum": [
+            "no_process",
+            "foreground_cleaned",
+            "background_retained",
+            "background_terminated"
+          ]
+        },
+        "return_code": {
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "type": "integer"
+        },
+        "stderr_base64": {
+          "$ref": "#/$defs/base64"
+        },
+        "stderr_truncated": {
+          "type": "boolean"
+        },
+        "stdout_base64": {
+          "$ref": "#/$defs/base64"
+        },
+        "stdout_truncated": {
+          "type": "boolean"
+        },
+        "target_task_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/identity"
+            }
+          ]
+        },
+        "timed_out": {
+          "type": "boolean"
+        },
+        "wait_clamped": {
+          "type": "boolean"
+        },
+        "wait_reason": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "const": "runtime_budget"
+            }
+          ]
+        }
+      },
+      "required": [
+        "return_code",
+        "timed_out",
+        "stdout_base64",
+        "stderr_base64",
+        "stdout_truncated",
+        "stderr_truncated",
+        "process_disposition",
+        "target_task_id",
+        "cleanup",
+        "census",
+        "media",
+        "wait_clamped",
+        "wait_reason",
+        "background_start_observation",
+        "actor_receipt"
+      ],
+      "type": "object"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "clear": {
+          "const": true
+        },
+        "inherit_remote": {
+          "items": false,
+          "maxItems": 7,
+          "minItems": 7,
+          "prefixItems": [
+            {
+              "const": "HOME"
+            },
+            {
+              "const": "LANG"
+            },
+            {
+              "const": "LC_ALL"
+            },
+            {
+              "const": "PATH"
+            },
+            {
+              "const": "TERM"
+            },
+            {
+              "const": "TMPDIR"
+            },
+            {
+              "const": "USER"
+            }
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "clear",
+        "inherit_remote"
+      ],
+      "type": "object"
+    },
+    "failure": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_receipt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/actor_receipt"
+            }
+          ]
+        },
+        "census_verified": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "cleanup_verified": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "code": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9_.-]+$",
+          "type": "string",
+          "x-utf8-max-bytes": 128
+        },
+        "execution_may_have_started": {
+          "type": "boolean"
+        },
+        "recoverability": {
+          "const": "fatal"
+        }
+      },
+      "required": [
+        "code",
+        "execution_may_have_started",
+        "cleanup_verified",
+        "census_verified",
+        "recoverability",
+        "actor_receipt"
+      ],
+      "type": "object"
+    },
+    "identity": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[^\\u0000-\\u001f]+$",
+      "type": "string",
+      "x-utf8-max-bytes": 256
+    },
+    "limits": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments_cap_bytes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "background_output_wait_max_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_background_processes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_directory_entries": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_grep_matches": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_path_bytes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_read_or_write_bytes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "max_replacements": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "process_spool_bytes_per_process": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "process_spool_bytes_per_run": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "read_file_media_enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "arguments_cap_bytes",
+        "max_path_bytes",
+        "max_read_or_write_bytes",
+        "max_directory_entries",
+        "max_grep_matches",
+        "max_replacements",
+        "max_background_processes",
+        "process_spool_bytes_per_process",
+        "process_spool_bytes_per_run",
+        "background_output_wait_max_ms"
+      ],
+      "type": "object"
+    },
+    "media": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_byte_length": {
+          "maximum": 4194304,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "content_base64": {
+          "$ref": "#/$defs/base64"
+        },
+        "height": {
+          "maximum": 8192,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "logical_path": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?/)(?!.*//)[^\\u0000-\\u001f]+$",
+          "type": "string",
+          "x-utf8-max-bytes": 4096
+        },
+        "mime_type": {
+          "enum": [
+            "image/png",
+            "image/jpeg"
+          ]
+        },
+        "source_byte_length": {
+          "maximum": 4194304,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "width": {
+          "maximum": 8192,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "logical_path",
+        "mime_type",
+        "width",
+        "height",
+        "source_byte_length",
+        "source_sha256",
+        "canonical_byte_length",
+        "canonical_sha256",
+        "content_base64"
+      ],
+      "type": "object"
+    },
+    "nonnegative_integer": {
+      "maximum": 18446744073709551615,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "positive_integer": {
+      "maximum": 18446744073709551615,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "process_census": {
+      "additionalProperties": false,
+      "properties": {
+        "owned_processes_alive": {
+          "$ref": "#/$defs/nonnegative_integer"
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "verified",
+        "owned_processes_alive"
+      ],
+      "type": "object"
+    },
+    "request": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_done_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "arguments_json": {
+          "contentMediaType": "application/json",
+          "contentSchema": {
+            "type": "object"
+          },
+          "minLength": 1,
+          "type": "string"
+        },
+        "attempt_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "cleanup_reserve_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "cleanup_start_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "deadline_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "environment": {
+          "$ref": "#/$defs/environment"
+        },
+        "hard_deadline_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "kill_confirmation_timeout_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "last_send_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "limits": {
+          "$ref": "#/$defs/limits"
+        },
+        "logical_cwd": {
+          "minLength": 1,
+          "pattern": "^/(?!\\.?\\.?(?:/|$))(?!.*//)(?!.*(?:/\\.\\.?)(?:/|$)).*$",
+          "type": "string"
+        },
+        "message_type": {
+          "const": "tool.request"
+        },
+        "operation_timeout_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "process_settlement_reserve_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "provider_send_reserve_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "run_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "runtime_final_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "schema_version": {
+          "const": "external-tool-stdio-v3"
+        },
+        "seq": {
+          "$ref": "#/$defs/nonnegative_integer"
+        },
+        "stderr_cap_bytes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "stdout_cap_bytes": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "term_grace_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "terminalization_reserve_ms": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "tool_name": {
+          "$ref": "#/$defs/tool_name"
+        },
+        "tool_settled_monotonic_ns": {
+          "$ref": "#/$defs/positive_integer"
+        },
+        "trial_id": {
+          "$ref": "#/$defs/identity"
+        }
+      },
+      "required": [
+        "schema_version",
+        "message_type",
+        "seq",
+        "run_id",
+        "trial_id",
+        "attempt_id",
+        "call_id",
+        "tool_name",
+        "arguments_json",
+        "logical_cwd",
+        "operation_timeout_ms",
+        "term_grace_ms",
+        "kill_confirmation_timeout_ms",
+        "stdout_cap_bytes",
+        "stderr_cap_bytes",
+        "environment",
+        "limits",
+        "actor_done_monotonic_ns",
+        "tool_settled_monotonic_ns",
+        "last_send_monotonic_ns",
+        "runtime_final_monotonic_ns",
+        "cleanup_start_monotonic_ns",
+        "hard_deadline_monotonic_ns",
+        "cleanup_reserve_ms",
+        "terminalization_reserve_ms",
+        "provider_send_reserve_ms",
+        "process_settlement_reserve_ms",
+        "deadline_receipt_sha256"
+      ],
+      "type": "object",
+      "x-strict-json-object-field": {
+        "field": "arguments_json",
+        "utf8-max-bytes-from": [
+          "limits",
+          "arguments_cap_bytes"
+        ]
+      }
+    },
+    "settled_response": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "settlement": {
+              "const": "completed"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        },
+        {
+          "properties": {
+            "settlement": {
+              "const": "fatal"
+            }
+          },
+          "required": [
+            "failure"
+          ]
+        }
+      ],
+      "properties": {
+        "attempt_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "failure": {
+          "$ref": "#/$defs/failure"
+        },
+        "message_type": {
+          "const": "tool.response"
+        },
+        "request_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "result": {
+          "$ref": "#/$defs/completed_result"
+        },
+        "run_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "schema_version": {
+          "const": "external-tool-stdio-v3"
+        },
+        "seq": {
+          "$ref": "#/$defs/nonnegative_integer"
+        },
+        "settlement": {
+          "enum": [
+            "completed",
+            "fatal"
+          ]
+        },
+        "tool_name": {
+          "$ref": "#/$defs/tool_name"
+        },
+        "trial_id": {
+          "$ref": "#/$defs/identity"
+        }
+      },
+      "required": [
+        "schema_version",
+        "message_type",
+        "seq",
+        "run_id",
+        "trial_id",
+        "attempt_id",
+        "call_id",
+        "tool_name",
+        "request_sha256",
+        "settlement"
+      ],
+      "type": "object"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "tool_name": {
+      "enum": [
+        "run_terminal_command",
+        "read_file",
+        "search_replace",
+        "write",
+        "list_dir",
+        "grep",
+        "kill_terminal_command",
+        "get_terminal_command_output"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://nano-grok-build.dev/schemas/external-tool-stdio-v3.json",
+  "$schema": "https://nano-grok-build.dev/schemas/external-tool-schema-meta-v1.json",
+  "$comment": "Validation requires https://nano-grok-build.dev/vocab/external-tool-validation-v1. A validator that does not implement this required vocabulary must refuse to process this schema.",
+  "description": "Strict absolute-deadline JSONL protocol between the Rust runtime and a host sandbox bridge.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/settled_response"
+    }
+  ],
+  "title": "Nano Grok Build external tool stdio v3"
+}
