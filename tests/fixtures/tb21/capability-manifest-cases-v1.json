@@ -1,0 +1,62 @@
+{
+  "schema_version": "nano-tb21-capability-fixtures-v1",
+  "cases": [
+    {
+      "name": "present",
+      "facts": {
+        "capture_state": "present",
+        "cpu": {
+          "architecture": "x86_64",
+          "features": [
+            "sse4_2",
+            "avx2",
+            "avx"
+          ],
+          "state": "present"
+        },
+        "dependencies": [
+          {
+            "name": "git",
+            "state": "present",
+            "version": "2.50.1"
+          },
+          {
+            "name": "docker",
+            "state": "missing",
+            "version": null
+          }
+        ],
+        "runtimes": [
+          {
+            "name": "rust",
+            "state": "present",
+            "version": "1.88.0"
+          },
+          {
+            "name": "python",
+            "state": "present",
+            "version": "3.13.5"
+          },
+          {
+            "name": "node",
+            "state": "unknown",
+            "version": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown",
+      "facts": {
+        "capture_state": "unknown",
+        "cpu": {
+          "architecture": null,
+          "features": [],
+          "state": "unknown"
+        },
+        "dependencies": [],
+        "runtimes": []
+      }
+    }
+  ]
+}
