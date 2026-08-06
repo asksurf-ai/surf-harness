@@ -1,0 +1,150 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  UV_NO_PROGRESS: "1"
+
+jobs:
+  linux-authoritative:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Reject dependency forms and repository Cargo config before setup
+        run: python3 scripts/static_preflight.py
+      - name: Install exact runtime toolchains
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
+          python3 scripts/install_uv.py \
+            --platform linux-x86_64 \
+            --expected-sha256 df54b274e99b7ef26030dc21d105ce115bc21a644fc6a321bde9222cb1616de6 \
+            --install-dir "$RUNNER_TEMP/nano-uv/bin"
+          nano_uv="$RUNNER_TEMP/nano-uv/bin/uv"
+          export PATH="$RUNNER_TEMP/nano-uv/bin:$PATH"
+          echo "$RUNNER_TEMP/nano-uv/bin" >> "$GITHUB_PATH"
+          "$nano_uv" python install 3.12.11
+          rustc --version | grep -F "rustc 1.97.1 "
+          "$nano_uv" --version | grep -E '^uv 0\.7\.11($| )'
+          nano_python="$("$nano_uv" python find 3.12.11)"
+          "$nano_python" --version | grep -F "Python 3.12.11"
+      - name: Install checksum-pinned scanners
+        run: |
+          mkdir -p "$RUNNER_TEMP/nano-tools/bin"
+          curl --fail --silent --show-error --location \
+            https://github.com/EmbarkStudios/cargo-deny/releases/download/0.20.2/cargo-deny-0.20.2-x86_64-unknown-linux-musl.tar.gz \
+            --output "$RUNNER_TEMP/cargo-deny.tar.gz"
+          printf '%s  %s\n' \
+            9f12ed4c49936e09b48bf862b595cde2fe64fcbd9d74dfacac6131ca824c8d5f \
+            "$RUNNER_TEMP/cargo-deny.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/cargo-deny.tar.gz" \
+            -C "$RUNNER_TEMP/nano-tools/bin" --strip-components=1
+          curl --fail --silent --show-error --location \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.27.2/gitleaks_8.27.2_linux_x64.tar.gz \
+            --output "$RUNNER_TEMP/gitleaks.tar.gz"
+          printf '%s  %s\n' \
+            141c3b2dede46d8b3a53b47116da756bd223decc0374797559a6b50ecba5590c \
+            "$RUNNER_TEMP/gitleaks.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" \
+            -C "$RUNNER_TEMP/nano-tools/bin" gitleaks
+          echo "$RUNNER_TEMP/nano-tools/bin" >> "$GITHUB_PATH"
+      - name: Run authoritative checks
+        run: |
+          cargo-deny --version | grep -F "cargo-deny 0.20.2"
+          test "$(gitleaks version)" = "8.27.2"
+          python3 scripts/check.py --require-external-scanners
+      - name: Pull digest-pinned native fault image
+        run: |
+          env -u XAI_API_KEY docker pull \
+            alexgshaw/fix-git@sha256:389b9c8247610c2c5be080b1ac00429007c2c69bf57f7f26c79f0f75ba2d5c74
+      - name: Run provider-free native Linux fault matrix
+        run: |
+          env -u XAI_API_KEY \
+            NANO_RUN_DOCKER_TESTS=1 \
+            NANO_DOCKER_REGRESSION_IMAGE=alexgshaw/fix-git@sha256:389b9c8247610c2c5be080b1ac00429007c2c69bf57f7f26c79f0f75ba2d5c74 \
+            .venv/bin/python scripts/run_native_linux_fault_ci.py \
+            --output-dir "$RUNNER_TEMP/native-linux-fault-evidence"
+      - name: Upload native Linux fault evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-linux-fault-evidence-${{ github.sha }}
+          path: ${{ runner.temp }}/native-linux-fault-evidence
+          if-no-files-found: error
+          retention-days: 30
+
+  macos-smoke:
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Reject dependency forms and repository Cargo config before setup
+        run: python3 scripts/static_preflight.py
+      - name: Install exact runtime toolchains
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
+          python3 scripts/install_uv.py \
+            --platform macos-aarch64 \
+            --expected-sha256 b5f4cb27a3002d6590c3681377c6d826db0b52e2a9529c7144fcd53fec89ba79 \
+            --install-dir "$RUNNER_TEMP/nano-uv/bin"
+          nano_uv="$RUNNER_TEMP/nano-uv/bin/uv"
+          export PATH="$RUNNER_TEMP/nano-uv/bin:$PATH"
+          echo "$RUNNER_TEMP/nano-uv/bin" >> "$GITHUB_PATH"
+          "$nano_uv" python install 3.12.11
+          rustc --version | grep -F "rustc 1.97.1 "
+          "$nano_uv" --version | grep -E '^uv 0\.7\.11($| )'
+      - name: Run locked macOS checks
+        run: python3 scripts/check.py
+
+  lock-repro:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Reject dependency forms and repository Cargo config before setup
+        run: python3 scripts/static_preflight.py
+      - name: Install exact runtime toolchains
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
+          python3 scripts/install_uv.py \
+            --platform linux-x86_64 \
+            --expected-sha256 df54b274e99b7ef26030dc21d105ce115bc21a644fc6a321bde9222cb1616de6 \
+            --install-dir "$RUNNER_TEMP/nano-uv/bin"
+          nano_uv="$RUNNER_TEMP/nano-uv/bin/uv"
+          export PATH="$RUNNER_TEMP/nano-uv/bin:$PATH"
+          echo "$RUNNER_TEMP/nano-uv/bin" >> "$GITHUB_PATH"
+          "$nano_uv" python install 3.12.11
+      - name: Build archived checkout without lock drift
+        run: |
+          archive_root="$RUNNER_TEMP/archive"
+          mkdir -p "$archive_root"
+          git archive HEAD | tar -x -C "$archive_root"
+          cd "$archive_root"
+          python3 scripts/static_preflight.py
+          before="$(sha256sum Cargo.lock uv.lock)"
+          cargo metadata --locked --format-version 1 > /dev/null
+          cargo test --locked --workspace --all-targets --all-features --no-run
+          uv sync --frozen --all-groups --no-install-project
+          uv build --no-build-isolation --offline
+          uv lock --check
+          after="$(sha256sum Cargo.lock uv.lock)"
+          test "$before" = "$after"

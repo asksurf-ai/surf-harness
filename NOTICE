@@ -1,0 +1,6 @@
+nano-grok-build
+Copyright 2026 nano-grok-build contributors
+
+This product includes modified contract material from Grok Build commit a5727c5960452e7527a154b25cb5bf00cda0545e, Copyright 2023-2026 SpaceXAI, under the Apache License, Version 2.0. The material was adapted for an independent minimal runtime. See THIRD_PARTY_NOTICES.md and the hash-only provenance records.
+
+This independent community project is not affiliated with, endorsed by, or sponsored by xAI. “xAI”, “Grok”, and model IDs identify source provenance and compatibility targets only. No trademark rights, exact source parity, or full Grok Build compatibility are claimed.
