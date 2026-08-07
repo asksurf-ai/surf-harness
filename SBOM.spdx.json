@@ -1,0 +1,5407 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "creationInfo": {
+    "created": "2026-08-07T09:39:23Z",
+    "creators": [
+      "Tool: nano-grok-build-public-export-v1"
+    ],
+    "licenseListVersion": "3.26"
+  },
+  "dataLicense": "CC0-1.0",
+  "documentDescribes": [
+    "SPDXRef-Package-surf-harness"
+  ],
+  "documentNamespace": "https://spdx.org/spdxdocs/surf-harness-0.4.7-5c5fdd84d11cd533097e35743b27b548172554f7",
+  "name": "surf-harness-0.4.7",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-surf-harness",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "name": "surf-harness",
+      "versionInfo": "0.4.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-atomic-waker-1.1.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/atomic-waker/1.1.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/atomic-waker@1.1.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "atomic-waker",
+      "versionInfo": "1.1.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-aws-lc-rs-1.17.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "00bdb5da18dac48ca2cc7cd4a98e533e8635a58e2361d13a1a4ee3888e0d72f1"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/aws-lc-rs/1.17.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/aws-lc-rs@1.17.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "aws-lc-rs",
+      "versionInfo": "1.17.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-aws-lc-sys-0.43.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "43103168cc76fe62678a375e722fc9cb3a0146159ac5828bc4f0dfd755c2224c"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/aws-lc-sys/0.43.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/aws-lc-sys@0.43.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "aws-lc-sys",
+      "versionInfo": "0.43.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-base64-0.22.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/base64/0.22.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/base64@0.22.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "base64",
+      "versionInfo": "0.22.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-bitflags-2.13.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b588b76d00fde79687d7646a9b5bdf3cc0f655e0bbd080335a95d7e96f3587da"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/bitflags/2.13.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/bitflags@2.13.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "bitflags",
+      "versionInfo": "2.13.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-block-buffer-0.10.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/block-buffer/0.10.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/block-buffer@0.10.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "block-buffer",
+      "versionInfo": "0.10.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-bumpalo-3.20.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "72f5acc6cb2ba439de613abc23857ec3d78374d8ed5ac84e9d11336e87da8649"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/bumpalo/3.20.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/bumpalo@3.20.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "bumpalo",
+      "versionInfo": "3.20.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-bytes-1.12.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/bytes/1.12.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/bytes@1.12.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "bytes",
+      "versionInfo": "1.12.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cc-1.3.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c89588d05638b5b4594a3348a2d6c20277e43a7f5c5202b05cc56888475a47b8"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cc/1.3.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cc@1.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cc",
+      "versionInfo": "1.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cfg-aliases-0.2.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f079e83a288787bcd14a6aea84cee5c87a67c5a3e660c30f557a3d24761b3527"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cfg_aliases/0.2.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cfg_aliases@0.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cfg_aliases",
+      "versionInfo": "0.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cfg-if-1.0.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cfg-if/1.0.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cfg-if@1.0.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cfg-if",
+      "versionInfo": "1.0.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-chacha20-0.10.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d524456ba66e72eb8b115ff89e01e497f8e6d11d78b70b1aa13c0fbd97540a81"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/chacha20/0.10.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/chacha20@0.10.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "chacha20",
+      "versionInfo": "0.10.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cmake-0.1.58",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cmake/0.1.58/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cmake@0.1.58",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cmake",
+      "versionInfo": "0.1.58"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-combine-4.6.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ba5a308b75df32fe02788e748662718f03fde005016435c444eea572398219fd"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/combine/4.6.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/combine@4.6.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "combine",
+      "versionInfo": "4.6.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-core-foundation-0.10.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b2a6cd9ae233e7f62ba4e9353e81a88df7fc8a5987b8d445b4d90c879bd156f6"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/core-foundation/0.10.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/core-foundation@0.10.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "core-foundation",
+      "versionInfo": "0.10.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-core-foundation-sys-0.8.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/core-foundation-sys/0.8.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/core-foundation-sys@0.8.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "core-foundation-sys",
+      "versionInfo": "0.8.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cpufeatures-0.2.17",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cpufeatures/0.2.17/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cpufeatures@0.2.17",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cpufeatures",
+      "versionInfo": "0.2.17"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-cpufeatures-0.3.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b2a41393f66f16b0823bb79094d54ac5fbd34ab292ddafb9a0456ac9f87d201"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/cpufeatures/0.3.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/cpufeatures@0.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cpufeatures",
+      "versionInfo": "0.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-crypto-common-0.1.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/crypto-common/0.1.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/crypto-common@0.1.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "crypto-common",
+      "versionInfo": "0.1.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-digest-0.10.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/digest/0.10.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/digest@0.10.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "digest",
+      "versionInfo": "0.10.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-displaydoc-0.2.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1ac70aa55017e108007fbaf5aa0f54b021c98f92ff8af59d42eda9da96e3dd4f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/displaydoc/0.2.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/displaydoc@0.2.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "displaydoc",
+      "versionInfo": "0.2.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-dunce-1.0.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "92773504d58c093f6de2459af4af33faa518c13451eb8f2b5698ed3d36e7c813"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/dunce/1.0.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/dunce@1.0.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "dunce",
+      "versionInfo": "1.0.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-errno-0.3.14",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/errno/0.3.14/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/errno@0.3.14",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "errno",
+      "versionInfo": "0.3.14"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-fastrand-2.5.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/fastrand/2.5.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/fastrand@2.5.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "fastrand",
+      "versionInfo": "2.5.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-find-msvc-tools-0.1.9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/find-msvc-tools/0.1.9/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/find-msvc-tools@0.1.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "find-msvc-tools",
+      "versionInfo": "0.1.9"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-form-urlencoded-1.2.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cb4cb245038516f5f85277875cdaa4f7d2c9a0fa0468de06ed190163b1581fcf"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/form_urlencoded/1.2.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/form_urlencoded@1.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "form_urlencoded",
+      "versionInfo": "1.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-fs-extra-1.3.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/fs_extra/1.3.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/fs_extra@1.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "fs_extra",
+      "versionInfo": "1.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-channel-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "262590f4fe6afeb0bc83be1daa64e52657fe185690a958af7f3ad0e92085c5ae"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-channel/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-channel@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-channel",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-core-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2cd50c473c80f6d7c3670a752354b8e569b1a7cbfdc0419ec88e5edad85e0dc7"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-core/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-core@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-core",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-io-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4577ecaa3c4f96589d473f679a71b596316f6641bc350038b962a5daf0085d7a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-io/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-io@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-io",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-macro-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2d6d3cde68c518367be28956066ddfef33813991b77a55005a69dae04bf3b10b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-macro/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-macro@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-macro",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-sink-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e34418ac499d6305c2fb5ad0ed2f6ac998c5f8ca209b4510f7f94242c647e307"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-sink/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-sink@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-sink",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-task-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b231ed28831efb4a61a08580c4bc233ec56bc009f4cd8f52da2c3cb97df0c109"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-task/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-task@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-task",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-futures-util-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a77a90a256fce34da66415271e30f94ee91c57b04b8a2c042d9cf3220179deaa"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/futures-util/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/futures-util@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "futures-util",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-generic-array-0.14.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/generic-array/0.14.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/generic-array@0.14.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "generic-array",
+      "versionInfo": "0.14.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-getrandom-0.2.17",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff2abc00be7fca6ebc474524697ae276ad847ad0a6b3faa4bcb027e9a4614ad0"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/getrandom/0.2.17/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/getrandom@0.2.17",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "getrandom",
+      "versionInfo": "0.2.17"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-getrandom-0.4.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/getrandom/0.4.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/getrandom@0.4.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "getrandom",
+      "versionInfo": "0.4.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-http-1.4.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6970f50e31d6fc17d3fa27329444bfa74e196cf62e95052a3f6fee181dba6425"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/http/1.4.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/http@1.4.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "http",
+      "versionInfo": "1.4.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-http-body-1.1.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ca2a8f2913ee65f60facd6a5905613afaa448497a0230cc41ce022d93290bc2c"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/http-body/1.1.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/http-body@1.1.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "http-body",
+      "versionInfo": "1.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-http-body-util-0.1.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e9f41fd6a08e4d4ec69df65976da761afd5ad5e58a9d4acb46bd1c953a9e3ff2"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/http-body-util/0.1.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/http-body-util@0.1.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "http-body-util",
+      "versionInfo": "0.1.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-httparse-1.10.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6dbf3de79e51f3d586ab4cb9d5c3e2c14aa28ed23d180cf89b4df0454a69cc87"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/httparse/1.10.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/httparse@1.10.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "httparse",
+      "versionInfo": "1.10.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-hyper-1.11.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d22053281f852e11534f5198498373cbb59295120a20771d90f7ed1897490a72"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/hyper/1.11.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/hyper@1.11.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "hyper",
+      "versionInfo": "1.11.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-hyper-rustls-0.27.9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "33ca68d021ef39cf6463ab54c1d0f5daf03377b70561305bb89a8f83aab66e0f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/hyper-rustls/0.27.9/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/hyper-rustls@0.27.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "hyper-rustls",
+      "versionInfo": "0.27.9"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-hyper-util-0.1.20",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "96547c2556ec9d12fb1578c4eaf448b04993e7fb79cbaad930a656880a6bdfa0"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/hyper-util/0.1.20/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/hyper-util@0.1.20",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "hyper-util",
+      "versionInfo": "0.1.20"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-collections-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2984d1cd16c883d7935b9e07e44071dca8d917fd52ecc02c04d5fa0b5a3f191c"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_collections/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_collections@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_collections",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-locale-core-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "92219b62b3e2b4d88ac5119f8904c10f8f61bf7e95b640d25ba3075e6cac2c29"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_locale_core/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_locale_core@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_locale_core",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-normalizer-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c56e5ee99d6e3d33bd91c5d85458b6005a22140021cc324cea84dd0e72cff3b4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_normalizer/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_normalizer@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_normalizer",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-normalizer-data-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "da3be0ae77ea334f4da67c12f149704f19f81d1adf7c51cf482943e84a2bad38"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_normalizer_data/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_normalizer_data@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_normalizer_data",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-properties-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bee3b67d0ea5c2cca5003417989af8996f8604e34fb9ddf96208a033901e70de"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_properties/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_properties@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_properties",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-properties-data-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8e2bbb201e0c04f7b4b3e14382af113e17ba4f63e2c9d2ee626b720cbce54a14"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_properties_data/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_properties_data@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_properties_data",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-icu-provider-2.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "139c4cf31c8b5f33d7e199446eff9c1e02decfc2f0eec2c8d71f65befa45b421"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/icu_provider/2.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/icu_provider@2.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "icu_provider",
+      "versionInfo": "2.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-idna-1.1.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3b0875f23caa03898994f6ddc501886a45c7d3d62d04d2d90788d47be1b1e4de"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/idna/1.1.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/idna@1.1.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "idna",
+      "versionInfo": "1.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-idna-adapter-1.2.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cb68373c0d6620ef8105e855e7745e18b0d00d3bdb07fb532e434244cdb9a714"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/idna_adapter/1.2.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/idna_adapter@1.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "idna_adapter",
+      "versionInfo": "1.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-ipnet-2.12.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d98f6fed1fde3f8c21bc40a1abb88dd75e67924f9cffc3ef95607bad8017f8e2"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/ipnet/2.12.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/ipnet@2.12.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "ipnet",
+      "versionInfo": "2.12.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-itoa-1.0.18",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/itoa/1.0.18/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/itoa@1.0.18",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "itoa",
+      "versionInfo": "1.0.18"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-jni-0.22.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5efd9a482cf3a427f00d6b35f14332adc7902ce91efb778580e180ff90fa3498"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/jni/0.22.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/jni@0.22.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jni",
+      "versionInfo": "0.22.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-jni-macros-0.22.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a00109accc170f0bdb141fed3e393c565b6f5e072365c3bd58f5b062591560a3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/jni-macros/0.22.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/jni-macros@0.22.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jni-macros",
+      "versionInfo": "0.22.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-jni-sys-0.4.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c6377a88cb3910bee9b0fa88d4f42e1d2da8e79915598f65fb0c7ee14c878af2"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/jni-sys/0.4.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/jni-sys@0.4.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jni-sys",
+      "versionInfo": "0.4.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-jni-sys-macros-0.4.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "38c0b942f458fe50cdac086d2f946512305e5631e720728f2a61aabcd47a6264"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/jni-sys-macros/0.4.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/jni-sys-macros@0.4.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jni-sys-macros",
+      "versionInfo": "0.4.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-jobserver-0.1.35",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1c00acbd29eabad4a2392fa0e921c874934dbbf4194312ad20f04a0ed67a3cb3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/jobserver/0.1.35/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/jobserver@0.1.35",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jobserver",
+      "versionInfo": "0.1.35"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-js-sys-0.3.103",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "53b44bfcdb3f8d5837a46dae1ca9660a837176eee74a28b229bc626816589102"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/js-sys/0.3.103/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/js-sys@0.3.103",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "js-sys",
+      "versionInfo": "0.3.103"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-libc-0.2.189",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/libc/0.2.189/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/libc@0.2.189",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "libc",
+      "versionInfo": "0.2.189"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-linux-raw-sys-0.12.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/linux-raw-sys/0.12.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/linux-raw-sys@0.12.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "linux-raw-sys",
+      "versionInfo": "0.12.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-litemap-0.8.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "92daf443525c4cce67b150400bc2316076100ce0b3686209eb8cf3c31612e6f0"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/litemap/0.8.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/litemap@0.8.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "litemap",
+      "versionInfo": "0.8.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-log-0.4.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/log/0.4.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/log@0.4.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "log",
+      "versionInfo": "0.4.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-lru-slab-0.1.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "112b39cec0b298b6c1999fee3e31427f74f676e4cb9879ed1a121b43661a4154"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/lru-slab/0.1.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/lru-slab@0.1.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "lru-slab",
+      "versionInfo": "0.1.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-memchr-2.8.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/memchr/2.8.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/memchr@2.8.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "memchr",
+      "versionInfo": "2.8.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-mio-1.2.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "30d65c71f1ce40ab09135ce117d742b9f8a19ff91a41a8b57ed50bc2de59c427"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/mio/1.2.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/mio@1.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "mio",
+      "versionInfo": "1.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-once-cell-1.21.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/once_cell/1.21.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/once_cell@1.21.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "once_cell",
+      "versionInfo": "1.21.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-openssl-probe-0.2.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/openssl-probe/0.2.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/openssl-probe@0.2.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "openssl-probe",
+      "versionInfo": "0.2.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-percent-encoding-2.3.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/percent-encoding/2.3.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/percent-encoding@2.3.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "percent-encoding",
+      "versionInfo": "2.3.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-pin-project-lite-0.2.17",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/pin-project-lite/0.2.17/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/pin-project-lite@0.2.17",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pin-project-lite",
+      "versionInfo": "0.2.17"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-pkg-config-0.3.33",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "19f132c84eca552bf34cab8ec81f1c1dcc229b811638f9d283dceabe58c5569e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/pkg-config/0.3.33/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/pkg-config@0.3.33",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pkg-config",
+      "versionInfo": "0.3.33"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-potential-utf-0.1.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0103b1cef7ec0cf76490e969665504990193874ea05c85ff9bab8b911d0a0564"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/potential_utf/0.1.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/potential_utf@0.1.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "potential_utf",
+      "versionInfo": "0.1.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-proc-macro2-1.0.107",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/proc-macro2/1.0.107/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/proc-macro2@1.0.107",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "proc-macro2",
+      "versionInfo": "1.0.107"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-quinn-0.11.11",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c1a41e437b6bbd489372cd4971de128e85c855f56c57f283d20ff016cf7c0a8"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/quinn/0.11.11/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/quinn@0.11.11",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "quinn",
+      "versionInfo": "0.11.11"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-quinn-proto-0.11.16",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2f4bfc015262b9df63c8845072ce59068853ff5872180c2ce2f13038b970e560"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/quinn-proto/0.11.16/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/quinn-proto@0.11.16",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "quinn-proto",
+      "versionInfo": "0.11.16"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-quinn-udp-0.5.15",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "35a133f956daabe89a61a685c2649f13d82d5aa4bd5d12d1277e1072a21c0694"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/quinn-udp/0.5.15/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/quinn-udp@0.5.15",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "quinn-udp",
+      "versionInfo": "0.5.15"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-quote-1.0.47",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/quote/1.0.47/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/quote@1.0.47",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "quote",
+      "versionInfo": "1.0.47"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-r-efi-6.0.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/r-efi/6.0.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/r-efi@6.0.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "r-efi",
+      "versionInfo": "6.0.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rand-0.10.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c7f5fa3a058cd35567ef9bfa5e75732bee0f9e4c55fa90477bef2dfcdbc4be80"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rand/0.10.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rand@0.10.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rand",
+      "versionInfo": "0.10.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rand-core-0.10.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rand_core/0.10.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rand_core@0.10.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rand_core",
+      "versionInfo": "0.10.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rand-pcg-0.10.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "caa0f4137e1c0a72f4c651489402276c8e8e1cf081f3b0ba156d2cbeef09e86a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rand_pcg/0.10.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rand_pcg@0.10.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rand_pcg",
+      "versionInfo": "0.10.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-reqwest-0.13.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "219c5811de6525e5416c7d5d53bb656d3afdbc6c5af816e0802bcfa42dbdc1c3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/reqwest/0.13.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/reqwest@0.13.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "reqwest",
+      "versionInfo": "0.13.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-ring-0.17.14",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a4689e6c2294d81e88dc6261c768b63bc4fcdb852be6d1352498b114f61383b7"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/ring/0.17.14/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/ring@0.17.14",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "ring",
+      "versionInfo": "0.17.14"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustc-hash-2.1.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6b1e7f9a428571be2dc5bc0505c13fb6bf936822b894ec87abf8a08a4e51742d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustc-hash/2.1.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustc-hash@2.1.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustc-hash",
+      "versionInfo": "2.1.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustc-version-0.4.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustc_version/0.4.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustc_version@0.4.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustc_version",
+      "versionInfo": "0.4.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustix-1.1.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b6fe4565b9518b83ef4f91bb47ce29620ca828bd32cb7e408f0062e9930ba190"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustix/1.1.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustix@1.1.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustix",
+      "versionInfo": "1.1.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-0.23.42",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3c54fcab019b409d04215d3a17cb438fd7fbf192ee61461f20f4fe18704bc138"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls/0.23.42/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls@0.23.42",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls",
+      "versionInfo": "0.23.42"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-native-certs-0.8.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "dab5152771c58876a2146916e53e35057e1a4dfa2b9df0f0305b07f611fdea4d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls-native-certs/0.8.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls-native-certs@0.8.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls-native-certs",
+      "versionInfo": "0.8.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-pki-types-1.15.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "764899a24af3980067ee14bc143654f297b22eaebfe3c7b6b211920a5a59b046"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls-pki-types/1.15.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls-pki-types@1.15.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls-pki-types",
+      "versionInfo": "1.15.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-platform-verifier-0.7.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "26d1e2536ce4f35f4846aa13bff16bd0ff40157cdb14cc056c7b14ba41233ba0"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls-platform-verifier/0.7.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls-platform-verifier@0.7.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls-platform-verifier",
+      "versionInfo": "0.7.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-platform-verifier-android-0.1.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f87165f0995f63a9fbeea62b64d10b4d9d8e78ec6d7d51fb2125fda7bb36788f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls-platform-verifier-android/0.1.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls-platform-verifier-android@0.1.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls-platform-verifier-android",
+      "versionInfo": "0.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustls-webpki-0.103.13",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "61c429a8649f110dddef65e2a5ad240f747e85f7758a6bccc7e5777bd33f756e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustls-webpki/0.103.13/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustls-webpki@0.103.13",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustls-webpki",
+      "versionInfo": "0.103.13"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-rustversion-1.0.23",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/rustversion/1.0.23/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/rustversion@1.0.23",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rustversion",
+      "versionInfo": "1.0.23"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-same-file-1.0.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/same-file/1.0.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/same-file@1.0.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "same-file",
+      "versionInfo": "1.0.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-schannel-0.1.29",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "91c1b7e4904c873ef0710c1f407dde2e6287de2bebc1bbbf7d430bb7cbffd939"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/schannel/0.1.29/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/schannel@0.1.29",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "schannel",
+      "versionInfo": "0.1.29"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-security-framework-3.7.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b7f4bc775c73d9a02cde8bf7b2ec4c9d12743edf609006c7facc23998404cd1d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/security-framework/3.7.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/security-framework@3.7.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "security-framework",
+      "versionInfo": "3.7.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-security-framework-sys-2.17.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6ce2691df843ecc5d231c0b14ece2acc3efb62c0a398c7e1d875f3983ce020e3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/security-framework-sys/2.17.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/security-framework-sys@2.17.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "security-framework-sys",
+      "versionInfo": "2.17.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-semver-1.0.28",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/semver/1.0.28/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/semver@1.0.28",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "semver",
+      "versionInfo": "1.0.28"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-serde-1.0.229",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/serde/1.0.229/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/serde@1.0.229",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "serde",
+      "versionInfo": "1.0.229"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-serde-core-1.0.229",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/serde_core/1.0.229/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/serde_core@1.0.229",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "serde_core",
+      "versionInfo": "1.0.229"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-serde-derive-1.0.229",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/serde_derive/1.0.229/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/serde_derive@1.0.229",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "serde_derive",
+      "versionInfo": "1.0.229"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-serde-json-1.0.151",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/serde_json/1.0.151/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/serde_json@1.0.151",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "serde_json",
+      "versionInfo": "1.0.151"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-sha2-0.10.9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/sha2/0.10.9/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/sha2@0.10.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "sha2",
+      "versionInfo": "0.10.9"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-shlex-2.0.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/shlex/2.0.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/shlex@2.0.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "shlex",
+      "versionInfo": "2.0.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-signal-hook-registry-1.4.8",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c4db69cba1110affc0e9f7bcd48bbf87b3f4fc7c61fc9155afd4c469eb3d6c1b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/signal-hook-registry/1.4.8/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/signal-hook-registry@1.4.8",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "signal-hook-registry",
+      "versionInfo": "1.4.8"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-simd-cesu8-1.2.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "11031e251abf8611c80f460e19dbdeb54a66db918e49c65a7065b46ac7aec520"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/simd_cesu8/1.2.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/simd_cesu8@1.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "simd_cesu8",
+      "versionInfo": "1.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-simdutf8-0.1.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/simdutf8/0.1.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/simdutf8@0.1.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "simdutf8",
+      "versionInfo": "0.1.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-slab-0.4.12",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/slab/0.4.12/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/slab@0.4.12",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "slab",
+      "versionInfo": "0.4.12"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-smallvec-1.15.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/smallvec/1.15.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/smallvec@1.15.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "smallvec",
+      "versionInfo": "1.15.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-socket2-0.6.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c3d1e2c7f27f8d4cb10542a02c49005dbd6e93095799d6f3be745fae9f8fedd4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/socket2/0.6.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/socket2@0.6.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "socket2",
+      "versionInfo": "0.6.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-stable-deref-trait-1.2.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/stable_deref_trait/1.2.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/stable_deref_trait@1.2.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "stable_deref_trait",
+      "versionInfo": "1.2.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-subtle-2.6.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/subtle/2.6.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/subtle@2.6.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "subtle",
+      "versionInfo": "2.6.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-syn-2.0.119",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/syn/2.0.119/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/syn@2.0.119",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "syn",
+      "versionInfo": "2.0.119"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-syn-3.0.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/syn/3.0.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/syn@3.0.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "syn",
+      "versionInfo": "3.0.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-sync-wrapper-1.0.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0bf256ce5efdfa370213c1dabab5935a12e49f2c58d15e9eac2870d3b4f27263"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/sync_wrapper/1.0.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/sync_wrapper@1.0.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "sync_wrapper",
+      "versionInfo": "1.0.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-synstructure-0.13.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "728a70f3dbaf5bab7f0c4b1ac8d7ae5ea60a4b5549c8a5914361c99147a709d2"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/synstructure/0.13.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/synstructure@0.13.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "synstructure",
+      "versionInfo": "0.13.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tempfile-3.27.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tempfile/3.27.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tempfile@3.27.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tempfile",
+      "versionInfo": "3.27.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-thiserror-2.0.18",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4288b5bcbc7920c07a1149a35cf9590a2aa808e0bc1eafaade0b80947865fbc4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/thiserror/2.0.18/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/thiserror@2.0.18",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "thiserror",
+      "versionInfo": "2.0.18"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-thiserror-impl-2.0.18",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ebc4ee7f67670e9b64d05fa4253e753e016c6c95ff35b89b7941d6b856dec1d5"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/thiserror-impl/2.0.18/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/thiserror-impl@2.0.18",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "thiserror-impl",
+      "versionInfo": "2.0.18"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tinystr-0.8.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c8323304221c2a851516f22236c5722a72eaa19749016521d6dff0824447d96d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tinystr/0.8.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tinystr@0.8.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tinystr",
+      "versionInfo": "0.8.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tinyvec-1.12.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bb4ebadaa0af04fab11ae01eb5f9fdb5f9c5b875506e210e71c07873528baa7f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tinyvec/1.12.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tinyvec@1.12.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tinyvec",
+      "versionInfo": "1.12.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tinyvec-macros-0.1.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tinyvec_macros/0.1.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tinyvec_macros@0.1.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tinyvec_macros",
+      "versionInfo": "0.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tokio-1.52.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fc7f01b389ac15039e4dc9531aa973a135d7a4135281b12d7c1bc79fd57fffe"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tokio/1.52.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tokio@1.52.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tokio",
+      "versionInfo": "1.52.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tokio-macros-2.7.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6328af13490e73a9b4694030fafd93f8c8c6a9dede33e821c3fc63eddf8042ba"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tokio-macros/2.7.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tokio-macros@2.7.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tokio-macros",
+      "versionInfo": "2.7.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tokio-rustls-0.26.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1729aa945f29d91ba541258c8df89027d5792d85a8841fb65e8bf0f4ede4ef61"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tokio-rustls/0.26.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tokio-rustls@0.26.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tokio-rustls",
+      "versionInfo": "0.26.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tokio-util-0.7.19",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "494815d09bf52b5548659851081238f0ca39ff638363907596da739561c62c52"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tokio-util/0.7.19/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tokio-util@0.7.19",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tokio-util",
+      "versionInfo": "0.7.19"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tower-0.5.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ebe5ef63511595f1344e2d5cfa636d973292adc0eec1f0ad45fae9f0851ab1d4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tower/0.5.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tower@0.5.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tower",
+      "versionInfo": "0.5.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tower-http-0.6.11",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4cfcf7e2740e6fc6d4d688b4ef00650406bb94adf4731e43c096c3a19fe40840"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tower-http/0.6.11/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tower-http@0.6.11",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tower-http",
+      "versionInfo": "0.6.11"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tower-layer-0.3.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "121c2a6cda46980bb0fcd1647ffaf6cd3fc79a013de288782836f6df9c48780e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tower-layer/0.3.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tower-layer@0.3.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tower-layer",
+      "versionInfo": "0.3.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tower-service-0.3.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tower-service/0.3.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tower-service@0.3.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tower-service",
+      "versionInfo": "0.3.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tracing-0.1.44",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tracing/0.1.44/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tracing@0.1.44",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tracing",
+      "versionInfo": "0.1.44"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-tracing-core-0.1.36",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/tracing-core/0.1.36/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/tracing-core@0.1.36",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "tracing-core",
+      "versionInfo": "0.1.36"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-try-lock-0.2.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/try-lock/0.2.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/try-lock@0.2.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "try-lock",
+      "versionInfo": "0.2.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-typenum-1.20.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/typenum/1.20.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/typenum@1.20.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "typenum",
+      "versionInfo": "1.20.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-unicode-ident-1.0.24",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/unicode-ident/1.0.24/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/unicode-ident@1.0.24",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "unicode-ident",
+      "versionInfo": "1.0.24"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-untrusted-0.9.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/untrusted/0.9.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/untrusted@0.9.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "untrusted",
+      "versionInfo": "0.9.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-url-2.5.8",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff67a8a4397373c3ef660812acab3268222035010ab8680ec4215f38ba3d0eed"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/url/2.5.8/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/url@2.5.8",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "url",
+      "versionInfo": "2.5.8"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-utf8-iter-1.0.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/utf8_iter/1.0.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/utf8_iter@1.0.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "utf8_iter",
+      "versionInfo": "1.0.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-version-check-0.9.5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/version_check/0.9.5/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/version_check@0.9.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "version_check",
+      "versionInfo": "0.9.5"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-walkdir-2.5.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/walkdir/2.5.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/walkdir@2.5.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "walkdir",
+      "versionInfo": "2.5.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-want-0.3.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bfa7760aed19e106de2c7c0b581b509f2f25d3dacaf737cb82ac61bc6d760b0e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/want/0.3.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/want@0.3.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "want",
+      "versionInfo": "0.3.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasi-0.11.1-wasi-snapshot-preview1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasi/0.11.1+wasi-snapshot-preview1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasi@0.11.1+wasi-snapshot-preview1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasi",
+      "versionInfo": "0.11.1+wasi-snapshot-preview1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-bindgen-0.2.126",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4b067c0c11094aef6b7a801c1e34a26affafdf3d051dba08456b868789aaf9a4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-bindgen/0.2.126/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-bindgen@0.2.126",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-bindgen",
+      "versionInfo": "0.2.126"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-bindgen-futures-0.4.76",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c62df1340f32221cb9c54d6a27b030e3dba64361d4a95bed55f9aacb44da291d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-bindgen-futures/0.4.76/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-bindgen-futures@0.4.76",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-bindgen-futures",
+      "versionInfo": "0.4.76"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-bindgen-macro-0.2.126",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "167ce5e579f6bcf889c4f7175a8a5a585de84e8ff93976ce393efa5f2837aab1"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-bindgen-macro/0.2.126/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-bindgen-macro@0.2.126",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-bindgen-macro",
+      "versionInfo": "0.2.126"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-bindgen-macro-support-0.2.126",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3997c7839262f4ef12cf90b818d6340c18e80f263f1a94bf157d0ec4420380e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-bindgen-macro-support/0.2.126/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-bindgen-macro-support@0.2.126",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-bindgen-macro-support",
+      "versionInfo": "0.2.126"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-bindgen-shared-0.2.126",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "dc1b4cb0cc549fcf58d7dfc081778139b3d283a081644e833e84682ad71cea24"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-bindgen-shared/0.2.126/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-bindgen-shared@0.2.126",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-bindgen-shared",
+      "versionInfo": "0.2.126"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-wasm-streams-0.5.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9d1ec4f6517c9e11ae630e200b2b65d193279042e28edd4a2cda233e46670bbb"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/wasm-streams/0.5.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/wasm-streams@0.5.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "wasm-streams",
+      "versionInfo": "0.5.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-web-sys-0.3.103",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8622dcb61c0bcc9fffa6938bed81210af2da9a7e4a1a834b2e37a59b6dfb6141"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/web-sys/0.3.103/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/web-sys@0.3.103",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "web-sys",
+      "versionInfo": "0.3.103"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-web-time-1.1.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/web-time/1.1.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/web-time@1.1.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "web-time",
+      "versionInfo": "1.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-webpki-root-certs-1.0.9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b96554aa2acc8ccdb7e1c9a58a7a68dd5d13bccc69cd124cb09406db612a1c9b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/webpki-root-certs/1.0.9/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/webpki-root-certs@1.0.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "webpki-root-certs",
+      "versionInfo": "1.0.9"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-winapi-util-0.1.11",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/winapi-util/0.1.11/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/winapi-util@0.1.11",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "winapi-util",
+      "versionInfo": "0.1.11"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-aarch64-gnullvm-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32a4622180e7a0ec044bb555404c800bc9fd9ec262ec147edd5989ccd0c02cd3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_aarch64_gnullvm/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_aarch64_gnullvm@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_aarch64_gnullvm",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-aarch64-msvc-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "09ec2a7bb152e2252b53fa7803150007879548bc709c039df7627cabbd05d469"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_aarch64_msvc/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_aarch64_msvc@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_aarch64_msvc",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-i686-gnu-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8e9b5ad5ab802e97eb8e295ac6720e509ee4c243f69d781394014ebfe8bbfa0b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_i686_gnu/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_i686_gnu@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_i686_gnu",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-i686-gnullvm-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0eee52d38c090b3caa76c563b86c3a4bd71ef1a819287c19d586d7334ae8ed66"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_i686_gnullvm/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_i686_gnullvm@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_i686_gnullvm",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-i686-msvc-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "240948bc05c5e7c6dabba28bf89d89ffce3e303022809e73deaefe4f6ec56c66"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_i686_msvc/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_i686_msvc@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_i686_msvc",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-link-0.2.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows-link/0.2.1/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows-link@0.2.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows-link",
+      "versionInfo": "0.2.1"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-sys-0.52.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows-sys/0.52.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows-sys@0.52.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows-sys",
+      "versionInfo": "0.52.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-sys-0.61.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows-sys/0.61.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows-sys@0.61.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows-sys",
+      "versionInfo": "0.61.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-targets-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9b724f72796e036ab90c1021d4780d4d3d648aca59e491e6b98e725b84e99973"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows-targets/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows-targets@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows-targets",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-x86-64-gnu-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "147a5c80aabfbf0c7d901cb5895d1de30ef2907eb21fbbab29ca94c5b08b1a78"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_x86_64_gnu/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_x86_64_gnu@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_x86_64_gnu",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-x86-64-gnullvm-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_x86_64_gnullvm/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_x86_64_gnullvm@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_x86_64_gnullvm",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-windows-x86-64-msvc-0.52.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/windows_x86_64_msvc/0.52.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/windows_x86_64_msvc@0.52.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "windows_x86_64_msvc",
+      "versionInfo": "0.52.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-writeable-0.6.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1ffae5123b2d3fc086436f8834ae3ab053a283cfac8fe0a0b8eaae044768a4c4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/writeable/0.6.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/writeable@0.6.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "writeable",
+      "versionInfo": "0.6.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-yoke-0.8.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "709fe23a0424b6a435d82152b1bd3fdfb0833487d5fa90d05d42762a9891fef5"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/yoke/0.8.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/yoke@0.8.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "yoke",
+      "versionInfo": "0.8.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-yoke-derive-0.8.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "de844c262c8848816172cef550288e7dc6c7b7814b4ee56b3e1553f275f1858e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/yoke-derive/0.8.2/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/yoke-derive@0.8.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "yoke-derive",
+      "versionInfo": "0.8.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zerofrom-0.1.8",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0ec05a11813ea801ff6d75110ad09cd0824ddba17dfe17128ea0d5f68e6c5272"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zerofrom/0.1.8/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zerofrom@0.1.8",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zerofrom",
+      "versionInfo": "0.1.8"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zerofrom-derive-0.1.7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "11532158c46691caf0f2593ea8358fed6bbf68a0315e80aae9bd41fbade684a1"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zerofrom-derive/0.1.7/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zerofrom-derive@0.1.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zerofrom-derive",
+      "versionInfo": "0.1.7"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zeroize-1.9.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e13c156562582aa81c60cb29407084cdb54c4164760106ab78e6c5b0858cf64e"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zeroize/1.9.0/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zeroize@1.9.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zeroize",
+      "versionInfo": "1.9.0"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zerotrie-0.2.4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0f9152d31db0792fa83f70fb2f83148effb5c1f5b8c7686c3459e361d9bc20bf"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zerotrie/0.2.4/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zerotrie@0.2.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zerotrie",
+      "versionInfo": "0.2.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zerovec-0.11.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "90f911cbc359ab6af17377d242225f4d75119aec87ea711a880987b18cd7b239"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zerovec/0.11.6/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zerovec@0.11.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zerovec",
+      "versionInfo": "0.11.6"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zerovec-derive-0.11.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "625dc425cab0dca6dc3c3319506e6593dcb08a9f387ea3b284dbd52a92c40555"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zerovec-derive/0.11.3/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zerovec-derive@0.11.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zerovec-derive",
+      "versionInfo": "0.11.3"
+    },
+    {
+      "SPDXID": "SPDXRef-cargo-zmij-1.0.23",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://crates.io/api/v1/crates/zmij/1.0.23/download",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:cargo/zmij@1.0.23",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "zmij",
+      "versionInfo": "1.0.23"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-attrs-26.1.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985/attrs-26.1.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/attrs@26.1.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "attrs",
+      "versionInfo": "26.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-colorama-0.4.6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/colorama@0.4.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "colorama",
+      "versionInfo": "0.4.6"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-hatchling-1.27.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "971c296d9819abb3811112fc52c7a9751c8d381898f36533bb16f9791e941fd6"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/8f/8a/cc1debe3514da292094f1c3a700e4ca25442489731ef7c0814358816bb03/hatchling-1.27.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/hatchling@1.27.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "hatchling",
+      "versionInfo": "1.27.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-iniconfig-2.3.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/iniconfig@2.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "iniconfig",
+      "versionInfo": "2.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-jsonschema-4.25.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e4a9655ce0da0c0b67a085847e00a3a51449e1157f4f75e9fb5aa545e122eb85"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/74/69/f7185de793a29082a9f3c7728268ffb31cb5095131a9c139a74078e27336/jsonschema-4.25.1.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/jsonschema@4.25.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jsonschema",
+      "versionInfo": "4.25.1"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-jsonschema-specifications-2025.9.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/19/74/a633ee74eb36c44aa6d1095e7cc5569bebf04342ee146178e2d36600708b/jsonschema_specifications-2025.9.1.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/jsonschema-specifications@2025.9.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jsonschema-specifications",
+      "versionInfo": "2025.9.1"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-packaging-26.2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/d7/f1/e7a6dd94a8d4a5626c03e4e99c87f241ba9e350cd9e6d75123f992427270/packaging-26.2.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/packaging@26.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "packaging",
+      "versionInfo": "26.2"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-pathspec-1.1.1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/5a/82/42f767fc1c1143d6fd36efb827202a2d997a375e160a71eb2888a925aac1/pathspec-1.1.1.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pathspec@1.1.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pathspec",
+      "versionInfo": "1.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-pluggy-1.6.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pluggy@1.6.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pluggy",
+      "versionInfo": "1.6.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-pygments-2.20.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522fdcebac55e66de6603a76a02bca1b6414f6c/pygments-2.20.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pygments@2.20.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pygments",
+      "versionInfo": "2.20.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-pytest-9.0.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/7d/0d/549bd94f1a0a402dc8cf64563a117c0f3765662e2e668477624baeec44d5/pytest-9.0.3.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pytest@9.0.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pytest",
+      "versionInfo": "9.0.3"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-referencing-0.37.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/22/f5/df4e9027acead3ecc63e50fe1e36aca1523e1719559c499951bb4b53188f/referencing-0.37.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/referencing@0.37.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "referencing",
+      "versionInfo": "0.37.0"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-rpds-py-2026.6.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1cebd1337c242e4ec2293e541f712b2da849b29f48f0c293684b71c0632625d4"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/aa/2a/9618a122aeb2a169a28b03889a2995fe297588964333d4a7d67bdf46e147/rpds_py-2026.6.3.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/rpds-py@2026.6.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "rpds-py",
+      "versionInfo": "2026.6.3"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-ruff-0.12.3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f1b5a4b6668fd7b7ea3697d8d98857390b40c1320a63a178eee6be0899ea2d77"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/c3/2a/43955b530c49684d3c38fcda18c43caf91e99204c2a065552528e0552d4f/ruff-0.12.3.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/ruff@0.12.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "ruff",
+      "versionInfo": "0.12.3"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-trove-classifiers-2026.6.1.19",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c5132b4b61a829d11cfbd2d72e97f20a45ed6edb95e45c5efdeb5e00836b2745"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/c2/e3/7ca82ee24c82d344584abd5b8637b3bd056f2900226e8d82fc22f1184b92/trove_classifiers-2026.6.1.19.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/trove-classifiers@2026.6.1.19",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "trove-classifiers",
+      "versionInfo": "2026.6.1.19"
+    },
+    {
+      "SPDXID": "SPDXRef-pypi-typing-extensions-4.16.0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/typing-extensions@4.16.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "typing-extensions",
+      "versionInfo": "4.16.0"
+    }
+  ],
+  "relationships": [
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-atomic-waker-1.1.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-aws-lc-rs-1.17.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-aws-lc-sys-0.43.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-base64-0.22.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-bitflags-2.13.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-block-buffer-0.10.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-bumpalo-3.20.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-bytes-1.12.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cc-1.3.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cfg-aliases-0.2.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cfg-if-1.0.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-chacha20-0.10.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cmake-0.1.58",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-combine-4.6.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-core-foundation-0.10.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-core-foundation-sys-0.8.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cpufeatures-0.2.17",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-cpufeatures-0.3.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-crypto-common-0.1.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-digest-0.10.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-displaydoc-0.2.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-dunce-1.0.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-errno-0.3.14",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-fastrand-2.5.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-find-msvc-tools-0.1.9",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-form-urlencoded-1.2.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-fs-extra-1.3.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-channel-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-core-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-io-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-macro-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-sink-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-task-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-futures-util-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-generic-array-0.14.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-getrandom-0.2.17",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-getrandom-0.4.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-http-1.4.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-http-body-1.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-http-body-util-0.1.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-httparse-1.10.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-hyper-1.11.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-hyper-rustls-0.27.9",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-hyper-util-0.1.20",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-collections-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-locale-core-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-normalizer-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-normalizer-data-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-properties-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-properties-data-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-icu-provider-2.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-idna-1.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-idna-adapter-1.2.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-ipnet-2.12.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-itoa-1.0.18",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-jni-0.22.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-jni-macros-0.22.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-jni-sys-0.4.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-jni-sys-macros-0.4.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-jobserver-0.1.35",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-js-sys-0.3.103",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-libc-0.2.189",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-linux-raw-sys-0.12.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-litemap-0.8.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-log-0.4.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-lru-slab-0.1.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-memchr-2.8.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-mio-1.2.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-once-cell-1.21.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-openssl-probe-0.2.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-percent-encoding-2.3.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-pin-project-lite-0.2.17",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-pkg-config-0.3.33",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-potential-utf-0.1.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-proc-macro2-1.0.107",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-quinn-0.11.11",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-quinn-proto-0.11.16",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-quinn-udp-0.5.15",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-quote-1.0.47",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-r-efi-6.0.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rand-0.10.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rand-core-0.10.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rand-pcg-0.10.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-reqwest-0.13.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-ring-0.17.14",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustc-hash-2.1.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustc-version-0.4.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustix-1.1.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-0.23.42",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-native-certs-0.8.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-pki-types-1.15.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-platform-verifier-0.7.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-platform-verifier-android-0.1.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustls-webpki-0.103.13",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-rustversion-1.0.23",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-same-file-1.0.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-schannel-0.1.29",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-security-framework-3.7.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-security-framework-sys-2.17.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-semver-1.0.28",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-serde-1.0.229",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-serde-core-1.0.229",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-serde-derive-1.0.229",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-serde-json-1.0.151",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-sha2-0.10.9",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-shlex-2.0.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-signal-hook-registry-1.4.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-simd-cesu8-1.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-simdutf8-0.1.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-slab-0.4.12",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-smallvec-1.15.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-socket2-0.6.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-stable-deref-trait-1.2.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-subtle-2.6.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-syn-2.0.119",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-syn-3.0.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-sync-wrapper-1.0.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-synstructure-0.13.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tempfile-3.27.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-thiserror-2.0.18",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-thiserror-impl-2.0.18",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tinystr-0.8.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tinyvec-1.12.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tinyvec-macros-0.1.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tokio-1.52.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tokio-macros-2.7.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tokio-rustls-0.26.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tokio-util-0.7.19",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tower-0.5.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tower-http-0.6.11",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tower-layer-0.3.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tower-service-0.3.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tracing-0.1.44",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-tracing-core-0.1.36",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-try-lock-0.2.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-typenum-1.20.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-unicode-ident-1.0.24",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-untrusted-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-url-2.5.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-utf8-iter-1.0.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-version-check-0.9.5",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-walkdir-2.5.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-want-0.3.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasi-0.11.1-wasi-snapshot-preview1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-bindgen-0.2.126",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-bindgen-futures-0.4.76",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-bindgen-macro-0.2.126",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-bindgen-macro-support-0.2.126",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-bindgen-shared-0.2.126",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-wasm-streams-0.5.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-web-sys-0.3.103",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-web-time-1.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-webpki-root-certs-1.0.9",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-winapi-util-0.1.11",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-aarch64-gnullvm-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-aarch64-msvc-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-i686-gnu-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-i686-gnullvm-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-i686-msvc-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-link-0.2.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-sys-0.52.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-sys-0.61.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-targets-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-x86-64-gnu-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-x86-64-gnullvm-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-windows-x86-64-msvc-0.52.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-writeable-0.6.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-yoke-0.8.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-yoke-derive-0.8.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zerofrom-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zerofrom-derive-0.1.7",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zeroize-1.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zerotrie-0.2.4",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zerovec-0.11.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zerovec-derive-0.11.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-cargo-zmij-1.0.23",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-attrs-26.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-colorama-0.4.6",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-hatchling-1.27.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-iniconfig-2.3.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-jsonschema-4.25.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-jsonschema-specifications-2025.9.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-packaging-26.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-pathspec-1.1.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-pluggy-1.6.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-pygments-2.20.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-pytest-9.0.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-referencing-0.37.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-rpds-py-2026.6.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-ruff-0.12.3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-trove-classifiers-2026.6.1.19",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-pypi-typing-extensions-4.16.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-surf-harness"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3"
+}
