@@ -1,0 +1,32 @@
+version = "1.0"
+
+[task]
+name = "nano-grok-build/synthetic-terminal"
+authors = []
+keywords = ["synthetic", "walking-slice"]
+
+[metadata]
+difficulty = "easy"
+category = "testing"
+tags = ["synthetic"]
+
+[agent]
+# Test-only headroom for the frozen 75s signed reserves plus the V10 90s
+# final-response reserve. The scripted walk still completes promptly.
+timeout_sec = 180.0
+
+[verifier]
+timeout_sec = 20.0
+
+[environment]
+build_timeout_sec = 180.0
+workdir = "/workspace"
+cpus = 1
+memory_mb = 512
+storage_mb = 1024
+gpus = 0
+mcp_servers = []
+
+[verifier.env]
+
+[solution.env]
