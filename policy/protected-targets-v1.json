@@ -1,0 +1,34 @@
+{
+  "schema_version": "protected-targets-v1",
+  "fatal_code": "protected_harness_material_access_blocked",
+  "workspace_root": "/workspace",
+  "protected_path_families": [
+    "/logs"
+  ],
+  "official_benchmark_repository_slugs": [
+    "harbor-framework/terminal-bench",
+    "laude-institute/terminal-bench"
+  ],
+  "terminal_command_fields": {
+    "run_terminal_command": [
+      "command"
+    ]
+  },
+  "filesystem_path_fields": {
+    "grep": [
+      "path"
+    ],
+    "list_dir": [
+      "target_directory"
+    ],
+    "read_file": [
+      "target_file"
+    ],
+    "search_replace": [
+      "file_path"
+    ],
+    "write": [
+      "file_path"
+    ]
+  }
+}

@@ -1,0 +1,1068 @@
+{
+  "approval": {
+    "approved_artifacts": [
+      {
+        "byte_length": 648,
+        "path": "NOTICE",
+        "sha256": "48f7687551795354b316162b0bdf189a6bb57d6e5e9e6db4bf7a4ad79ea8426d"
+      },
+      {
+        "byte_length": 1365,
+        "path": "THIRD_PARTY_NOTICES.md",
+        "sha256": "3345d8ae98ca7826a8b51d95add738fcf9480eaf04620e8bce350004e7df5151"
+      },
+      {
+        "byte_length": 2973,
+        "path": "contracts/nano-v1/agent-profile.json",
+        "sha256": "613e616c0dff8177699e2a971832332e1f2a9025916aa9582fa9cd0b626ae373"
+      },
+      {
+        "byte_length": 757520,
+        "path": "contracts/nano-v1/contract-delta.json",
+        "sha256": "b335ed6dc62b39ea874db78a4dd2c454cbb538a6c6ac6677d30f6de1ee233b99"
+      },
+      {
+        "byte_length": 16904,
+        "path": "contracts/nano-v1/effective-contract.json",
+        "sha256": "f2c52037e6840c81d3285698ca86a03f02fea025cd2ea6412aa20534c661c051"
+      },
+      {
+        "byte_length": 13226,
+        "path": "contracts/nano-v1/normalization-manifest.json",
+        "sha256": "61d6b31e06b0a39f0f3c1d929689a63e3580e8b273efc9321636be952d82e983"
+      },
+      {
+        "byte_length": 9218,
+        "path": "contracts/nano-v1/renderer-goldens.json",
+        "sha256": "6336c1b9682fe250c6f15c0fa301b9b403ca620019f57ea9109248f5dbee3e07"
+      },
+      {
+        "byte_length": 698,
+        "path": "contracts/nano-v1/user-wrapper-goldens.json",
+        "sha256": "998cd1ce4e542482fb113be18e18a41105772121d5851ac669ac37cec4532ab4"
+      }
+    ],
+    "policy_sha256": "cf6621e53e3271457832419fa574eab1061c80739ca6f8c9b63a6be33ead1595"
+  },
+  "files": [
+    {
+      "byte_length": 6553,
+      "mode": "100644",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "a0a86707bf553e113c59d83b5f9a32d9218aab67bd2f6baf9177c7325aedea1e"
+    },
+    {
+      "byte_length": 316,
+      "mode": "100644",
+      "path": ".gitignore",
+      "sha256": "c58637439f559aad12527778fdede9e2f29066e6f10db975aa3734823e7356fb"
+    },
+    {
+      "byte_length": 713,
+      "mode": "100644",
+      "path": ".gitleaksignore",
+      "sha256": "d88988ed976d3264718d7e1a0174bc77665406c4778cd5e2c1971f398a8f55a8"
+    },
+    {
+      "byte_length": 8,
+      "mode": "100644",
+      "path": ".python-version",
+      "sha256": "43fd694bd564dd2215f51a6b23f6a3712834850225e629d7781c81c71076092d"
+    },
+    {
+      "byte_length": 9726,
+      "mode": "100644",
+      "path": "CHANGELOG.md",
+      "sha256": "088ca69f743b80cdc6b16d0d6146f7ea53ca38f617c15cb3a09a97d7f50096f1"
+    },
+    {
+      "byte_length": 788,
+      "mode": "100644",
+      "path": "CONTRIBUTING.md",
+      "sha256": "e240c5f3d467ab929afcd85ecfcfec07c47be2450ae64af360256fbc0ca8bd6e"
+    },
+    {
+      "byte_length": 43607,
+      "mode": "100644",
+      "path": "Cargo.lock",
+      "sha256": "cf4957b1b5d2bbe06fad62eec596700afc2375e16df905816eeaeba41eb18375"
+    },
+    {
+      "byte_length": 1055,
+      "mode": "100644",
+      "path": "Cargo.toml",
+      "sha256": "91b74519a2f1ddbd3cdac70717b6509c27a3a7d4ca1f860a2660570d46dd81b4"
+    },
+    {
+      "byte_length": 10258,
+      "mode": "100644",
+      "path": "LICENSE",
+      "sha256": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b"
+    },
+    {
+      "byte_length": 648,
+      "mode": "100644",
+      "path": "NOTICE",
+      "sha256": "48f7687551795354b316162b0bdf189a6bb57d6e5e9e6db4bf7a4ad79ea8426d"
+    },
+    {
+      "byte_length": 7810,
+      "mode": "100644",
+      "path": "README.md",
+      "sha256": "8a26e6da27e68743a4a8d53620bc24a20f24de5d4b8a51f943a770f7b8b0c4b7"
+    },
+    {
+      "byte_length": 175801,
+      "mode": "100644",
+      "path": "SBOM.spdx.json",
+      "sha256": "8d28e0e3fc7254dbf1f2dda2cc05067c0412ca0948ba2cf95e7e8f927fb42c50"
+    },
+    {
+      "byte_length": 953,
+      "mode": "100644",
+      "path": "SECURITY.md",
+      "sha256": "2c6c4579db1c0ea64c48cf4f6f4b687a6661609edd2708d3d9b4085c8187dbfb"
+    },
+    {
+      "byte_length": 1365,
+      "mode": "100644",
+      "path": "THIRD_PARTY_NOTICES.md",
+      "sha256": "3345d8ae98ca7826a8b51d95add738fcf9480eaf04620e8bce350004e7df5151"
+    },
+    {
+      "byte_length": 2973,
+      "mode": "100644",
+      "path": "contracts/nano-v1/agent-profile.json",
+      "sha256": "613e616c0dff8177699e2a971832332e1f2a9025916aa9582fa9cd0b626ae373"
+    },
+    {
+      "byte_length": 757520,
+      "mode": "100644",
+      "path": "contracts/nano-v1/contract-delta.json",
+      "sha256": "b335ed6dc62b39ea874db78a4dd2c454cbb538a6c6ac6677d30f6de1ee233b99"
+    },
+    {
+      "byte_length": 16904,
+      "mode": "100644",
+      "path": "contracts/nano-v1/effective-contract.json",
+      "sha256": "f2c52037e6840c81d3285698ca86a03f02fea025cd2ea6412aa20534c661c051"
+    },
+    {
+      "byte_length": 13226,
+      "mode": "100644",
+      "path": "contracts/nano-v1/normalization-manifest.json",
+      "sha256": "61d6b31e06b0a39f0f3c1d929689a63e3580e8b273efc9321636be952d82e983"
+    },
+    {
+      "byte_length": 9218,
+      "mode": "100644",
+      "path": "contracts/nano-v1/renderer-goldens.json",
+      "sha256": "6336c1b9682fe250c6f15c0fa301b9b403ca620019f57ea9109248f5dbee3e07"
+    },
+    {
+      "byte_length": 698,
+      "mode": "100644",
+      "path": "contracts/nano-v1/user-wrapper-goldens.json",
+      "sha256": "998cd1ce4e542482fb113be18e18a41105772121d5851ac669ac37cec4532ab4"
+    },
+    {
+      "byte_length": 437,
+      "mode": "100644",
+      "path": "crates/nano-cli/Cargo.toml",
+      "sha256": "087947a7ffaea493adef880be294369d4c98ff1f9c9e35baea2a80334c981910"
+    },
+    {
+      "byte_length": 23510,
+      "mode": "100644",
+      "path": "crates/nano-cli/src/main.rs",
+      "sha256": "c3823f6b7dab10d7c35f71e61356e432e0a22cc1831942092b69f0b24a58c478"
+    },
+    {
+      "byte_length": 67493,
+      "mode": "100644",
+      "path": "crates/nano-cli/tests/cli_integration.rs",
+      "sha256": "2a59905a28987326b55fa6d97d0ee9d88a74f0693fb7725f4426f3287cec83d3"
+    },
+    {
+      "byte_length": 620,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/Cargo.toml",
+      "sha256": "8bb8d1aaa4edd8e5e8a84ff9e1865fbe3612eb8a8c5bdb3bb9634898f6f86ad2"
+    },
+    {
+      "byte_length": 15229,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/client.rs",
+      "sha256": "20529a1d49bfc8756b3c03b8204ab0bb8ed1f5b7a35afd0d76b14655e864741a"
+    },
+    {
+      "byte_length": 807,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/lib.rs",
+      "sha256": "31bba740d67625f1e0dbc136181f676f7c9eab6a55c654491d80fc3f137ae672"
+    },
+    {
+      "byte_length": 35344,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/request.rs",
+      "sha256": "b97da3794b993786a47980a054250451f6420e67801367ad3e65901e6acb78b6"
+    },
+    {
+      "byte_length": 2436,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/scripted.rs",
+      "sha256": "edc669cc457cace5144dc9fc77f3f4e1ce9c71e10d3a7a34a23b24636494939f"
+    },
+    {
+      "byte_length": 29465,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/sse.rs",
+      "sha256": "19a9a339c4c6151a1cfff63048b28d0aebd626e73b41b2c653bf98c9ecd08775"
+    },
+    {
+      "byte_length": 49481,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/src/types.rs",
+      "sha256": "ede42f76696399efe272db993f9a8949f5acf6de1e4bb4ce235b6725b03ae8e2"
+    },
+    {
+      "byte_length": 20989,
+      "mode": "100644",
+      "path": "crates/nano-provider-xai/tests/responses_loopback.rs",
+      "sha256": "cab2fbd17a65bb937ebdb2b70c6371e0e588e6d852de961765316a0befe140c7"
+    },
+    {
+      "byte_length": 579,
+      "mode": "100644",
+      "path": "crates/nano-runtime/Cargo.toml",
+      "sha256": "1a6268bf53a3798472dda08e7308a6c60ef6f9a2b7d04901cdcdca6b4e75f2d9"
+    },
+    {
+      "byte_length": 237624,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/agent_loop.rs",
+      "sha256": "b9cd3a9a3663042735e75481169bd3c9b95d236276036d8957bda79d5595970a"
+    },
+    {
+      "byte_length": 33682,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/completion_review.rs",
+      "sha256": "3ed95f685e22e1b027d958f762fdd24e2ca9c8b98482e355837dbf0f69d03aed"
+    },
+    {
+      "byte_length": 32129,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/deadline.rs",
+      "sha256": "04894d04bd07ae54b0d969d9abd4eb77e3a64a760cbffa9eaf36af48ea7e17d5"
+    },
+    {
+      "byte_length": 48903,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/event_writer.rs",
+      "sha256": "cac38a0b1a37ddc5628cf3cfe262d5f0d689d5fc6a6d50f002efd9a676b11417"
+    },
+    {
+      "byte_length": 76338,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/external_stdio.rs",
+      "sha256": "b08257a77b1a99c0f7df7418251b4f3e5490b454bf572b5236ea525e2e04c076"
+    },
+    {
+      "byte_length": 16109,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/finish_controller.rs",
+      "sha256": "9429e822ba3de8009216a54fc4a59b3e51a030577706aaffacd89571ca0ed98b"
+    },
+    {
+      "byte_length": 8476,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/foreground.rs",
+      "sha256": "3daa031f59360df5cb5dd75f8551b1e5129d26c2fc8c8fbcd60e20ac0c12f919"
+    },
+    {
+      "byte_length": 14377,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/git_history_gate.rs",
+      "sha256": "0a39e8654ff4f233c87d6a855386fd409f70ef25a84f3f9c2e9c07979b7bf358"
+    },
+    {
+      "byte_length": 1028,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/lib.rs",
+      "sha256": "44ccdff829c4177878a4e49ca1d7a929f9e712b8a7a6bd3bca11b8c692261683"
+    },
+    {
+      "byte_length": 16850,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/protected_target.rs",
+      "sha256": "200d4941050a8aee3b78220b0c8122582dfeffb274043d82ccdc67bd1942feed"
+    },
+    {
+      "byte_length": 17247,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/terminal.rs",
+      "sha256": "3a8287e447fc0e679733e73dcedf2fbeb3da3ddbd7dcda0ebe8339823c4403c3"
+    },
+    {
+      "byte_length": 14440,
+      "mode": "100644",
+      "path": "crates/nano-runtime/src/tool.rs",
+      "sha256": "4790637b607e3ecf27247ff23c2b787a1b1fbed903c0d5ea71b03d59c0ee1a74"
+    },
+    {
+      "byte_length": 109284,
+      "mode": "100644",
+      "path": "crates/nano-runtime/tests/external_stdio.rs",
+      "sha256": "1b5f12621755cb9f7f49b383051654be78e3eeadefae2a1c56b17efcbf88b59a"
+    },
+    {
+      "byte_length": 125291,
+      "mode": "100644",
+      "path": "crates/nano-runtime/tests/xai_terminal_roundtrip.rs",
+      "sha256": "e984b3909cc982cc4f5e6ae90e4213f014468c3b08d5d56e0b89b5686d04b7ae"
+    },
+    {
+      "byte_length": 249,
+      "mode": "100644",
+      "path": "crates/nano-types/Cargo.toml",
+      "sha256": "155d11e11c8b01f85d99b711ce48066cd1e9b4fdfb33ba403ed11eeb1e2c01d2"
+    },
+    {
+      "byte_length": 767,
+      "mode": "100644",
+      "path": "crates/nano-types/examples/load_contract_bundle.rs",
+      "sha256": "28cd6f345df77236e3ba947c5fe3c1c4ec90a9dae00e897693c0de03261e7065"
+    },
+    {
+      "byte_length": 102759,
+      "mode": "100644",
+      "path": "crates/nano-types/src/contract.rs",
+      "sha256": "d5a32945cf17e352f0f6e96b41e4bb160e6f2b59921ee22622553b02cc1e589c"
+    },
+    {
+      "byte_length": 65486,
+      "mode": "100644",
+      "path": "crates/nano-types/src/event.rs",
+      "sha256": "b72f289092f5da401fb10b3c7c2fbb2e45efa36850f7e083c7cf1a15dd6116de"
+    },
+    {
+      "byte_length": 62565,
+      "mode": "100644",
+      "path": "crates/nano-types/src/external_tool.rs",
+      "sha256": "edc47df4a16a8c58ef8f3b5b580231458dc959fcf5e5f46b647805402085287b"
+    },
+    {
+      "byte_length": 137,
+      "mode": "100644",
+      "path": "crates/nano-types/src/lib.rs",
+      "sha256": "162ca2ea3295cb346333774cecc82d9b8ea98fe5d0d5c6ea36026430f5399884"
+    },
+    {
+      "byte_length": 17719,
+      "mode": "100644",
+      "path": "crates/nano-types/src/run_spec.rs",
+      "sha256": "9b4ad1a2b35626ac4eefc8c4e321d57468e3976012ee25eb39389e277b9b7e70"
+    },
+    {
+      "byte_length": 484,
+      "mode": "100644",
+      "path": "deny.toml",
+      "sha256": "049006f40cdb859878ad68245a490a24e3ea8f4070b9bc3a3b4df6b2d6a06bfc"
+    },
+    {
+      "byte_length": 3792,
+      "mode": "100644",
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "c39f37a8c313eed76da18a1d9dee3c80a6fc976c91a90f370c87f7f56ba8d753"
+    },
+    {
+      "byte_length": 3929,
+      "mode": "100644",
+      "path": "docs/SUBMITTING.md",
+      "sha256": "8ed105ab3e093bc7b7cfee7186114772d27f0b711c63bb5648fa142c4daf1172"
+    },
+    {
+      "byte_length": 10161,
+      "mode": "100644",
+      "path": "evaluation/tb21-2-1-task-checksums.json",
+      "sha256": "6f17fc1e73019e4af3d2889e8f310bce222ddab9100f8f9ee0a76578811fcc5f"
+    },
+    {
+      "byte_length": 655,
+      "mode": "100644",
+      "path": "policy/protected-targets-v1.json",
+      "sha256": "ff6b64ad03048449412a173a0f89b3fe5fdae88f136e393b936325dcf896de53"
+    },
+    {
+      "byte_length": 27604,
+      "mode": "100644",
+      "path": "policy/tb21-git-history-capability-v2.json",
+      "sha256": "c2c6f4327c05d97142b89b7daeb88a097f3265ae7eccc9a3057a2a9d896eb9e8"
+    },
+    {
+      "byte_length": 1006,
+      "mode": "100644",
+      "path": "pyproject.toml",
+      "sha256": "a114cb904fcc077bd3601653edff8482f730f56665fa9aa8d43f792b158d6887"
+    },
+    {
+      "byte_length": 86,
+      "mode": "100644",
+      "path": "rust-toolchain.toml",
+      "sha256": "559f488c181e0e9e77cf17c29de663977f036ec7ff2e2060585714bf53c52d62"
+    },
+    {
+      "byte_length": 72,
+      "mode": "100644",
+      "path": "rustfmt.toml",
+      "sha256": "db00d320c47bf818306a7c188270fdd372488ae6288668b8ac412f0c70069387"
+    },
+    {
+      "byte_length": 1514,
+      "mode": "100644",
+      "path": "schemas/external-tool-schema-meta-v1.json",
+      "sha256": "24d1a784109cd2db2ac976f56d0ea0a5d6ed383919d600ccc74ad66e2548c57e"
+    },
+    {
+      "byte_length": 18915,
+      "mode": "100644",
+      "path": "schemas/external-tool-stdio-v2.json",
+      "sha256": "48004bedef2f95fd488720d5f1dbbffdebc50dac510042b0c1d64ddc27870901"
+    },
+    {
+      "byte_length": 18525,
+      "mode": "100644",
+      "path": "schemas/external-tool-stdio-v3.json",
+      "sha256": "848e93603c30a9e43c8506a79a9553e5a52713ed43a2c3cb23fe8821e5e01758"
+    },
+    {
+      "byte_length": 13884,
+      "mode": "100644",
+      "path": "schemas/tb21-capability-manifest-v1.json",
+      "sha256": "270e14913ef6d256acf5104db024df8f48d9191732e050594051d4e09cfd2a33"
+    },
+    {
+      "byte_length": 32,
+      "mode": "100644",
+      "path": "scripts/__init__.py",
+      "sha256": "8cf5f0c43fc725a279dfa6d177f84285ac84ac21330c50f3d1a391079737ca5a"
+    },
+    {
+      "byte_length": 1655,
+      "mode": "100755",
+      "path": "scripts/bootstrap.py",
+      "sha256": "3ca79e8da33b38a6c0f8f5ea9e68b1ba96db8cf8e97dcd761dc2be3af617c45e"
+    },
+    {
+      "byte_length": 8963,
+      "mode": "100755",
+      "path": "scripts/check.py",
+      "sha256": "d388c07ff8f293cb6abdccb6f4779bf7984997f4de05366b2a98130ef3cb2904"
+    },
+    {
+      "byte_length": 5147,
+      "mode": "100755",
+      "path": "scripts/check_architecture_boundaries.py",
+      "sha256": "6f649478b654590b43095bb5c17648cdbef63dc1596e26aa73748675edb4c1a0"
+    },
+    {
+      "byte_length": 5946,
+      "mode": "100755",
+      "path": "scripts/check_cold_build.py",
+      "sha256": "252e5f6f01894206d8dadc9055e0ee4d25df15966ea91a7b1cad50933044d63e"
+    },
+    {
+      "byte_length": 29130,
+      "mode": "100755",
+      "path": "scripts/check_dependency_policy.py",
+      "sha256": "c7ec7fa4cac1dfdbff9d2638b301d70c99b4ef4d97de1c7f415d0c69a114d745"
+    },
+    {
+      "byte_length": 1281,
+      "mode": "100755",
+      "path": "scripts/check_gitleaks_canary.py",
+      "sha256": "9888dcbf425dbea735dc08f8472537597abff6071a59b021b463ee61ba7e4163"
+    },
+    {
+      "byte_length": 4160,
+      "mode": "100755",
+      "path": "scripts/check_gitleaks_worktree.py",
+      "sha256": "d2a05812b4166226f902dca319a578465d62d7448d63abde658a7d96e0f21ba4"
+    },
+    {
+      "byte_length": 11344,
+      "mode": "100755",
+      "path": "scripts/check_public_release.py",
+      "sha256": "3fbd512fc508a5bc163f56311a05e13616d18ab17d15919e9a4d3d6be2a1e90f"
+    },
+    {
+      "byte_length": 1952,
+      "mode": "100755",
+      "path": "scripts/check_secrets.py",
+      "sha256": "323ce69e8eae3b27b75f5c7eeaf47a6cc70cbd932fa2fe601bee9716faae61b2"
+    },
+    {
+      "byte_length": 83375,
+      "mode": "100755",
+      "path": "scripts/check_v10_candidate.py",
+      "sha256": "bbdbe8763d4158266bf872492af443169baad02a0aab070797d08e9e9fe063d8"
+    },
+    {
+      "byte_length": 7731,
+      "mode": "100755",
+      "path": "scripts/install_uv.py",
+      "sha256": "2f7cfa89f2ee28b7cb69610cf6a76a5b121eac6f0d9b8fa5d098c1ee5871367d"
+    },
+    {
+      "byte_length": 12822,
+      "mode": "100755",
+      "path": "scripts/run_native_linux_fault_ci.py",
+      "sha256": "3c751989d2923e4409ae7fc8b7d72ec18ce036a9fd0684e66befdb590efc05bb"
+    },
+    {
+      "byte_length": 3354,
+      "mode": "100755",
+      "path": "scripts/static_preflight.py",
+      "sha256": "4e5f5e73f77f97273fcf65c3126d5c09ca917fb43147f8341e9cf4069591d406"
+    },
+    {
+      "byte_length": 56913,
+      "mode": "100755",
+      "path": "scripts/submission_preflight.py",
+      "sha256": "7618b9952c7bd3333c8c16ea57ca6664e3da015f847f1701d3eda2fdee900115"
+    },
+    {
+      "byte_length": 85,
+      "mode": "100644",
+      "path": "src/nano_grok_build/__init__.py",
+      "sha256": "fad066429c2548fab4101e424ede2971f079191b2fee07ddb745a6617a01bb8b"
+    },
+    {
+      "byte_length": 215,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/__init__.py",
+      "sha256": "37fae43b2f1eecf2a5f10190e074be4a536d677a6b9954d85f51a1019996cd4d"
+    },
+    {
+      "byte_length": 510,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/artifact_limits.py",
+      "sha256": "4af5a7f14635e105082480b624cfc97c6f3b17464751a055f3bc20f42e05e8de"
+    },
+    {
+      "byte_length": 101400,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/artifactizer.py",
+      "sha256": "da8cfcad3248bcc5784401796f1f4639777dc73c33e9262629bc8a426285041a"
+    },
+    {
+      "byte_length": 27553,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/atif.py",
+      "sha256": "e44777cd11c45a7f0765263c5e544a1a123ea5e12fde701f714b35a4b5b54ef3"
+    },
+    {
+      "byte_length": 13689,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/control_plane.py",
+      "sha256": "fd6a385b441e09bf2af4cdceda4dff44d31366760dac288a898b21ac177b50ab"
+    },
+    {
+      "byte_length": 14695,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/deadline.py",
+      "sha256": "b000db709bc6e3d0c74efadb01333f2bbf1eb98808e0fa361e9e422882a0dae3"
+    },
+    {
+      "byte_length": 51590,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/harbor.py",
+      "sha256": "15141c60e017fd5147517f2e0048d500c2ab2db8f5b49598baa4a1d68eea220b"
+    },
+    {
+      "byte_length": 78296,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/stdio_bridge.py",
+      "sha256": "c2d311ddbf1dde5c8c46bbcb5910a6ff3b86b90cbd0afe3663e1e1f9649bc248"
+    },
+    {
+      "byte_length": 304554,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/terminal_actor.py",
+      "sha256": "084572694489559c70b389e74312a18d22e681b669e9ee755f54ed56b4849762"
+    },
+    {
+      "byte_length": 121090,
+      "mode": "100644",
+      "path": "src/nano_grok_build/adapter/workspace_snapshot.py",
+      "sha256": "394e0000250bae8992cf4b045112780a022b843ddc016aec7d7ffc9f5f5e262b"
+    },
+    {
+      "byte_length": 42,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/__init__.py",
+      "sha256": "655169b2713a6f9e90e1185f743ab45f9be5b6e1460e676f34d29c31bd3137ad"
+    },
+    {
+      "byte_length": 19481,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/compat_v020.py",
+      "sha256": "b547707f9e25bc402679477a32aeb9851b308731320c6435d2a343133700594b"
+    },
+    {
+      "byte_length": 1040,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/deadline.py",
+      "sha256": "0762a79684fc815c8b083aefa1bdb36632d54560749b4debb0791b7003b28918"
+    },
+    {
+      "byte_length": 7852,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/dispatch.py",
+      "sha256": "dcc1d437351c0d10d2bc9413a085decdae127f2d878c0f318610b906a6269f64"
+    },
+    {
+      "byte_length": 16079,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/git_history_audit.py",
+      "sha256": "954dbfd79aec4029b36d51e674995e26cbd088ed1804ac72b3fa2248705a32c2"
+    },
+    {
+      "byte_length": 6929,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/git_history_capability.py",
+      "sha256": "17e2010903752b5aadcdfb695d8edb213e72142493c76313f350a69c5d3fa34e"
+    },
+    {
+      "byte_length": 19830,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/git_history_isolation.py",
+      "sha256": "570baa8c01a2650889f8a933d76bec5059a6cbde737991fc3493cd30bad20862"
+    },
+    {
+      "byte_length": 10860,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/git_history_receipt.py",
+      "sha256": "70e99de95fce604c24b2027aaccad3b9236387296e1a31185bb0387f49c6d432"
+    },
+    {
+      "byte_length": 21670,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/live_smoke.py",
+      "sha256": "e173b255f9261f65ce487b970fa1f781ab8f617c15adb090986b3647f123e93b"
+    },
+    {
+      "byte_length": 28529,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/prelaunch.py",
+      "sha256": "a7ff98f2a16b0fb05d06cfe2ad96198f87c04ebdc8bb29f22e18dd138cff4337"
+    },
+    {
+      "byte_length": 31288,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/protected_target.py",
+      "sha256": "2baa2942da948092b6bf39005a01df06e19fa4d30cad6102b42140fc5473b1f8"
+    },
+    {
+      "byte_length": 3673,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/provider.py",
+      "sha256": "76b9e5e4aa15601d5db557175793b1c8803b3c27d93262999ebd8e2a64786775"
+    },
+    {
+      "byte_length": 10466,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/runtime_entry.py",
+      "sha256": "5335c4209251c859046f15a766a232c1dffcb2e6a75c9b93a41307098d886910"
+    },
+    {
+      "byte_length": 230366,
+      "mode": "100644",
+      "path": "src/nano_grok_build/harbor/tb21.py",
+      "sha256": "93379af74d31c4478e20fa417120fe24cd05342f7c12e77a86e65525b64f34ca"
+    },
+    {
+      "byte_length": 3380,
+      "mode": "100644",
+      "path": "tests/fixtures/background-tool-cases-v1.json",
+      "sha256": "723e38750b6bdf2a0a852343a7dad64633f981f2aa2c373d6137d70aa14df84a"
+    },
+    {
+      "byte_length": 1824,
+      "mode": "100644",
+      "path": "tests/fixtures/external-tool-stdio-v2-rust.json",
+      "sha256": "d34d771e1689808f46caa505bd5587b6fc4d7343c8dd0f02ab359f0d154643c0"
+    },
+    {
+      "byte_length": 2100,
+      "mode": "100644",
+      "path": "tests/fixtures/p0p1/collector-classification-cases.json",
+      "sha256": "b035d02112ca42263394cbfaead92882fc1c61a53c24ec045eea0e7a7198bac3"
+    },
+    {
+      "byte_length": 3988,
+      "mode": "100644",
+      "path": "tests/fixtures/p0p1/terminal-phase-cases.json",
+      "sha256": "d4709dd7ee9478df7778ccd179f3bf4be68a95ac149e2ad122074c5150b10ddc"
+    },
+    {
+      "byte_length": 3095,
+      "mode": "100644",
+      "path": "tests/fixtures/p0p1/tool-boundary-cases.json",
+      "sha256": "73628fd70458037e025e1d6b792eaf18a4bf5794186b50309f95ba606a5a4e91"
+    },
+    {
+      "byte_length": 5888,
+      "mode": "100644",
+      "path": "tests/fixtures/p0p1/workspace-cases.json",
+      "sha256": "f52f2fb2b0365911b206b6a19446fbc0190e0ee0521a3371bf2c2c505a212ea2"
+    },
+    {
+      "byte_length": 1277,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/capability-manifest-cases-v1.json",
+      "sha256": "fa320e0d58a4a876c80983f8864ce9f1ccacc94056c846d731d8de52592e91b5"
+    },
+    {
+      "byte_length": 3864,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/historic-a43d5fd-event-prefix-anchor.json",
+      "sha256": "5913933b150aec46606ffdaa039edf0fa8f3080b69b761210c2054d4642ccb95"
+    },
+    {
+      "byte_length": 7208,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/historical-v2-deadline-synthetic-v1/exporter.rs",
+      "sha256": "8802432211f30669877c0108bc845a305d3134fb6241463772b704415dcef343"
+    },
+    {
+      "byte_length": 9386,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/historical-v2-deadline-synthetic-v1/golden.json",
+      "sha256": "66bffb943473af00b8cf6a840729ed02cd4741aae506b7cb308ba8e7373de7b6"
+    },
+    {
+      "byte_length": 1225,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/historical-v2-deadline-synthetic-v1/input.json",
+      "sha256": "5293752426972ebaf1002f9f5bfd095820b325ae89e44d2eb2aa856479ab6e10"
+    },
+    {
+      "byte_length": 10135,
+      "mode": "100644",
+      "path": "tests/fixtures/tb21/historical-v2-deadline-synthetic-v1/reconstruct.py",
+      "sha256": "d5d37302efd7d0bd5a6757e6095cb4f5eb95a7d4beb541f56800e203f83be76a"
+    },
+    {
+      "byte_length": 62,
+      "mode": "100644",
+      "path": "tests/harbor/background-task/environment/Dockerfile",
+      "sha256": "6afa1159464ea5408ec43d8cd73c0a0884e6f43bb414287ee2c6205dfbfe3ee8"
+    },
+    {
+      "byte_length": 268,
+      "mode": "100644",
+      "path": "tests/harbor/background-task/instruction.md",
+      "sha256": "ff72989a5011d8018b2ee52188c4405bf854aef25a41522495d3d79c7cc56c14"
+    },
+    {
+      "byte_length": 898,
+      "mode": "100644",
+      "path": "tests/harbor/background-task/scripted-provider.json",
+      "sha256": "06eb8617e7e87cd006cc095e82cfc83248b149519532894ec5b6eeae533275d7"
+    },
+    {
+      "byte_length": 480,
+      "mode": "100644",
+      "path": "tests/harbor/background-task/task.toml",
+      "sha256": "736a0174b95e4c6d06601fccf9a9222168e5e1dd6ef0c2afff2632f54d715c1e"
+    },
+    {
+      "byte_length": 982,
+      "mode": "100755",
+      "path": "tests/harbor/background-task/tests/test.sh",
+      "sha256": "edcc9fd035e1dd5c07456ed3a4235d5748157b177586bddb7cf2853311e6dac1"
+    },
+    {
+      "byte_length": 62,
+      "mode": "100644",
+      "path": "tests/harbor/live-task/environment/Dockerfile",
+      "sha256": "6afa1159464ea5408ec43d8cd73c0a0884e6f43bb414287ee2c6205dfbfe3ee8"
+    },
+    {
+      "byte_length": 237,
+      "mode": "100644",
+      "path": "tests/harbor/live-task/instruction.md",
+      "sha256": "1ed74c3817ca0e48a3857c94d46afbd3dac1df48f5aae272ff37a34960c9e726"
+    },
+    {
+      "byte_length": 412,
+      "mode": "100644",
+      "path": "tests/harbor/live-task/task.toml",
+      "sha256": "66be30cc05b6370b6cb577018bbfddb485a70ab67edb00a0a2476430219fb68a"
+    },
+    {
+      "byte_length": 309,
+      "mode": "100755",
+      "path": "tests/harbor/live-task/tests/test.sh",
+      "sha256": "87d03da28684c87bffec9c388a414015e2a749300295dd63c98177d9d52b97cd"
+    },
+    {
+      "byte_length": 16408,
+      "mode": "100644",
+      "path": "tests/harbor/run_background_service.py",
+      "sha256": "d97aa7ff151c721b927d330b6344623b848449782435c3697871deac57ea56b0"
+    },
+    {
+      "byte_length": 350,
+      "mode": "100644",
+      "path": "tests/harbor/run_live_smoke.py",
+      "sha256": "c878fb66f73ce3238b6207de48717dc01c2c152bef068d1b2b198adc8a30b511"
+    },
+    {
+      "byte_length": 19329,
+      "mode": "100644",
+      "path": "tests/harbor/run_synthetic.py",
+      "sha256": "ab8021421b48bd85910a9759829ede4a26c36ece953ac65c13afa11a2a9dbfcc"
+    },
+    {
+      "byte_length": 363,
+      "mode": "100644",
+      "path": "tests/harbor/run_tb21.py",
+      "sha256": "794a37d4632245c969d4d2a74808a0a88c79eee532a7e1bb3440a18e59634fdc"
+    },
+    {
+      "byte_length": 884,
+      "mode": "100644",
+      "path": "tests/harbor/scripted-provider.json",
+      "sha256": "d0a90a710985856b00af46b8ee8daa43038bd9e1b0b9093807b779a480183177"
+    },
+    {
+      "byte_length": 62,
+      "mode": "100644",
+      "path": "tests/harbor/toy-task/environment/Dockerfile",
+      "sha256": "6afa1159464ea5408ec43d8cd73c0a0884e6f43bb414287ee2c6205dfbfe3ee8"
+    },
+    {
+      "byte_length": 366,
+      "mode": "100644",
+      "path": "tests/harbor/toy-task/instruction.md",
+      "sha256": "82fccaa3b3fd0838e57dce5f3fee1288ff94c79d8d2d47db7f73f6d1b653ef8c"
+    },
+    {
+      "byte_length": 565,
+      "mode": "100644",
+      "path": "tests/harbor/toy-task/task.toml",
+      "sha256": "21205e3abde44206fc18dcbb8a27b19fd8efc275692259d273d61185e9b5c1f4"
+    },
+    {
+      "byte_length": 1022,
+      "mode": "100755",
+      "path": "tests/harbor/toy-task/tests/test.sh",
+      "sha256": "c489011872189ffebdf041c3511da2fc65614e8f5dce129cd56c7b59d11d3204"
+    },
+    {
+      "byte_length": 2700,
+      "mode": "100644",
+      "path": "tests/test_architecture_boundaries.py",
+      "sha256": "7d30e6e85c863ba807c3104b5f63a4a4d41054d7225a0003fb1b40a86136b288"
+    },
+    {
+      "byte_length": 4015,
+      "mode": "100644",
+      "path": "tests/test_background_service_runner.py",
+      "sha256": "8164972d14f9bd5e3eb3d543f94358fb9e24fd61c99026611fa9c9e8f3c65a48"
+    },
+    {
+      "byte_length": 1043,
+      "mode": "100644",
+      "path": "tests/test_cold_build.py",
+      "sha256": "00c0376b8d4c10d2a3415c76da9d916a2b125eccec1217161be22c17b961eb31"
+    },
+    {
+      "byte_length": 5327,
+      "mode": "100644",
+      "path": "tests/test_deadline.py",
+      "sha256": "fe6a1b073df23e5ba5ef25728f4ead95ff46b708b8d5384b676a2496fb5ba286"
+    },
+    {
+      "byte_length": 42852,
+      "mode": "100644",
+      "path": "tests/test_deadline_actor.py",
+      "sha256": "215fff948eb4553068953ea2807580c40188fa29e9bbe101072800bf1dc55f38"
+    },
+    {
+      "byte_length": 47558,
+      "mode": "100644",
+      "path": "tests/test_deadline_live_e2e.py",
+      "sha256": "f8404cb802fbd4dfa96c7fac87fa9afaf8eb2af581869210e8273f01aadef50c"
+    },
+    {
+      "byte_length": 11692,
+      "mode": "100644",
+      "path": "tests/test_git_history_audit.py",
+      "sha256": "36e1e63c01ee5b98895948fa27cb2be02ca52c9e9678a8aec61b3877e8992374"
+    },
+    {
+      "byte_length": 4463,
+      "mode": "100644",
+      "path": "tests/test_gitleaks_worktree.py",
+      "sha256": "7c3ce4cca64934c9a584029a78c57c19910aac10ff4ba44241f7973cc6734684"
+    },
+    {
+      "byte_length": 81428,
+      "mode": "100644",
+      "path": "tests/test_harbor_artifactizer.py",
+      "sha256": "56aa4e197beb67b16afdee31ec0915b152ecb59b7859fa5461847f02eb90a9e9"
+    },
+    {
+      "byte_length": 13686,
+      "mode": "100644",
+      "path": "tests/test_harbor_atif.py",
+      "sha256": "0e8a10ee5400586f4cb8d1aaf3f75055069c091207f3bce7d23aefd5d5f5c2bc"
+    },
+    {
+      "byte_length": 127410,
+      "mode": "100644",
+      "path": "tests/test_harbor_bridge.py",
+      "sha256": "09271db51766f8aa06bd0551688cbdd982a0ec54b88d64e7a419e7fdef3abbd5"
+    },
+    {
+      "byte_length": 29456,
+      "mode": "100644",
+      "path": "tests/test_harbor_compat.py",
+      "sha256": "46b5ceb9dfaa08ddc93926144b9abff4a0af64ed84303aca92f79e6cd7335cd5"
+    },
+    {
+      "byte_length": 6514,
+      "mode": "100644",
+      "path": "tests/test_harbor_dispatch.py",
+      "sha256": "9592389fca3f69c9248c28a9089a3d114f2ca323879324a511c68eb14fadf4e4"
+    },
+    {
+      "byte_length": 11683,
+      "mode": "100644",
+      "path": "tests/test_harbor_live_smoke.py",
+      "sha256": "bdcae35b797dae4f48529cce5f82c0250442c91b5421bc909c0594cfca6f9b0d"
+    },
+    {
+      "byte_length": 28144,
+      "mode": "100644",
+      "path": "tests/test_harbor_prelaunch.py",
+      "sha256": "b265dde9f73a40d132b57b8deffd213869f2b31571920101fb3cc3b71f796a58"
+    },
+    {
+      "byte_length": 4228,
+      "mode": "100644",
+      "path": "tests/test_native_linux_fault_ci.py",
+      "sha256": "22102c0dd628efd4989704a330c2cbf15202789d0a5d91ab62437792b9ed1f4b"
+    },
+    {
+      "byte_length": 51252,
+      "mode": "100644",
+      "path": "tests/test_p0p1_acceptance.py",
+      "sha256": "affc6b77e2347b50f6a7bad3d573f4d5d66f1fb5f3ba2c197504095af6d86d52"
+    },
+    {
+      "byte_length": 35372,
+      "mode": "100644",
+      "path": "tests/test_policy_rejections.py",
+      "sha256": "b0b0732ffee3692e0075d9cca5974a00d351509634f06c0f71b415244de596d5"
+    },
+    {
+      "byte_length": 8157,
+      "mode": "100644",
+      "path": "tests/test_preflight_ordering.py",
+      "sha256": "3469d04a3f78ca1cb029b11e1e6390555110ff55d10098c3c637dc66a12e7fc2"
+    },
+    {
+      "byte_length": 1384,
+      "mode": "100644",
+      "path": "tests/test_public_release.py",
+      "sha256": "34be6dc7aa6821c1bed7a1c806b0ad3f92cdcda0778943b6ba7e19fa2ef25baa"
+    },
+    {
+      "byte_length": 847,
+      "mode": "100644",
+      "path": "tests/test_secrets.py",
+      "sha256": "3703366b8eb838b6fdda73df4659ffd7359541252849e8be129a87acb0e25c72"
+    },
+    {
+      "byte_length": 65250,
+      "mode": "100644",
+      "path": "tests/test_submission_preflight.py",
+      "sha256": "03c065c8a40b90c4f5801129df262b220836fdf258471e190a23f4ae21874448"
+    },
+    {
+      "byte_length": 257420,
+      "mode": "100644",
+      "path": "tests/test_tb21.py",
+      "sha256": "6b5ac2c4f969d81a34b170bd933e12030f124549f8abcb1403457b35c8b414d7"
+    },
+    {
+      "byte_length": 253888,
+      "mode": "100644",
+      "path": "tests/test_terminal_actor.py",
+      "sha256": "5fdbbaa4e55642eda7d8bf18a91fce1b07e321b366fb1bc8a99f0d216c978d87"
+    },
+    {
+      "byte_length": 3033,
+      "mode": "100644",
+      "path": "tests/test_uv_supply_chain.py",
+      "sha256": "de346259f8cf6b3c98a6e6b62ac7ddc9e38dea3f1a7a8607af90b2d1229255d4"
+    },
+    {
+      "byte_length": 137392,
+      "mode": "100644",
+      "path": "tests/test_workspace_snapshot.py",
+      "sha256": "4baca22d43244ebf2901b1c18478217b332ecb86bcf74e8d24e1c1e9097edc02"
+    },
+    {
+      "byte_length": 2195,
+      "mode": "100644",
+      "path": "tools/tool-versions.json",
+      "sha256": "cadd1960dcd6feac0bf8a35e932a8b290d1b2bad5067ac43caf2529643abe4ef"
+    },
+    {
+      "byte_length": 22072,
+      "mode": "100644",
+      "path": "uv.lock",
+      "sha256": "b9c85beaa3d043e9cc94ec94d417ce4ec0ab265c3c0497bf42cc68ee5662ebe6"
+    }
+  ],
+  "generated_at": "2026-08-07T23:50:08Z",
+  "payload_tree_sha256": "d453c058c3c7ead4bd4a28c1d8db2d7474b21e05f3b51399ccb8511d368b04fc",
+  "release": {
+    "agent": {
+      "name": "nano-grok-build",
+      "version": "0.4.9"
+    },
+    "harbor": {
+      "commit": "459ff6ec99417589b7f679d14ddf3b3f0ae4f1dc",
+      "version": "0.20.0"
+    },
+    "model": {
+      "name": "xai/grok-4.5",
+      "reasoning_effort": "high"
+    },
+    "project": "surf-harness",
+    "readiness": {
+      "reason": "",
+      "status": "ready"
+    },
+    "terminal_bench": {
+      "commit": "5c8eadf1f393183288fa08b8f73ca9a469cc5e00",
+      "dataset_digest": "sha256:7d7bdc1cbedad549fc1140404bd4dc45e5fd0ea7c4186773687d177ad3a0699a",
+      "dataset_name": "terminal-bench/terminal-bench-2-1",
+      "minimum_independent_trials": 5,
+      "tasks_per_job": 89
+    },
+    "version": "0.4.9"
+  },
+  "schema_version": "surf-harness-source-manifest-v1",
+  "source": {
+    "export_manifest_sha256": "e21c0db749002d17894befd19e87858e7463e3cf4a9a1c2be5ec72666e8bb787",
+    "git_commit": "9288f1f8a103fd87996438aa688335f36fcbd4f3",
+    "git_tree": "27ffc2cd6f1c335198ca4a03484fc56110821154"
+  }
+}
