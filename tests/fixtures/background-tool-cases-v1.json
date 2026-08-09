@@ -1,0 +1,127 @@
+{
+  "schema_version": "background-tool-cases-v1",
+  "fixed_task_ids": [
+    "018f22d6-9f04-7cc0-8000-000000000001",
+    "018f22d6-9f04-7cc0-8000-000000000002"
+  ],
+  "cases": [
+    {
+      "case": "launch",
+      "tool_name": "run_terminal_command",
+      "arguments": {
+        "command": "printf ready; sleep 60",
+        "description": "serve",
+        "background": true
+      },
+      "expected_status": "running",
+      "expected_process_disposition": "background_retained"
+    },
+    {
+      "case": "running_snapshot",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ],
+        "timeout_ms": 0
+      },
+      "expected_status": "running",
+      "expected_output": "ready"
+    },
+    {
+      "case": "completed_snapshot",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ],
+        "timeout_ms": 30000
+      },
+      "expected_status": "completed",
+      "expected_exit_code": 0
+    },
+    {
+      "case": "failed_snapshot",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ]
+      },
+      "expected_status": "failed",
+      "expected_exit_code": 7
+    },
+    {
+      "case": "timed_out_snapshot",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ]
+      },
+      "expected_status": "failed",
+      "expected_exit_code": 124
+    },
+    {
+      "case": "kill_running",
+      "tool_name": "kill_terminal_command",
+      "arguments": {
+        "task_id": "018f22d6-9f04-7cc0-8000-000000000001"
+      },
+      "expected_status": "killed",
+      "expected_process_disposition": "background_terminated"
+    },
+    {
+      "case": "kill_repeated",
+      "tool_name": "kill_terminal_command",
+      "arguments": {
+        "task_id": "018f22d6-9f04-7cc0-8000-000000000001"
+      },
+      "expected_status": "already_exited",
+      "expected_process_disposition": "background_terminated"
+    },
+    {
+      "case": "kill_unknown",
+      "tool_name": "kill_terminal_command",
+      "arguments": {
+        "task_id": "018f22d6-9f04-7cc0-8000-000000000099"
+      },
+      "expected_status": "not_found",
+      "expected_process_disposition": "no_process"
+    },
+    {
+      "case": "multi_id_order",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000002",
+          "018f22d6-9f04-7cc0-8000-000000000099",
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ],
+        "timeout_ms": 0
+      },
+      "expected_task_ids": [
+        "018f22d6-9f04-7cc0-8000-000000000002",
+        "018f22d6-9f04-7cc0-8000-000000000099",
+        "018f22d6-9f04-7cc0-8000-000000000001"
+      ],
+      "expected_statuses": [
+        "running",
+        "not_found",
+        "completed"
+      ]
+    },
+    {
+      "case": "snapshot_truncated",
+      "tool_name": "get_terminal_command_output",
+      "arguments": {
+        "task_ids": [
+          "018f22d6-9f04-7cc0-8000-000000000001"
+        ],
+        "timeout_ms": 0
+      },
+      "expected_status": "running",
+      "expected_truncated": true
+    }
+  ]
+}
