@@ -1,0 +1,53 @@
+{
+  "$id": "https://nano-grok-build.dev/schemas/external-tool-schema-meta-v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$dynamicAnchor": "meta",
+  "$vocabulary": {
+    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
+    "https://json-schema.org/draft/2020-12/vocab/content": true,
+    "https://json-schema.org/draft/2020-12/vocab/core": true,
+    "https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
+    "https://json-schema.org/draft/2020-12/vocab/meta-data": true,
+    "https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
+    "https://json-schema.org/draft/2020-12/vocab/validation": true,
+    "https://nano-grok-build.dev/vocab/external-tool-validation-v1": true
+  },
+  "allOf": [
+    {
+      "$ref": "https://json-schema.org/draft/2020-12/schema"
+    }
+  ],
+  "properties": {
+    "x-strict-json-object-field": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "utf8-max-bytes-from": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "utf8-max-bytes-from"
+      ],
+      "type": "object"
+    },
+    "x-utf8-max-bytes": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "title": "Nano external tool schema meta-schema v1",
+  "type": [
+    "object",
+    "boolean"
+  ]
+}
