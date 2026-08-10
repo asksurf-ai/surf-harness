@@ -1,0 +1,148 @@
+{
+  "cases": [
+    {
+      "code": "provider_transport_failed",
+      "expected_bucket": "provider",
+      "name": "provider",
+      "phase": "provider",
+      "shape": "provider_failed",
+      "status": "provider_failure"
+    },
+    {
+      "code": "terminal_actor_cleanup_unverified",
+      "expected_bucket": "tool_transport",
+      "name": "tool",
+      "phase": "tool",
+      "shape": "fatal_tool",
+      "status": "tool_failure"
+    },
+    {
+      "code": "external_stdio_response_timeout",
+      "expected_bucket": "tool_transport",
+      "name": "bridge",
+      "phase": "bridge",
+      "shape": "fatal_tool",
+      "status": "tool_failure"
+    },
+    {
+      "code": "background_cleanup_unknown",
+      "expected_bucket": "background_lifecycle",
+      "name": "background",
+      "phase": "tool",
+      "shape": "fatal_tool",
+      "status": "tool_failure"
+    },
+    {
+      "code": "provider_send_window_exhausted",
+      "expected_bucket": "action_deadline",
+      "name": "deadline",
+      "phase": "deadline",
+      "shape": "provider_in_flight",
+      "status": "deadline_failure"
+    },
+    {
+      "code": "cooperative_cancelled",
+      "expected_bucket": "action_deadline",
+      "name": "cancellation",
+      "phase": "cancellation",
+      "shape": "in_flight_tool",
+      "status": "cancelled"
+    },
+    {
+      "code": "event_capacity_exhausted",
+      "expected_bucket": "artifact",
+      "name": "artifact",
+      "phase": "artifact",
+      "shape": "no_calls",
+      "status": "runtime_failure"
+    },
+    {
+      "code": "runtime_internal_failure",
+      "expected_bucket": "environment_infra",
+      "name": "runtime",
+      "phase": "runtime",
+      "shape": "no_calls",
+      "status": "runtime_failure"
+    }
+  ],
+  "outer_cases": [
+    {
+      "bounded_text": false,
+      "expected_reason": "outer_return_code_type_invalid",
+      "id": "return_code_type",
+      "return_code_shape": "bool",
+      "stderr_shape": "empty_text",
+      "stdout_shape": "bounded_text"
+    },
+    {
+      "bounded_text": true,
+      "expected_reason": "outer_return_code_nonzero",
+      "id": "return_code_nonzero",
+      "return_code_shape": "nonzero_int",
+      "stderr_shape": "bounded_text",
+      "stdout_shape": "bounded_text"
+    },
+    {
+      "bounded_text": false,
+      "expected_reason": "outer_stdout_type_invalid",
+      "id": "stdout_type",
+      "return_code_shape": "zero_int",
+      "stderr_shape": "empty_text",
+      "stdout_shape": "wrong_type"
+    },
+    {
+      "bounded_text": false,
+      "expected_reason": "outer_stderr_type_invalid",
+      "id": "stderr_type",
+      "return_code_shape": "zero_int",
+      "stderr_shape": "wrong_type",
+      "stdout_shape": "bounded_text"
+    },
+    {
+      "bounded_text": true,
+      "expected_reason": "outer_stderr_nonempty",
+      "id": "stderr_nonempty",
+      "return_code_shape": "zero_int",
+      "stderr_shape": "bounded_text",
+      "stdout_shape": "bounded_text"
+    }
+  ],
+  "terminal_cases": [
+    {
+      "expected_reason": "terminal_json_invalid",
+      "id": "json",
+      "mutation_oracle": "invalid_json"
+    },
+    {
+      "expected_reason": "terminal_keyset_invalid",
+      "id": "keyset",
+      "mutation_oracle": "extra_key"
+    },
+    {
+      "expected_reason": "terminal_field_type_invalid",
+      "id": "field_type",
+      "mutation_oracle": "boolean_return_code"
+    },
+    {
+      "expected_reason": "terminal_status_invalid",
+      "id": "status",
+      "mutation_oracle": "completed_nonzero"
+    },
+    {
+      "expected_reason": "terminal_identity_mismatch",
+      "id": "identity",
+      "mutation_oracle": "owner_token_mismatch"
+    },
+    {
+      "expected_reason": "termination_proof_invalid",
+      "id": "termination_proof",
+      "mutation_oracle": "nonzero_survivor_count"
+    },
+    {
+      "expected_reason": "terminal_cancelled",
+      "id": "cancelled",
+      "mutation_oracle": "cancelled_terminal"
+    }
+  ],
+  "schema_version": "nano-p0p1-terminal-phase-fixtures-v1"
+}

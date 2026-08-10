@@ -1,0 +1,666 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nano-grok-build.local/schemas/tb21-capability-manifest-v1.json",
+  "additionalProperties": false,
+  "properties": {
+    "capture_state": {
+      "enum": [
+        "present",
+        "missing",
+        "unknown",
+        "invalid"
+      ]
+    },
+    "cpu": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "architecture": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "aarch64",
+                    "x86_64"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "features": {
+              "$ref": "#/$defs/cpuFeatures"
+            },
+            "state": {
+              "enum": [
+                "present",
+                "missing",
+                "unknown"
+              ]
+            }
+          },
+          "required": [
+            "architecture",
+            "features",
+            "state"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "missing",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "architecture": {
+                    "type": "null"
+                  },
+                  "features": {
+                    "maxItems": 0
+                  }
+                }
+              }
+            }
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "dependencies": {
+      "$ref": "#/$defs/dependencyList"
+    },
+    "runtimes": {
+      "$ref": "#/$defs/runtimeList"
+    },
+    "schema_version": {
+      "const": "nano-tb21-capability-manifest-v1"
+    },
+    "source": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "byte_length": {
+              "maximum": 65536,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "probe": {
+              "const": "generic-v1"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "byte_length",
+            "probe",
+            "sha256"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "required": [
+    "capture_state",
+    "cpu",
+    "dependencies",
+    "runtimes",
+    "schema_version",
+    "source"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "capture_state": {
+            "enum": [
+              "present",
+              "unknown"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "source": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capture_state": {
+            "const": "missing"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cpu": {
+            "type": "null"
+          },
+          "dependencies": {
+            "maxItems": 0
+          },
+          "runtimes": {
+            "maxItems": 0
+          },
+          "source": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capture_state": {
+            "const": "invalid"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cpu": {
+            "type": "null"
+          },
+          "dependencies": {
+            "maxItems": 0
+          },
+          "runtimes": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
+  "type": "object",
+  "$defs": {
+    "cpuFeature": {
+      "enum": [
+        "avx",
+        "avx2",
+        "neon",
+        "sse4_2"
+      ]
+    },
+    "cpuFeatureAvx": {
+      "const": "avx"
+    },
+    "cpuFeatureAvx2": {
+      "const": "avx2"
+    },
+    "cpuFeatureNeon": {
+      "const": "neon"
+    },
+    "cpuFeatureSse42": {
+      "const": "sse4_2"
+    },
+    "cpuFeatures": {
+      "oneOf": [
+        {
+          "maxItems": 0,
+          "type": "array"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/cpuFeature"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        {
+          "maxItems": 2,
+          "minItems": 2,
+          "oneOf": [
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "unevaluatedItems": false
+        },
+        {
+          "maxItems": 3,
+          "minItems": 3,
+          "oneOf": [
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/cpuFeatureAvx2"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureNeon"
+                },
+                {
+                  "$ref": "#/$defs/cpuFeatureSse42"
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "unevaluatedItems": false
+        },
+        {
+          "items": false,
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/cpuFeatureAvx"
+            },
+            {
+              "$ref": "#/$defs/cpuFeatureAvx2"
+            },
+            {
+              "$ref": "#/$defs/cpuFeatureNeon"
+            },
+            {
+              "$ref": "#/$defs/cpuFeatureSse42"
+            }
+          ],
+          "type": "array"
+        }
+      ]
+    },
+    "dependency": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "enum": [
+            "docker",
+            "git"
+          ]
+        },
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "unknown"
+          ]
+        },
+        "version": {
+          "anyOf": [
+            {
+              "pattern": "^(?:0|[1-9][0-9]{0,2})(?:\\.(?:0|[1-9][0-9]{0,2})){0,3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "state",
+        "version"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "missing",
+                  "unknown"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "version": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "type": "object"
+    },
+    "runtime": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "enum": [
+            "node",
+            "python",
+            "rust"
+          ]
+        },
+        "state": {
+          "enum": [
+            "present",
+            "missing",
+            "unknown"
+          ]
+        },
+        "version": {
+          "anyOf": [
+            {
+              "pattern": "^(?:0|[1-9][0-9]{0,2})(?:\\.(?:0|[1-9][0-9]{0,2})){0,3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "state",
+        "version"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "missing",
+                  "unknown"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "version": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "type": "object"
+    },
+    "dependencyDocker": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/dependency"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "docker"
+            }
+          }
+        }
+      ]
+    },
+    "dependencyGit": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/dependency"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "git"
+            }
+          }
+        }
+      ]
+    },
+    "runtimeNode": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/runtime"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "node"
+            }
+          }
+        }
+      ]
+    },
+    "runtimePython": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/runtime"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "python"
+            }
+          }
+        }
+      ]
+    },
+    "runtimeRust": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/runtime"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "rust"
+            }
+          }
+        }
+      ]
+    },
+    "dependencyList": {
+      "oneOf": [
+        {
+          "maxItems": 0,
+          "type": "array"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/dependency"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/dependencyDocker"
+            },
+            {
+              "$ref": "#/$defs/dependencyGit"
+            }
+          ],
+          "type": "array",
+          "unevaluatedItems": false
+        }
+      ]
+    },
+    "runtimeList": {
+      "oneOf": [
+        {
+          "maxItems": 0,
+          "type": "array"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/runtime"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        {
+          "maxItems": 2,
+          "minItems": 2,
+          "oneOf": [
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/runtimeNode"
+                },
+                {
+                  "$ref": "#/$defs/runtimePython"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/runtimeNode"
+                },
+                {
+                  "$ref": "#/$defs/runtimeRust"
+                }
+              ]
+            },
+            {
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/runtimePython"
+                },
+                {
+                  "$ref": "#/$defs/runtimeRust"
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "unevaluatedItems": false
+        },
+        {
+          "items": false,
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/runtimeNode"
+            },
+            {
+              "$ref": "#/$defs/runtimePython"
+            },
+            {
+              "$ref": "#/$defs/runtimeRust"
+            }
+          ],
+          "type": "array"
+        }
+      ]
+    }
+  }
+}
