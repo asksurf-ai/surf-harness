@@ -1,0 +1,72 @@
+{
+  "request": {
+    "schema_version": "external-tool-stdio-v2",
+    "message_type": "tool.request",
+    "seq": 0,
+    "run_id": "run-1",
+    "trial_id": "trial-1",
+    "attempt_id": "attempt-0",
+    "call_id": "call-1",
+    "tool_name": "run_terminal_command",
+    "arguments_json": "{}",
+    "logical_cwd": "/workspace",
+    "timeout_ms": 1,
+    "term_grace_ms": 1,
+    "kill_confirmation_timeout_ms": 1,
+    "stdout_cap_bytes": 1,
+    "stderr_cap_bytes": 1,
+    "environment": {
+      "clear": true,
+      "inherit_remote": [
+        "HOME",
+        "LANG",
+        "LC_ALL",
+        "PATH",
+        "TERM",
+        "TMPDIR",
+        "USER"
+      ]
+    },
+    "limits": {
+      "arguments_cap_bytes": 2,
+      "max_path_bytes": 1,
+      "max_read_or_write_bytes": 1,
+      "max_directory_entries": 1,
+      "max_grep_matches": 1,
+      "max_replacements": 1,
+      "max_background_processes": 1,
+      "process_spool_bytes_per_process": 1,
+      "process_spool_bytes_per_run": 1,
+      "background_output_wait_max_ms": 1
+    }
+  },
+  "response": {
+    "schema_version": "external-tool-stdio-v2",
+    "message_type": "tool.response",
+    "seq": 0,
+    "run_id": "run-1",
+    "trial_id": "trial-1",
+    "attempt_id": "attempt-0",
+    "call_id": "call-1",
+    "tool_name": "run_terminal_command",
+    "request_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "return_code": 0,
+    "timed_out": false,
+    "stdout_base64": "",
+    "stderr_base64": "",
+    "stdout_truncated": false,
+    "stderr_truncated": false,
+    "process_disposition": "no_process",
+    "target_task_id": null,
+    "cleanup": {
+      "attempted": false,
+      "term_sent": false,
+      "kill_sent": false,
+      "verified": true
+    },
+    "census": {
+      "verified": true,
+      "owned_processes_alive": 0
+    }
+  }
+}

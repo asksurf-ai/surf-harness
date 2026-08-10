@@ -1,0 +1,189 @@
+{
+  "ordinary_content": "synthetic answer\n",
+  "ordinary_path": "answer.txt",
+  "failure_cases": [
+    {
+      "baseline_state": "unavailable",
+      "category": "timeout",
+      "code": "workspace_before_capture_failed",
+      "disposition": "diagnostic_failed_continue",
+      "id": "before_all_proofs",
+      "phase": "before",
+      "proofs": {
+        "cleanup_verified": true,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": true
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "semantic_execution_timed_out"
+    },
+    {
+      "baseline_state": "unavailable",
+      "category": "timeout",
+      "code": "workspace_before_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "before_stage_missing",
+      "phase": "before",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": false,
+        "termination_verified": false,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "semantic_execution_timed_out"
+    },
+    {
+      "baseline_state": "unavailable",
+      "category": "timeout",
+      "code": "workspace_before_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "before_termination_missing",
+      "phase": "before",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": true,
+        "termination_verified": false,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "semantic_execution_timed_out"
+    },
+    {
+      "baseline_state": "unavailable",
+      "category": "timeout",
+      "code": "workspace_before_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "before_cleanup_missing",
+      "phase": "before",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "semantic_execution_timed_out"
+    },
+    {
+      "baseline_state": "unavailable",
+      "category": "timeout",
+      "code": "workspace_before_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "before_zero_census_missing",
+      "phase": "before",
+      "proofs": {
+        "cleanup_verified": true,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "semantic_execution_timed_out"
+    },
+    {
+      "baseline_state": "available",
+      "category": "timeout",
+      "code": "workspace_after_capture_failed",
+      "disposition": "diagnostic_failed_continue",
+      "id": "after_all_proofs",
+      "phase": "after",
+      "proofs": {
+        "cleanup_verified": true,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": true
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "wait_transport_timed_out_recovered"
+    },
+    {
+      "baseline_state": "available",
+      "category": "timeout",
+      "code": "workspace_after_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "after_stage_missing",
+      "phase": "after",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": false,
+        "termination_verified": false,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "wait_transport_timed_out_recovered"
+    },
+    {
+      "baseline_state": "available",
+      "category": "timeout",
+      "code": "workspace_after_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "after_termination_missing",
+      "phase": "after",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": true,
+        "termination_verified": false,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "wait_transport_timed_out_recovered"
+    },
+    {
+      "baseline_state": "available",
+      "category": "timeout",
+      "code": "workspace_after_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "after_cleanup_missing",
+      "phase": "after",
+      "proofs": {
+        "cleanup_verified": false,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "wait_transport_timed_out_recovered"
+    },
+    {
+      "baseline_state": "available",
+      "category": "timeout",
+      "code": "workspace_after_capture_failed",
+      "disposition": "trial_fatal",
+      "id": "after_zero_census_missing",
+      "phase": "after",
+      "proofs": {
+        "cleanup_verified": true,
+        "stage_validated": true,
+        "termination_verified": true,
+        "zero_census_verified": false
+      },
+      "reason": "not_applicable",
+      "stage": "remote-exec",
+      "subtype": "wait_transport_failed",
+      "timeout_origin": "wait_transport_timed_out_recovered"
+    }
+  ],
+  "schema_version": "nano-p0p1-workspace-fixtures-v1",
+  "sensitive_content": "PLACEHOLDER=fixture-only\n",
+  "sensitive_path": ".env"
+}

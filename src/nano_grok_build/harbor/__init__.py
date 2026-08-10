@@ -1,0 +1,1 @@
+"""Pinned Harbor launch compatibility."""
