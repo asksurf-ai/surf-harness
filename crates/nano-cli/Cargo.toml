@@ -1,0 +1,19 @@
+[package]
+name = "nano-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nano-provider-xai = { workspace = true, features = ["http"] }
+nano-runtime.workspace = true
+nano-types.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+rustix.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tempfile.workspace = true

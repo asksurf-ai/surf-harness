@@ -1,0 +1,26 @@
+# Rust
+/target/
+
+# Python
+/.venv/
+/.pytest_cache/
+/.ruff_cache/
+/dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+
+# Editors and operating systems
+.DS_Store
+*.swp
+
+# Local scratch and reports
+/.cache/
+/coverage/
+/.local-tools/
+/.review/
+
+# Local credentials (keep the public template trackable)
+/.env
+/.env.*
+!/.env.example
