@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nano-grok-build"
+version = "0.6.0"
+description = "Bootstrap package for the nano-grok-build Harbor adapter."
+readme = "README.md"
+requires-python = "==3.12.*"
+license = "Apache-2.0"
+dependencies = []
+
+[dependency-groups]
+build = [
+  "hatchling==1.27.0",
+]
+dev = [
+  "jsonschema==4.25.1",
+  "pytest==9.0.3",
+  "ruff==0.12.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nano_grok_build"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"policy/protected-targets-v1.json" = "nano_grok_build/policy/protected-targets-v1.json"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.format]
+# Commit A and golden.json bind this line-budgeted recipe byte-for-byte.
+exclude = ["tests/fixtures/tb21/historical-v2-deadline-synthetic-v1/reconstruct.py"]

@@ -1,0 +1,101 @@
+{
+  "cases": [
+    {
+      "cleanup_attempted": true,
+      "cleanup_verified": true,
+      "census_verified": true,
+      "expected_settlement": "completed",
+      "background_start_kind": null,
+      "child_exit_code": null,
+      "name": "foreground_timeout_clean",
+      "process_disposition": "foreground_cleaned",
+      "return_code": 124,
+      "survivor_count": 0,
+      "target_task_id": null,
+      "timed_out": true,
+      "tool_name": "run_terminal_command"
+    },
+    {
+      "background_start_kind": "not_started",
+      "child_exit_code": null,
+      "cleanup_attempted": false,
+      "cleanup_verified": true,
+      "census_verified": true,
+      "expected_settlement": "completed",
+      "name": "background_not_started",
+      "process_disposition": "no_process",
+      "return_code": 2,
+      "survivor_count": 0,
+      "target_task_id": null,
+      "task_id_published": false,
+      "timed_out": false,
+      "tool_name": "run_terminal_command"
+    },
+    {
+      "background_start_kind": "quick_exit",
+      "child_exit_code": 0,
+      "cleanup_attempted": true,
+      "cleanup_verified": true,
+      "census_verified": true,
+      "expected_settlement": "completed",
+      "name": "background_quick_exit_zero",
+      "process_disposition": "no_process",
+      "return_code": 0,
+      "survivor_count": 0,
+      "target_task_id": null,
+      "task_id_published": false,
+      "timed_out": false,
+      "tool_name": "run_terminal_command"
+    },
+    {
+      "background_start_kind": "quick_exit",
+      "child_exit_code": 7,
+      "cleanup_attempted": true,
+      "cleanup_verified": true,
+      "census_verified": true,
+      "expected_settlement": "completed",
+      "name": "background_quick_exit_nonzero",
+      "process_disposition": "no_process",
+      "return_code": 2,
+      "survivor_count": 0,
+      "target_task_id": null,
+      "task_id_published": false,
+      "timed_out": false,
+      "tool_name": "run_terminal_command"
+    },
+    {
+      "background_start_kind": null,
+      "child_exit_code": null,
+      "cleanup_attempted": false,
+      "cleanup_verified": true,
+      "census_verified": true,
+      "expected_settlement": "completed",
+      "name": "background_status_unavailable_owned",
+      "process_disposition": "no_process",
+      "return_code": 75,
+      "survivor_count": 0,
+      "target_task_id": null,
+      "timed_out": false,
+      "tool_name": "get_terminal_command_output"
+    },
+    {
+      "cleanup_verified": true,
+      "code": "terminal_actor_transport_unknown",
+      "census_verified": true,
+      "execution_may_have_started": true,
+      "expected_settlement": "fatal",
+      "name": "background_transport_loss_cleaned",
+      "tool_name": "run_terminal_command"
+    },
+    {
+      "cleanup_verified": false,
+      "code": "terminal_actor_cleanup_unverified",
+      "census_verified": false,
+      "execution_may_have_started": true,
+      "expected_settlement": "fatal",
+      "name": "cleanup_or_census_uncertain",
+      "tool_name": "run_terminal_command"
+    }
+  ],
+  "schema_version": "nano-p0p1-tool-boundary-fixtures-v1"
+}
